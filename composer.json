@@ -12,6 +12,6 @@
     }
   ],
   "autoload": {
-    "psr-4": {"thecatontheflat\\atlassian-connect-bundle\\": ""}
+    "psr-4": {"AtlassianConnectBundle\\": ""}
   }
 }
