@@ -1,6 +1,7 @@
 {
   "name": "thecatontheflat/atlassian-connect-bundle",
   "description": "Atlassian Connect Symfony2 Bundle",
+  "license": "MIT",
   "require": {
     "guzzlehttp/guzzle": "~5.0"
   },
@@ -11,6 +12,6 @@
     }
   ],
   "autoload": {
-    "psr-4": {"thecatontheflat\\AtlassianConnectBundle\\": ""}
+    "psr-4": {"thecatontheflat\\atlassian-connect-bundle\\": ""}
   }
 }
