@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0e04b69f-1605-46fb-9607-824903f133f8" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/arrow.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/fonts/atlassian-icons.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/fonts/atlassian-icons.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/fonts/atlassian-icons.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/aui-icon-close.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/aui-icon-tools.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/aui-message-icon-sprite.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/toolbar/aui-toolbar-24px.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/bg-000-trans20.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/bg-000-trans50.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/bg-grippy.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/fav_off_16.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/fav_on_16.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/messages/icon-close-inverted.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/messages/icon-close-inverted.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/messages/icon-close.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/messages/icon-close.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/forms/icon-date.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-dropdown-active-d.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-dropdown-active.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-dropdown-d.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-dropdown.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/messages/icon-error-white.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/messages/icon-error.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/messages/icon-generic.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/forms/icon-help.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/messages/icon-hint.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/messages/icon-info.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-maximize-d.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-maximize.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-minimize-d.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-minimize.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-move-d.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-move.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/forms/icon-range.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/forms/icon-required.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/core/icon-search.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/messages/icon-success.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/icons/forms/icon-users.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/icons/messages/icon-warning.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/forms/icons_form.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/select2-spinner.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/select2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/select2x2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/wait.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/AtlassianConnectBundle.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/DependencyInjection/AtlassianConnectExtension.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/JWT/Exceptions/BeforeValidException.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/DependencyInjection/Configuration.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Controller/DescriptorController.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/JWT/Exceptions/ExpiredException.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Controller/HandshakeController.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/JWT/Authentication/JWT.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Security/JWTAuthenticator.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Model/JWTRequest.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Security/JWTUserProvider.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Listener/LicenseListener.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Model/QSH.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Command/RequestAPICommand.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/JWT/Exceptions/SignatureInvalidException.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Entity/Tenant.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Entity/TenantRepository.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Controller/UnlicensedController.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/fonts/atlassian-icons.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/atlassian-logo-grey.min.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/atlassian-logo-grey.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/atlassian-logo.min.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/images/atlassian-logo.svg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui-css-deprecation-warnings.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui-css-deprecation-warnings.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui-datepicker.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui-datepicker.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/aui-experimental.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui-experimental.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/aui-experimental.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui-experimental.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/aui-iconfonts.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/aui-iconfonts.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui-soy.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui-soy.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/aui.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/css/aui.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/public/aui/js/aui.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/config/descriptor.dev.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/config/descriptor.prod.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/views/form_theme.html.twig" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/config/routing.yml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/config/services.yml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/views/unlicensed.html.twig" />
+    </list>
+    <ignored path="AtlassianConnectBundle.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="AtlassianConnectBundle" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Entity/Tenant.php" />
+        <option value="$PROJECT_DIR$/JWT/Authentication/JWT.php" />
+        <option value="$PROJECT_DIR$/Resources/config/descriptor.dev.json" />
+        <option value="$PROJECT_DIR$/Resources/config/descriptor.prod.json" />
+        <option value="$PROJECT_DIR$/Resources/config/services.yml" />
+      </list>
+    </option>
+  </component>
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1276" />
+    <option name="height" value="777" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AtlassianConnectBundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AtlassianConnectBundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AtlassianConnectBundle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="options.lastSelected" value="configurable.group.appearance" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="/bin/bash" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
+      <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0e04b69f-1605-46fb-9607-824903f133f8" name="Default" comment="" />
+      <created>1434893258542</created>
+      <option name="number" value="Default" />
+      <updated>1434893258542</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1276" height="777" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24764891" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Command/RequestAPICommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="777">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/DescriptorController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="588">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/HandshakeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="924">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/UnlicensedController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="654">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DependencyInjection/AtlassianConnectExtension.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="654">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DependencyInjection/Configuration.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.5" vertical-offset="84" max-vertical-offset="714">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Entity/Tenant.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.875" vertical-offset="0" max-vertical-offset="8925">
+          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JWT/Authentication/JWT.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-189.0" vertical-offset="0" max-vertical-offset="4830">
+          <caret line="216" column="0" selection-start-line="216" selection-start-column="0" selection-end-line="216" selection-end-column="0" />
+          <folding>
+            <element signature="e#61#129#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JWT/Exceptions/BeforeValidException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="654">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JWT/Exceptions/ExpiredException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="654">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/JWT/Exceptions/SignatureInvalidException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="654">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Listener/LicenseListener.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="5.25" vertical-offset="1050" max-vertical-offset="1680">
+          <caret line="49" column="53" selection-start-line="49" selection-start-column="53" selection-end-line="49" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/JWTRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.625" vertical-offset="0" max-vertical-offset="1932">
+          <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Model/QSH.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="19.25" vertical-offset="462" max-vertical-offset="1092">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resources/config/descriptor.dev.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.25" vertical-offset="0" max-vertical-offset="609">
+          <caret line="14" column="17" selection-start-line="0" selection-start-column="0" selection-end-line="23" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resources/config/descriptor.prod.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-20.125" vertical-offset="0" max-vertical-offset="609">
+          <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resources/config/routing.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="609">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resources/config/services.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="147">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resources/views/form_theme.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="25.375" vertical-offset="609" max-vertical-offset="1239">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resources/views/unlicensed.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="126">
+          <caret line="0" column="27" selection-start-line="0" selection-start-column="27" selection-end-line="0" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Security/JWTAuthenticator.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="50.75" vertical-offset="1218" max-vertical-offset="1848">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Security/JWTUserProvider.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.625" vertical-offset="903" max-vertical-offset="1533">
+          <caret line="70" column="5" selection-start-line="70" selection-start-column="5" selection-end-line="70" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AtlassianConnectBundle.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.23333333" vertical-offset="0" max-vertical-offset="630">
+          <caret line="7" column="1" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

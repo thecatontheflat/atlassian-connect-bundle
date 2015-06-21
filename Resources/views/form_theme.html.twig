@@ -1,0 +1,54 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{%- block form_row -%}
+    <div class="field-group">
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{%- block button_row -%}
+    <div class="buttons-container">
+        <div class="buttons">
+            {{- form_widget(form) -}}
+        </div>
+    </div>
+{%- endblock button_row -%}
+
+{%- block textarea_widget -%}
+    <textarea class="textarea" {{ block('widget_attributes') }}>{{ value }}</textarea>
+{%- endblock textarea_widget -%}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input class="text" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block button_widget -%}
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+            '%name%': name,
+            '%id%': id,
+            }) %}
+        {%- else -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+    <button class="aui-button" type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
+{%- endblock button_widget -%}
+
+{%- block form_start -%}
+    {% set method = method|upper %}
+    {% set jwt = '?jwt=' ~ app.request.get('jwt') %}
+    {%- if method in ["GET", "POST"] -%}
+    {% set form_method = method %}
+{%- else -%}
+    {% set form_method = "POST" %}
+{%- endif -%}
+    <form class="aui top-label" name="{{ name }}" method="{{ form_method|lower }}" action="{{ action ~ jwt }}"{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}{% if multipart %} enctype="multipart/form-data"{% endif %}>
+    {%- if form_method != method -%}
+    <input type="hidden" name="_method" value="{{ method }}" />
+{%- endif -%}
+{%- endblock form_start -%}
