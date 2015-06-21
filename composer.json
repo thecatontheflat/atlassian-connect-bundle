@@ -1,0 +1,13 @@
+{
+    "name": "thecatontheflat/atlassian-connect-bundle",
+    "description": "Atlassian Connect Symfony2 Bundle",
+    "require": {
+      "guzzlehttp/guzzle": "~5.0"
+    },
+    "authors": [
+        {
+            "name": "Vitaliy Zurian",
+            "email": "vitaliy.zurian@gmail.com"
+        }
+    ]
+}
