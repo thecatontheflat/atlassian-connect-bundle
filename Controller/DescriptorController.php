@@ -10,9 +10,9 @@ class DescriptorController extends Controller
     public function indexAction()
     {
         $kernel = $this->container->get('kernel');
-        $env = $kernel->getEnvironment();
-        $path = $kernel->locateResource('@AtlassianConnectBundle/Resources/config/descriptor.'.$env.'.json');
-        $descriptor = file_get_contents($path);
+        $config = $this->getParameter('atlassian_connect');
+        $envConfig = $config[$kernel->getEnvironment()];
+        $descriptor = json_encode($envConfig);
 
         $response = new Response();
         $response->setContent($descriptor);

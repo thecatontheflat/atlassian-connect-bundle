@@ -1,1 +1,14 @@
 services:
+    kernel.listener.license_listener:
+        class: AtlassianConnectBundle\Listener\LicenseListener
+        arguments: [@router, @kernel, @security.token_storage]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    jwt_user_provider:
+        class: AtlassianConnectBundle\Security\JWTUserProvider
+        arguments: [@doctrine.orm.entity_manager]
+
+    jwt_authenticator:
+        class: AtlassianConnectBundle\Security\JWTAuthenticator
+        arguments: [@jwt_user_provider, @kernel, @doctrine.orm.entity_manager]

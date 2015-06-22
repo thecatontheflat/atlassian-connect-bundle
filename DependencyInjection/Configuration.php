@@ -19,6 +19,12 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('atlassian_connect');
+        $rootNode
+            ->children()
+                ->variableNode('prod')->end()
+                ->variableNode('dev')->end()
+            ->end()
+        ;
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
