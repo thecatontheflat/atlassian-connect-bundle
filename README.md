@@ -21,7 +21,7 @@ Sample configuration in **config.yml**
                       url: '/protected/list?issue=${issue.key}'
                       weight: 100
                       name:
-                          value: "Tab Name"
+                          value: 'Tab Name'
   
       dev:
           baseUrl: 'http://localhost:8888'
