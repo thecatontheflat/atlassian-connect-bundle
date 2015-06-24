@@ -33,8 +33,8 @@ Sample configuration in **config.yml**
 
 To perform a license check for a certain route - specify the **requires_license** options
 
-    edit_description:
-        path: /protected/edit-description
-        defaults: { _controller: SimpleEditBundle:MD:editDescription }
+    some_route:
+        path: ...
+        defaults: ...
         options:
             requires_license: true
