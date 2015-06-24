@@ -1,4 +1,8 @@
 <?php
+/**
+ * This class is based on the https://github.com/firebase/php-jwt
+ * Thanks for the inspiration and the sources!
+ */
 
 namespace AtlassianConnectBundle\JWT\Authentication;
 
@@ -8,24 +12,24 @@ use AtlassianConnectBundle\JWT\Exceptions\BeforeValidException;
 
 class JWT
 {
-    public static $supported_algs = array(
+    public static $supportedAlgs = array(
         'HS256' => array('hash_hmac', 'SHA256'),
         'HS512' => array('hash_hmac', 'SHA512'),
         'HS384' => array('hash_hmac', 'SHA384'),
         'RS256' => array('openssl', 'SHA256'),
     );
 
-    public static function decode($jwt, $key = null, $allowed_algs = array(), $extraSeconds = 0)
+    public static function decode($jwt, $key = null, $allowedAlgs = array(), $extraSeconds = 0)
     {
         $tks = explode('.', $jwt);
         if (count($tks) != 3) {
             throw new \UnexpectedValueException('Wrong number of segments');
         }
         list($headb64, $bodyb64, $cryptob64) = $tks;
-        if (null === ($header = JWT::jsonDecode(JWT::urlsafeB64Decode($headb64)))) {
+        if (null === ($header = json_decode(JWT::urlsafeB64Decode($headb64)))) {
             throw new \UnexpectedValueException('Invalid header encoding');
         }
-        if (null === $payload = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyb64))) {
+        if (null === $payload = json_decode(JWT::urlsafeB64Decode($bodyb64))) {
             throw new \UnexpectedValueException('Invalid claims encoding');
         }
         $sig = JWT::urlsafeB64Decode($cryptob64);
@@ -33,10 +37,10 @@ class JWT
             if (empty($header->alg)) {
                 throw new \DomainException('Empty algorithm');
             }
-            if (empty(self::$supported_algs[$header->alg])) {
+            if (empty(self::$supportedAlgs[$header->alg])) {
                 throw new \DomainException('Algorithm not supported');
             }
-            if (!is_array($allowed_algs) || !in_array($header->alg, $allowed_algs)) {
+            if (!is_array($allowedAlgs) || !in_array($header->alg, $allowedAlgs)) {
                 throw new \DomainException('Algorithm not allowed');
             }
             if (is_array($key)) {
@@ -47,7 +51,6 @@ class JWT
                 }
             }
 
-            // Check the signature
             if (!JWT::verify("$headb64.$bodyb64", $sig, $key, $header->alg)) {
                 throw new SignatureInvalidException('Signature verification failed');
             }
@@ -56,7 +59,7 @@ class JWT
             // token can actually be used. If it's not yet that time, abort.
             if (isset($payload->nbf) && $payload->nbf > time()) {
                 throw new BeforeValidException(
-                    'Cannot handle token prior to ' . date(\DateTime::ISO8601, $payload->nbf)
+                    'Cannot handle token prior to '.date(\DateTime::ISO8601, $payload->nbf)
                 );
             }
 
@@ -65,7 +68,7 @@ class JWT
             // correctly used the nbf claim).
             if (isset($payload->iat) && $payload->iat > time()) {
                 throw new BeforeValidException(
-                    'Cannot handle token prior to ' . date(\DateTime::ISO8601, $payload->iat)
+                    'Cannot handle token prior to '.date(\DateTime::ISO8601, $payload->iat)
                 );
             }
 
@@ -85,8 +88,8 @@ class JWT
             $header['kid'] = $keyId;
         }
         $segments = array();
-        $segments[] = JWT::urlsafeB64Encode(JWT::jsonEncode($header));
-        $segments[] = JWT::urlsafeB64Encode(JWT::jsonEncode($payload));
+        $segments[] = JWT::urlsafeB64Encode(json_encode($header));
+        $segments[] = JWT::urlsafeB64Encode(json_encode($payload));
         $signing_input = implode('.', $segments);
 
         $signature = JWT::sign($signing_input, $key, $alg);
@@ -97,11 +100,11 @@ class JWT
 
     public static function sign($msg, $key, $alg = 'HS256')
     {
-        if (empty(self::$supported_algs[$alg])) {
+        if (empty(self::$supportedAlgs[$alg])) {
             throw new \DomainException('Algorithm not supported');
         }
-        list($function, $algorithm) = self::$supported_algs[$alg];
-        switch($function) {
+        list($function, $algorithm) = self::$supportedAlgs[$alg];
+        switch ($function) {
             case 'hash_hmac':
                 return hash_hmac($algorithm, $msg, $key, true);
             case 'openssl':
@@ -117,16 +120,16 @@ class JWT
 
     private static function verify($msg, $signature, $key, $alg)
     {
-        if (empty(self::$supported_algs[$alg])) {
+        if (empty(self::$supportedAlgs[$alg])) {
             throw new \DomainException('Algorithm not supported');
         }
 
-        list($function, $algorithm) = self::$supported_algs[$alg];
-        switch($function) {
+        list($function, $algorithm) = self::$supportedAlgs[$alg];
+        switch ($function) {
             case 'openssl':
                 $success = openssl_verify($msg, $signature, $key, $algorithm);
                 if (!$success) {
-                    throw new \DomainException("OpenSSL unable to verify data: " . openssl_error_string());
+                    throw new \DomainException("OpenSSL unable to verify data: ".openssl_error_string());
                 } else {
                     return $signature;
                 }
@@ -148,43 +151,6 @@ class JWT
         }
     }
 
-    public static function jsonDecode($input)
-    {
-        if (version_compare(PHP_VERSION, '5.4.0', '>=') && !(defined('JSON_C_VERSION') && PHP_INT_SIZE > 4)) {
-            /** In PHP >=5.4.0, json_decode() accepts an options parameter, that allows you
-             * to specify that large ints (like Steam Transaction IDs) should be treated as
-             * strings, rather than the PHP default behaviour of converting them to floats.
-             */
-            $obj = json_decode($input, false, 512, JSON_BIGINT_AS_STRING);
-        } else {
-            /** Not all servers will support that, however, so for older versions we must
-             * manually detect large ints in the JSON string and quote them (thus converting
-             *them to strings) before decoding, hence the preg_replace() call.
-             */
-            $max_int_length = strlen((string) PHP_INT_MAX) - 1;
-            $json_without_bigints = preg_replace('/:\s*(-?\d{'.$max_int_length.',})/', ': "$1"', $input);
-            $obj = json_decode($json_without_bigints);
-        }
-
-        if (function_exists('json_last_error') && $errno = json_last_error()) {
-            JWT::handleJsonError($errno);
-        } elseif ($obj === null && $input !== 'null') {
-            throw new \DomainException('Null result with non-null input');
-        }
-        return $obj;
-    }
-
-    public static function jsonEncode($input)
-    {
-        $json = json_encode($input);
-        if (function_exists('json_last_error') && $errno = json_last_error()) {
-            JWT::handleJsonError($errno);
-        } elseif ($json === 'null' && $input !== null) {
-            throw new \DomainException('Null result with non-null input');
-        }
-        return $json;
-    }
-
     public static function urlsafeB64Decode($input)
     {
         $remainder = strlen($input) % 4;
@@ -192,6 +158,7 @@ class JWT
             $padlen = 4 - $remainder;
             $input .= str_repeat('=', $padlen);
         }
+
         return base64_decode(strtr($input, '-_', '+/'));
     }
 
@@ -200,25 +167,12 @@ class JWT
         return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
     }
 
-    private static function handleJsonError($errno)
-    {
-        $messages = array(
-            JSON_ERROR_DEPTH => 'Maximum stack depth exceeded',
-            JSON_ERROR_CTRL_CHAR => 'Unexpected control character found',
-            JSON_ERROR_SYNTAX => 'Syntax error, malformed JSON'
-        );
-        throw new \DomainException(
-            isset($messages[$errno])
-            ? $messages[$errno]
-            : 'Unknown JSON error: ' . $errno
-        );
-    }
-
     private static function safeStrlen($str)
     {
         if (function_exists('mb_strlen')) {
             return mb_strlen($str, '8bit');
         }
+
         return strlen($str);
     }
 }
