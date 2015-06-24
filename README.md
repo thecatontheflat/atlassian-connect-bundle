@@ -59,3 +59,8 @@ To configure security part - use the following configuration in your `security.y
 # Usage Examples
 
 #### Signed Request
+
+In your **protected** controller action you can make a signed request to JIRA instance:
+
+    $request = new JWTRequest($this->getUser());
+    $json = $request->get('/rest/api/2/issue/KEY-XXX');
