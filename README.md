@@ -55,6 +55,12 @@ To configure security part - use the following configuration in your `security.y
             stateless: true
             simple_preauth:
                 authenticator: jwt_authenticator
+                
+
+#### Other Important Steps
+You would have to update the database schema:
+
+    app/console doctrine:schema:update --force
 
 # Usage Examples
 
