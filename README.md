@@ -1,6 +1,6 @@
 # Configuration
 
-## General Configuration
+#### General Configuration
 
 Bundle configuration includes has two main nodes - `prod` and `dev`. When requesting descriptor - this configuration is converted to JSON. Whatever you specify under `dev` node will override same option from `prod`.
 
@@ -31,7 +31,7 @@ Sample configuration in `config.yml`
           baseUrl: 'http://localhost:8888'
 
 
-## License Check Configuration
+#### License Check Configuration
 
 To perform a license check for a certain route - specify the `requires_license` options in your `routing.yml`
 
@@ -41,7 +41,7 @@ To perform a license check for a certain route - specify the `requires_license` 
         options:
             requires_license: true
 
-## Security Configuration
+#### Security Configuration
 
 To configure security part - use the following configuration in your `security.yml`
 
@@ -55,3 +55,7 @@ To configure security part - use the following configuration in your `security.y
             stateless: true
             simple_preauth:
                 authenticator: jwt_authenticator
+
+# Usage Examples
+
+#### Signed Request
