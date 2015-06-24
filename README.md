@@ -1,5 +1,13 @@
 # Atlassian Connect Bundle
 
+#### Installation
+In `composer.json`:
+
+    "require": {
+        // ...
+        "thecatontheflat/atlassian-connect-bundle": "dev-master"
+    }
+
 #### General Configuration
 
 Bundle configuration includes has two main nodes - `prod` and `dev`. When requesting descriptor - this configuration is converted to JSON. Whatever you specify under `dev` node will override same option from `prod`.
