@@ -1,4 +1,4 @@
-# Configuration
+# Atlassian Connect Bundle
 
 #### General Configuration
 
