@@ -1,5 +1,7 @@
 # Configuration
 
+## General Configuration
+
 Sample configuration in **config.yml**
 
     atlassian_connect:
@@ -25,3 +27,14 @@ Sample configuration in **config.yml**
   
       dev:
           baseUrl: 'http://localhost:8888'
+
+
+## Security and Routes Configuration
+
+To perform a license check for a certain route - specify the **requires_license** options
+
+    edit_description:
+        path: /protected/edit-description
+        defaults: { _controller: SimpleEditBundle:MD:editDescription }
+        options:
+            requires_license: true
