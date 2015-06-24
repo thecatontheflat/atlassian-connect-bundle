@@ -2,7 +2,7 @@
 
 ## General Configuration
 
-Sample configuration in **config.yml**
+Sample configuration in `config.yml`
 
     atlassian_connect:
       prod:
@@ -29,12 +29,27 @@ Sample configuration in **config.yml**
           baseUrl: 'http://localhost:8888'
 
 
-## Security and Routes Configuration
+## License Check Configuration
 
-To perform a license check for a certain route - specify the **requires_license** options
+To perform a license check for a certain route - specify the `requires_license` options in your `routing.yml`
 
     some_route:
         path: ...
         defaults: ...
         options:
             requires_license: true
+
+## Security Configuration
+
+To configure security part - use the following configuration in your `security.yml`
+
+    providers:
+        jwt_user_provider:
+            id: jwt_user_provider
+
+    firewalls:
+        jwt_secured_area:
+            pattern: "^/protected"
+            stateless: true
+            simple_preauth:
+                authenticator: jwt_authenticator
