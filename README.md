@@ -1,14 +1,28 @@
 # Atlassian Connect Bundle
 
-#### Installation
+### Installation
+##### Step 1: Download the Bundle
 In `composer.json`:
 
     "require": {
         // ...
         "thecatontheflat/atlassian-connect-bundle": "dev-master"
     }
+    
+##### Step 2: Enable the Bundle
+    // app/AppKernel.php
+    class AppKernel extends Kernel
+    {
+        public function registerBundles()
+        {
+            $bundles = array(
+                // ...
+                new AtlassianConnectBundle\AtlassianConnectBundle()
+            );
+        }
+    }
 
-#### General Configuration
+##### Step 3: Configure the Bundle
 
 Bundle configuration includes has two main nodes - `prod` and `dev`. When requesting descriptor - this configuration is converted to JSON. Whatever you specify under `dev` node will override same option from `prod`.
 
@@ -39,17 +53,7 @@ Sample configuration in `config.yml`
           baseUrl: 'http://localhost:8888'
 
 
-#### License Check Configuration
-
-To perform a license check for a certain route - specify the `requires_license` options in your `routing.yml`
-
-    some_route:
-        path: ...
-        defaults: ...
-        options:
-            requires_license: true
-
-#### Security Configuration
+##### Step 4: Configure Security
 
 To configure security part - use the following configuration in your `security.yml`
 
@@ -63,16 +67,26 @@ To configure security part - use the following configuration in your `security.y
             stateless: true
             simple_preauth:
                 authenticator: jwt_authenticator
+
+##### Step 5 (Optional): Configure License Check
+
+To perform a license check for a certain route - specify the `requires_license` options in your `routing.yml`
+
+    some_route:
+        path: ...
+        defaults: ...
+        options:
+            requires_license: true
                 
 
-#### Other Important Steps
-You would have to update the database schema:
+##### Step 6: Update Database
 
     app/console doctrine:schema:update --force
 
+
 # Usage Examples
 
-#### Signed Request
+### Signed Request
 
 In your **protected** controller action you can make a signed request to JIRA instance:
 
