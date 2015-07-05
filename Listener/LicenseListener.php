@@ -53,7 +53,7 @@ class LicenseListener
         }
 
 
-        if ('active' != $request->get('lic') && $this->kernel->getEnvironment() == 'prod') {
+        if ('active' != $request->get('lic') && $this->kernel->getEnvironment() != 'prod') {
             // Checking for whitelisted users
             try {
                 $user = $this->tokenStorage->getToken()->getUser();
@@ -72,7 +72,7 @@ class LicenseListener
                 // Do nothing
             }
 
-            $url = $this->router->generate('atlassian_connect_unlicensed');
+            $url = $this->router->generate('atlassian_connect_unlicensed', $request->query->all());
             $response = new RedirectResponse($url);
             $event->setResponse($response);
         }

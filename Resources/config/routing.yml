@@ -9,6 +9,6 @@ atlassian_connect_handshake:
         _controller: AtlassianConnectBundle:Handshake:register
 
 atlassian_connect_unlicensed:
-    path: /unlicensed
+    path: /protected/unlicensed
     defaults:
         _controller: AtlassianConnectBundle:Unlicensed:unlicensed
