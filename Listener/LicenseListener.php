@@ -53,7 +53,7 @@ class LicenseListener
         }
 
 
-        if ('active' != $request->get('lic') && $this->kernel->getEnvironment() != 'prod') {
+        if ('active' != $request->get('lic') && $this->kernel->getEnvironment() == 'prod') {
             // Checking for whitelisted users
             try {
                 $user = $this->tokenStorage->getToken()->getUser();
