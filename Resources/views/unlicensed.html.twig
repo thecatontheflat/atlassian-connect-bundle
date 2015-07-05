@@ -1,1 +1,29 @@
-<h1>You need to start the Trial to be able to use the Add-On</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+    <title></title>
+
+    <script src="{{ app.user.baseUrl|default('') }}/atlassian-connect/all.js" type="text/javascript" data-options="sizeToParent:true"></script>
+
+    <link rel="stylesheet" href="{{ asset('bundles/atlassianconnect/aui/css/aui.min.css') }}" media="all">
+    <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/atlassianconnect/aui/js/aui.min.js') }}"></script>
+</head>
+<body class="aui-page-focused aui-page-focused-xlarge">
+<div id="page">
+    <section id="content" role="main">
+        <div class="aui-page-panel">
+            <div class="aui-page-panel-inner">
+                <section class="aui-page-panel-content">
+                    <h1>You need to start the Trial to be able to use the Add-On</h1>
+                </section>
+            </div>
+        </div>
+    </section>
+</div>
+{% block js %}
+{% endblock %}
+</body>
+</html>
