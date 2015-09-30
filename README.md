@@ -67,8 +67,16 @@ To configure security part - use the following configuration in your `security.y
             stateless: true
             simple_preauth:
                 authenticator: jwt_authenticator
+                
+##### Step 5: Include Routes
 
-##### Step 5 (Optional): Configure License Check
+Add the following to your `app/config/routing.yml`
+
+    ac:
+        resource: "@AtlassianConnectBundle/Resources/config/routing.yml"
+
+
+##### Step 6 (Optional): Configure License Check
 
 To perform a license check for a certain route - specify the `requires_license` options in your `routing.yml`
 
@@ -79,7 +87,7 @@ To perform a license check for a certain route - specify the `requires_license` 
             requires_license: true
                 
 
-##### Step 6: Update Database
+##### Step 7: Update Database
 
     app/console doctrine:schema:update --force
 
