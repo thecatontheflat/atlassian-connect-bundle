@@ -101,3 +101,8 @@ In your **protected** controller action you can make a signed request to JIRA in
 
     $request = new JWTRequest($this->getUser());
     $json = $request->get('/rest/api/2/issue/KEY-XXX');
+
+### White listening licences
+
+You could white-list any lisence by editing related row in table tenant and setting field is_white_listed to 1.
+If you will also set white_listed_until - you will be able to set white-list expiration
