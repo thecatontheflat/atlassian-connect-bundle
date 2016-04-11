@@ -40,7 +40,7 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
     public function createToken(Request $request, $providerKey)
     {
         $jwt = $request->query->get('jwt');
-        if(!$jwt && $request->headers->has("authorization") && (count($authorizationHeaderArray = explode(" ",$request->headers->get("authorization")) > 1))) {
+        if(!$jwt && $request->headers->has("authorization") && (count($authorizationHeaderArray = explode(" ",$request->headers->get("authorization"))) > 1)) {
             list(,$jwt) = $authorizationHeaderArray;
         }
 
