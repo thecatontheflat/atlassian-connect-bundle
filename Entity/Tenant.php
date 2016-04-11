@@ -114,7 +114,7 @@ class Tenant implements UserInterface
     /**
      * @ORM\Column(name="is_white_listed", type="boolean", options={"default":0})
      */
-    private $isWhiteListed;
+    private $isWhiteListed = false;
 
     /**
      * @ORM\Column(name="white_listed_until", type="datetime", nullable=true)
