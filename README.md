@@ -101,3 +101,6 @@ In your **protected** controller action you can make a signed request to JIRA in
 
     $request = new JWTRequest($this->getUser());
     $json = $request->get('/rest/api/2/issue/KEY-XXX');
+
+### Dev environment
+In dev environment Tenant with id=1 would be used automatically
