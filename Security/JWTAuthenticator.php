@@ -40,9 +40,8 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
     public function createToken(Request $request, $providerKey)
     {
         $jwt = $request->query->get('jwt');
-        if(!$jwt) {
-            // webhooks got JWT as authorization header
-            list(,$jwt) = explode(" ",$request->headers->get("authorization"));
+        if(!$jwt && $request->headers->has("authorization") && (count($authorizationHeaderArray = explode(" ",$request->headers->get("authorization")) > 1))) {
+            list(,$jwt) = $authorizationHeaderArray;
         }
 
         if (!$jwt && $this->kernel->getEnvironment() == 'dev') {
