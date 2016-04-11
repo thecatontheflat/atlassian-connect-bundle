@@ -72,7 +72,12 @@ class JWTRequest
 
     private function buildURL($restUrl)
     {
-        return $this->tenant->getBaseUrl().$restUrl;
+        // Jira return absolute self links, so its more easy to work with get with absolute urls in such cases  
+        if((substr($restUrl,0,7) != 'http://') && (substr($restUrl,0,8) != 'https://')) {
+            return $this->tenant->getBaseUrl().$restUrl;
+        } else {
+            return $restUrl;
+        }
     }
 
     private function buildPayload($method, $restUrl)
