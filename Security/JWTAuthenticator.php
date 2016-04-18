@@ -42,7 +42,7 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
         $jwt = $request->query->get('jwt');
         if(!$jwt && $request->headers->has("authorization")) {
             $authorizationHeaderArray = explode(" ",$request->headers->get("authorization");
-            if((count($authorizationHeaderArray)) > 1) {
+            if(count($authorizationHeaderArray) > 1) {
                 $jwt = $authorizationHeaderArray[1];
             }
         }
