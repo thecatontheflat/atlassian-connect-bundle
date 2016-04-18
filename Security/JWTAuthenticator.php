@@ -40,6 +40,12 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
     public function createToken(Request $request, $providerKey)
     {
         $jwt = $request->query->get('jwt');
+        if(!$jwt && $request->headers->has("authorization")) {
+            $authorizationHeaderArray = explode(" ",$request->headers->get("authorization"));
+            if(count($authorizationHeaderArray) > 1) {
+                $jwt = $authorizationHeaderArray[1];
+            }
+        }
 
         if (!$jwt && $this->kernel->getEnvironment() == 'dev') {
             $tenant = $this->em->getRepository('AtlassianConnectBundle:Tenant')->find(1);
@@ -79,7 +85,10 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
 
         /** @var Tenant $user */
         $user = $this->userProvider->loadUserByUsername($clientKey);
-        $user->setUsername($token->sub);
+        if(property_exists($token,"sub")) {
+            // for some reasons, when webhooks are called - field sub is undefined
+            $user->setUsername($token->sub);
+        }
 
         return new PreAuthenticatedToken($user, $jwt, $providerKey, $user->getRoles());
     }
