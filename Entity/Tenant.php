@@ -112,6 +112,16 @@ class Tenant implements UserInterface
     private $updatedAt;
 
     /**
+     * @ORM\Column(name="is_white_listed", type="boolean", options={"default":0})
+     */
+    private $isWhiteListed = false;
+
+    /**
+     * @ORM\Column(name="white_listed_until", type="datetime", nullable=true)
+     */
+    private $whiteListedUntil;
+    
+    /**
      * @ORM\PrePersist
      */
     public function setCreatedAt()
@@ -418,5 +428,48 @@ class Tenant implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getIsWhiteListed()
+    {
+        return $this->isWhiteListed;
+    }
+
+    /**
+     * @param boolean $isWhiteListed
+     */
+    public function setIsWhiteListed($isWhiteListed)
+    {
+        $this->isWhiteListed = $isWhiteListed;
+        return $this;
+    }
+
+    /**
+     * @return null|\DateTime
+     */
+    public function getWhiteListedUntil()
+    {
+        return $this->whiteListedUntil;
+    }
+
+    /**
+     * @param \DateTime $whiteListedUntil
+     */
+    public function setWhiteListedUntil($whiteListedUntil)
+    {
+        $this->whiteListedUntil = $whiteListedUntil;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isWhiteListed()
+    {
+        $now = new \DateTime();
+        return $this->getIsWhiteListed() && (is_null($this->getWhiteListedUntil()) || ($now < $this->getWhiteListedUntil()));
     }
 }

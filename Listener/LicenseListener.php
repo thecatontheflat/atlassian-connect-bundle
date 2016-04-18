@@ -2,6 +2,7 @@
 
 namespace AtlassianConnectBundle\Listener;
 
+use AtlassianConnectBundle\Entity\Tenant;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -57,8 +58,12 @@ class LicenseListener
             // Checking for whitelisted users
             try {
                 $user = $this->tokenStorage->getToken()->getUser();
-                $today = date('Y-m-d');
-                if ($user instanceof UserInterface) {
+                if ($user instanceof Tenant) {
+                    if($user->isWhiteListed()){
+                        return;
+                    }
+
+                    $today = date('Y-m-d');
                     $whitelist = $this->kernel->getContainer()->getParameter('license_whitelist');
                     foreach ($whitelist as $allowed) {
                         if ($allowed['client_key'] == $user->getClientKey() && $today <= $allowed['valid_till']) {
@@ -66,7 +71,6 @@ class LicenseListener
                             return;
                         }
                     }
-
                 }
             } catch (\Exception $e) {
                 // Do nothing
