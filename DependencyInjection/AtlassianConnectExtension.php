@@ -28,6 +28,7 @@ class AtlassianConnectExtension extends Extension
         $config['dev'] = array_merge($prod, $dev);
 
         $container->setParameter('atlassian_connect', $config);
+        $container->setParameter('atlassian_connect_token_lifetime', $config["token_lifetime"]);
 
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
