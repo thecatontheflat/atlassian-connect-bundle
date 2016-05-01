@@ -110,3 +110,10 @@ If you will also set white_listed_until - you will be able to set white-list exp
 ### Dev environment
 
 In dev environment Tenant with id=1 would be used automatically
+
+### Token LifeTime
+
+Default token lifetime is 600 seconds. You can change value in config by setting parameter
+
+    atlassian_connect:
+        token_lifetime: 86400

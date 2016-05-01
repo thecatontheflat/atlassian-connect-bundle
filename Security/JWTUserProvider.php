@@ -18,10 +18,12 @@ class JWTUserProvider implements UserProviderInterface
      * @var EntityManager
      */
     private $em;
+    private $tokenLifetime;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, $tokenLifetime)
     {
         $this->em = $em;
+        $this->tokenLifetime = $tokenLifetime;
     }
 
     public function getDecodedToken($jwt)
@@ -30,7 +32,7 @@ class JWTUserProvider implements UserProviderInterface
             $decodedToken = JWT::decode($jwt);
             $tenant = $this->findTenant($decodedToken->iss);
 
-            JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256'], 600);
+            JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256'], $this->tokenLifetime);
 
             return $decodedToken;
         } catch (\Exception $e) {
