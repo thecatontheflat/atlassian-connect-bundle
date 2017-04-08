@@ -111,3 +111,19 @@ If you will also set white_listed_until - you will be able to set white-list exp
 ### Dev environment
 
 In dev environment Tenant with id=1 would be used automatically
+
+# Troubleshooting
+
+### Cant start free trial of my plugin on Jira Cloud
+
+As soon as you will create your plugin - you will be able to access plugin manifest via url
+
+    https://yourplugindomain.com/atlassian-connect.json
+    
+You will be able to setup it in "Manage Addons" section of your Jira Cloud using "Upload addon" interface. But right now AtlassianConnectBundle support only "paid via Atlassian" model, so you will not be able to start your trial.
+
+Instead of using manifest url directly - you should add **private listing** of your plugin, create token and get  manifest url like
+
+    https://marketplace.atlassian.com/files/1.0.0-AC/artifact/descriptor/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/atlassian-connect.json?access-token=xxxxxxxx
+    
+If you will use that url from marketplace - your trial will be started automatically.
