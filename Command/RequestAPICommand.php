@@ -14,24 +14,29 @@ class RequestAPICommand extends ContainerAwareCommand
     {
         $this
             ->setName('ac:request-api')
-            ->addArgument('client-key', InputArgument::REQUIRED)
-            ->addArgument('rest-url', InputArgument::REQUIRED)
-            ->setDescription('Request REST end-points');
+            ->addArgument('client-key', InputArgument::REQUIRED,"Client-key from tenant OR tenant id macro, like t#123")
+            ->addArgument('rest-url', InputArgument::REQUIRED, "REST api endpoint, like /rest/api/2/issue/{issueIdOrKey}")
+            ->setDescription('Request REST end-points. 
+Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $tenant = $input->getArgument('client-key');
         $restUrl = $input->getArgument('rest-url');
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $tenant = $em->getRepository('AtlassianConnectBundle:Tenant')
-            ->findOneByClientKey($tenant);
+        if(preg_match("'^t\#(\d+)$'",$input->getArgument('client-key'),$m)) {
+            $tenant = $em->getRepository('AtlassianConnectBundle:Tenant')
+                ->find($m[1]);
+        } else {
+            $tenant = $em->getRepository('AtlassianConnectBundle:Tenant')
+                ->findOneByClientKey($input->getArgument('client-key'));
+        }
 
         $request = new JWTRequest($tenant);
         $json = $request->get($restUrl);
 
         $output->writeln('');
-        var_export($json);
+        print json_encode($json, JSON_PRETTY_PRINT);
         $output->writeln('');
     }
 }
