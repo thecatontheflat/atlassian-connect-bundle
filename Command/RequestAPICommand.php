@@ -16,8 +16,8 @@ class RequestAPICommand extends ContainerAwareCommand
         $this
             ->setName('ac:request-api')
             ->addArgument('rest-url', InputArgument::REQUIRED, "REST api endpoint, like /rest/api/2/issue/{issueIdOrKey}")
-            ->addOption('client-key', "c", InputOption::VALUE_OPTIONAL | InputOption::VALUE_REQUIRED, "Client-key from tenant")
-            ->addOption('tenant-id', "t", InputOption::VALUE_OPTIONAL | InputOption::VALUE_REQUIRED, "Tenant-id")
+            ->addOption('client-key', "c", InputOption::VALUE_REQUIRED, "Client-key from tenant")
+            ->addOption('tenant-id', "t", InputOption::VALUE_REQUIRED, "Tenant-id")
             ->setDescription('Request REST end-points. 
 Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
     }
