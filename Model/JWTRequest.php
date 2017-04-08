@@ -51,6 +51,19 @@ class JWTRequest
 
         return $response->json();
     }
+    
+    public function post($restUrl, $json)
+    {
+        $url = $this->buildURL($restUrl);
+        $options = ['headers' => $this->buildAuthHeader('POST', $restUrl)];
+        $options['headers']['Content-Type'] = 'application/json';
+
+        $options['json'] = $json;
+
+        $response = $this->client->post($url, $options);
+
+        return $response->json();
+    }
 
     public function get($restUrl)
     {
