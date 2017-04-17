@@ -1,7 +1,6 @@
 <?php
 namespace AtlassianConnectBundle\Command;
 
-use AtlassianConnectBundle\Entity\Tenant;
 use AtlassianConnectBundle\Model\JWTRequest;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,11 +25,12 @@ Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
     {
         $restUrl = $input->getArgument('rest-url');
         $em = $this->getContainer()->get('doctrine')->getManager();
+        $tenantClass = $this->getContainer()->getParameter("atlassian_connect_tenant_entity_class");
         if($input->getOption("tenant-id")) {
-            $tenant = $em->getRepository('AtlassianConnectBundle:Tenant')
+            $tenant = $em->getRepository($tenantClass)
                 ->find($input->getOption("tenant-id"));
         } elseif($input->getOption("client-key")) {
-            $tenant = $em->getRepository('AtlassianConnectBundle:Tenant')
+            $tenant = $em->getRepository($tenantClass)
                 ->findOneByClientKey($input->getOption('client-key'));
         } else {
             throw new \Exception("Please provide client-key or tenant-id");

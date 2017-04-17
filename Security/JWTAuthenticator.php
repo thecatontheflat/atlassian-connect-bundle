@@ -24,11 +24,11 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
     /**
      * @var KernelInterface
      */
-    private $kernel;
+    protected $kernel;
     /**
      * @var EntityManager
      */
-    private $em;
+    protected $em;
 
     public function __construct(JWTUserProvider $userProvider, KernelInterface $kernel, EntityManager $em)
     {

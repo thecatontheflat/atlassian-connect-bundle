@@ -10,9 +10,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Tenant
  *
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\Table(name="tenant")
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Entity(repositoryClass="AtlassianConnectBundle\Entity\TenantRepository")
+ * @ORM\Entity()
  */
 class Tenant implements UserInterface
 {
@@ -120,7 +122,7 @@ class Tenant implements UserInterface
      * @ORM\Column(name="white_listed_until", type="datetime", nullable=true)
      */
     private $whiteListedUntil;
-    
+
     /**
      * @ORM\PrePersist
      */
@@ -169,7 +171,7 @@ class Tenant implements UserInterface
      * Set addonKey
      *
      * @param string $addonKey
-     * @return Tenant
+     * @return $this
      */
     public function setAddonKey($addonKey)
     {
@@ -192,7 +194,7 @@ class Tenant implements UserInterface
      * Set clientKey
      *
      * @param string $clientKey
-     * @return Tenant
+     * @return $this
      */
     public function setClientKey($clientKey)
     {
@@ -215,7 +217,7 @@ class Tenant implements UserInterface
      * Set publicKey
      *
      * @param string $publicKey
-     * @return Tenant
+     * @return $this
      */
     public function setPublicKey($publicKey)
     {
@@ -238,7 +240,7 @@ class Tenant implements UserInterface
      * Set sharedSecret
      *
      * @param string $sharedSecret
-     * @return Tenant
+     * @return $this
      */
     public function setSharedSecret($sharedSecret)
     {
@@ -261,7 +263,7 @@ class Tenant implements UserInterface
      * Set serverVersion
      *
      * @param string $serverVersion
-     * @return Tenant
+     * @return $this
      */
     public function setServerVersion($serverVersion)
     {
@@ -284,7 +286,7 @@ class Tenant implements UserInterface
      * Set pluginsVersion
      *
      * @param string $pluginsVersion
-     * @return Tenant
+     * @return $this
      */
     public function setPluginsVersion($pluginsVersion)
     {
@@ -307,7 +309,7 @@ class Tenant implements UserInterface
      * Set baseUrl
      *
      * @param string $baseUrl
-     * @return Tenant
+     * @return $this
      */
     public function setBaseUrl($baseUrl)
     {
@@ -330,7 +332,7 @@ class Tenant implements UserInterface
      * Set productType
      *
      * @param string $productType
-     * @return Tenant
+     * @return $this
      */
     public function setProductType($productType)
     {
@@ -353,7 +355,7 @@ class Tenant implements UserInterface
      * Set description
      *
      * @param string $description
-     * @return Tenant
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -376,7 +378,7 @@ class Tenant implements UserInterface
      * Set eventType
      *
      * @param string $eventType
-     * @return Tenant
+     * @return $this
      */
     public function setEventType($eventType)
     {
@@ -440,6 +442,7 @@ class Tenant implements UserInterface
 
     /**
      * @param boolean $isWhiteListed
+     * @return $this
      */
     public function setIsWhiteListed($isWhiteListed)
     {
@@ -457,6 +460,7 @@ class Tenant implements UserInterface
 
     /**
      * @param \DateTime $whiteListedUntil
+     * @return $this
      */
     public function setWhiteListedUntil($whiteListedUntil)
     {
