@@ -15,16 +15,16 @@ class LicenseListener
     /**
      * @var RouterInterface
      */
-    private $router;
+    protected $router;
 
     /**
      * @var KernelInterface
      */
-    private $kernel;
+    protected $kernel;
     /**
      * @var TokenStorage
      */
-    private $tokenStorage;
+    protected $tokenStorage;
 
     /**
      * @param RouterInterface $router

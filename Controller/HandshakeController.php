@@ -14,7 +14,8 @@ class HandshakeController extends Controller
         $content = $request->getContent();
         $content = json_decode($content, true);
 
-        $tenant = $this->getDoctrine()->getRepository('AtlassianConnectBundle:Tenant')
+        $tenantClass = $this->getParameter("atlassian_connect_tenant_entity_class");
+        $tenant = $this->getDoctrine()->getRepository($tenantClass)
             ->findOneByClientKey($content['clientKey']);
 
         if (!$tenant) {

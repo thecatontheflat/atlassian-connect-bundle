@@ -112,6 +112,55 @@ If you will also set white_listed_until - you will be able to set white-list exp
 
 In dev environment Tenant with id=1 would be used automatically
 
+### Custom tenant entity
+
+You could add new entity AppBundle/Entity/JiraTenant like
+
+    <?php
+    namespace AppBundle\Entity;
+    
+    use Doctrine\ORM\Mapping as ORM;
+    use AtlassianConnectBundle\Entity\Tenant as BaseTenant;
+     
+    /**
+     * JiraTenant
+     *
+     * @ORM\Entity()
+     */
+    class JiraTenant extends BaseTenant
+    {
+        /**
+         * @ORM\Column(type="string", nullable=true)
+         */
+        protected $cusomProperty;
+    
+        /**
+         * @return mixed
+         */
+        public function getCusomProperty()
+        {
+            return $this->cusomProperty;
+        }
+    
+        /**
+         * @param mixed $cusomProperty
+         * @return $this
+         */
+        public function setCusomProperty($cusomProperty)
+        {
+            $this->cusomProperty = $cusomProperty;
+            return $this;
+        }
+    }
+    
+And override default one by setting parameter
+    
+    atlassian_connect_tenant_entity_class: AppBundle:JiraTenant
+
+Since [Class Table Inheritance](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/inheritance-mapping.html#class-table-inheritance) used - you cant use class name Tenant and you will need to patch existing database with lowercased class name, like
+ 
+    UPDATE tenant SET discr='jiratenant'
+
 # Troubleshooting
 
 ### Cant start free trial of my plugin on Jira Cloud

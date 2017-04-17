@@ -17,13 +17,15 @@ class JWTUserProvider implements UserProviderInterface
     /**
      * @var EntityManager
      */
-    private $em;
-    private $tokenLifetime;
+    protected $em;
+    protected $tokenLifetime;
+    protected $tenantClass;
 
-    public function __construct(EntityManager $em, $tokenLifetime)
+    public function __construct(EntityManager $em, $tokenLifetime, $tenantClass)
     {
         $this->em = $em;
         $this->tokenLifetime = $tokenLifetime;
+        $this->tenantClass = $tenantClass;
     }
 
     public function getDecodedToken($jwt)
@@ -62,17 +64,17 @@ class JWTUserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-        return 'AtlassianConnectBundle\Entity\Tenant' === $class;
+        return ('AtlassianConnectBundle\Entity\Tenant' === $class) || is_subclass_of($class,'AtlassianConnectBundle\Entity\Tenant');
     }
 
     /**
      * @param $clientKey
      * @return Tenant|null
      */
-    private function findTenant($clientKey)
+    protected function findTenant($clientKey)
     {
         return $this->em
-            ->getRepository('AtlassianConnectBundle:Tenant')
+            ->getRepository($this->tenantClass)
             ->findOneByClientKey($clientKey);
     }
 }
