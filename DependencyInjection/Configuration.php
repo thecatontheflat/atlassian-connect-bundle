@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->variableNode('token_lifetime')->defaultValue(600)->end()
+                ->variableNode('dev_tenant')->defaultValue(1)->end()
                 ->variableNode('prod')->end()
                 ->variableNode('dev')->end()
             ->end()

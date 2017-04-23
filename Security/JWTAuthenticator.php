@@ -2,6 +2,7 @@
 
 namespace AtlassianConnectBundle\Security;
 
+use AtlassianConnectBundle\Entity\Tenant;
 use AtlassianConnectBundle\Model\QSH;
 use Doctrine\ORM\EntityManager;
 use AtlassianConnectBundle\JWT\Authentication\JWT;
@@ -15,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
-use AtlassianConnectBundle\Entity\Tenant;
 
 class JWTAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
@@ -29,12 +29,16 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
      * @var EntityManager
      */
     protected $em;
+    protected $tenantEntityClass;
+    protected $devTenant;
 
-    public function __construct(JWTUserProvider $userProvider, KernelInterface $kernel, EntityManager $em)
+    public function __construct(JWTUserProvider $userProvider, KernelInterface $kernel, EntityManager $em, $tenantEntityClass, $devTenant)
     {
         $this->userProvider = $userProvider;
         $this->kernel = $kernel;
         $this->em = $em;
+        $this->tenantEntityClass = $tenantEntityClass;
+        $this->devTenant = $devTenant;
     }
 
     public function createToken(Request $request, $providerKey)
@@ -47,8 +51,10 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
             }
         }
 
-        if (!$jwt && $this->kernel->getEnvironment() == 'dev') {
-            $tenant = $this->em->getRepository('AtlassianConnectBundle:Tenant')->find(1);
+        if (!$jwt && ($this->kernel->getEnvironment() == 'dev') && ($this->devTenant)) {
+            if(!$tenant = $this->em->getRepository($this->tenantEntityClass)->find($this->devTenant)) {
+                throw new \Exception("Cant find tenant with id ".$this->devTenant." - please set atlassian_connect.dev_tenant to false to disable dedicated dev tenant OR add valid id");
+            }
             $clientKey = $tenant->getClientKey();
             $sharedSecret = $tenant->getSharedSecret();
             $qshHelper = new QSH();
@@ -83,7 +89,7 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
             );
         }
 
-        /** @var Tenant $user */
+        /** @var $user Tenant */
         $user = $this->userProvider->loadUserByUsername($clientKey);
         if(property_exists($token,"sub")) {
             // for some reasons, when webhooks are called - field sub is undefined

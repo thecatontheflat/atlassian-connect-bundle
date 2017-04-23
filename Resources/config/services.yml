@@ -17,4 +17,4 @@ services:
 
     jwt_authenticator:
         class: "%atlassian_connect_jwt_authenticator_class%"
-        arguments: ['@jwt_user_provider', '@kernel', '@doctrine.orm.entity_manager']
+        arguments: ['@jwt_user_provider', '@kernel', '@doctrine.orm.entity_manager', "%atlassian_connect_tenant_entity_class%", "%atlassian_connect_dev_tenant%"]

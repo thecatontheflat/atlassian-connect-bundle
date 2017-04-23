@@ -16,7 +16,7 @@ class JWTRequest
 
     private $client;
 
-    public function __construct(Tenant $tenant)
+    public function __construct($tenant)
     {
         $this->tenant = $tenant;
         $this->client = new Client();
