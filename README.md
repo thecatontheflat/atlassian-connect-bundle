@@ -29,6 +29,7 @@ Bundle configuration includes has two main nodes - `prod` and `dev`. When reques
 Sample configuration in `config.yml`
 
     atlassian_connect:
+        dev_tenant: 1
         token_lifetime: 86400
         prod:
             key: 'your-addon-key'
@@ -110,56 +111,48 @@ If you will also set white_listed_until - you will be able to set white-list exp
 
 ### Dev environment
 
-In dev environment Tenant with id=1 would be used automatically
+In dev environment Tenant with id=1 would be used automatically. You could set configuration variable atlassian_connect.dev_tenant to false in order to disable it, or use another dev tenant id. It would allow you to test your plugin output for any tenant.
 
 ### Custom tenant entity
 
-You could add new entity AppBundle/Entity/JiraTenant like
+If you need to add more properties to tenant entity or reverse-side of your app entity relations - you could override default Tenant entity like
 
     <?php
     namespace AppBundle\Entity;
     
     use Doctrine\ORM\Mapping as ORM;
-    use AtlassianConnectBundle\Entity\Tenant as BaseTenant;
+    use AtlassianConnectBundle\Entity\TenantTrait;
+    use Symfony\Component\Security\Core\User\UserInterface;
      
     /**
      * JiraTenant
      *
+     * @ORM\Table()
+     * @ORM\HasLifecycleCallbacks()
      * @ORM\Entity()
      */
-    class JiraTenant extends BaseTenant
+    class JiraTenant implements UserInterface
     {
         /**
-         * @ORM\Column(type="string", nullable=true)
+         * @ORM\OneToMany(type="MyEntity", mappedBy="jiraTenant")
          */
-        protected $cusomProperty;
+        protected $myEntities;
     
-        /**
-         * @return mixed
-         */
-        public function getCusomProperty()
-        {
-            return $this->cusomProperty;
-        }
+        use TenantTrait;    
     
-        /**
-         * @param mixed $cusomProperty
-         * @return $this
-         */
-        public function setCusomProperty($cusomProperty)
-        {
-            $this->cusomProperty = $cusomProperty;
-            return $this;
-        }
+        // getters/setters for your custom properties
     }
     
 And override default one by setting parameter
     
-    atlassian_connect_tenant_entity_class: AppBundle:JiraTenant
+    atlassian_connect_tenant_entity_class: AppBundle\Entity\JiraTenant
+    
+In order to use it you will need to disable doctrine automapping
+    
+    auto_mapping: false
+        mappings:
+            AppBundle: ~
 
-Since [Class Table Inheritance](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/inheritance-mapping.html#class-table-inheritance) used - you cant use class name Tenant and you will need to patch existing database with lowercased class name, like
- 
-    UPDATE tenant SET discr='jiratenant'
 
 # Troubleshooting
 

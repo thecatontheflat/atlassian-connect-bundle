@@ -2,7 +2,6 @@
 
 namespace AtlassianConnectBundle\Controller;
 
-use AtlassianConnectBundle\Entity\Tenant;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +18,7 @@ class HandshakeController extends Controller
             ->findOneByClientKey($content['clientKey']);
 
         if (!$tenant) {
-            $tenant = new Tenant();
+            $tenant = new $tenantClass();
         }
 
         $tenant
