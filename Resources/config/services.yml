@@ -2,7 +2,7 @@ parameters:
     atlassian_connect_license_listener_class: AtlassianConnectBundle\Listener\LicenseListener
     atlassian_connect_jwt_user_provider_class: AtlassianConnectBundle\Security\JWTUserProvider
     atlassian_connect_jwt_authenticator_class: AtlassianConnectBundle\Security\JWTAuthenticator
-    atlassian_connect_tenant_entity_class: AtlassianConnectBundle:Tenant
+    atlassian_connect_tenant_entity_class: AtlassianConnectBundle\Entity\Tenant
 
 services:
     kernel.listener.license_listener:
