@@ -75,6 +75,16 @@ class JWTRequest
         return $response->json();
     }
 
+    public function delete($restUrl)
+    {
+        $url = $this->buildURL($restUrl);
+        $options = ['headers' => $this->buildAuthHeader('DELETE', $restUrl)];
+
+        $response = $this->client->delete($url, $options);
+
+        return $response->json();
+    }
+
     private function buildAuthHeader($method, $restUrl)
     {
         $token = $this->buildPayload($method, $restUrl);
