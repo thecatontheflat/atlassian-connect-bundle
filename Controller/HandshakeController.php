@@ -2,9 +2,11 @@
 
 namespace AtlassianConnectBundle\Controller;
 
+use AtlassianConnectBundle\JWT\Authentication\JWT;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class HandshakeController extends Controller
 {
@@ -17,7 +19,19 @@ class HandshakeController extends Controller
         $tenant = $this->getDoctrine()->getRepository($tenantClass)
             ->findOneByClientKey($content['clientKey']);
 
-        if (!$tenant) {
+        if ($tenant) {
+            try {
+                $authorizationHeaderArray = explode(' ', $request->headers->get('authorization'));
+                if (count($authorizationHeaderArray) > 1) {
+                    $jwt = $authorizationHeaderArray[1];
+                    JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256']);
+                }
+                throw new \InvalidArgumentException('Bad authorization header');
+            } catch (\Exception $e) {
+                $this->get('logger')->error($e->getMessage(), ['exception' => $e]);
+                return new Response('Unauthorized', 401);
+            }
+        } else {
             $tenant = new $tenantClass();
         }
 
