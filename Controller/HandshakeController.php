@@ -25,8 +25,9 @@ class HandshakeController extends Controller
                 if (count($authorizationHeaderArray) > 1) {
                     $jwt = $authorizationHeaderArray[1];
                     JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256']);
+                } else {
+                    throw new \InvalidArgumentException('Bad authorization header');
                 }
-                throw new \InvalidArgumentException('Bad authorization header');
             } catch (\Exception $e) {
                 $this->get('logger')->error($e->getMessage(), ['exception' => $e]);
                 return new Response('Unauthorized', 401);
