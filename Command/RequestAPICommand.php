@@ -2,6 +2,7 @@
 
 namespace AtlassianConnectBundle\Command;
 
+use AtlassianConnectBundle\Entity\TenantInterface;
 use AtlassianConnectBundle\Model\JWTRequest;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
@@ -52,8 +53,7 @@ class RequestAPICommand extends Command
             ->addArgument('rest-url', InputArgument::REQUIRED, 'REST api endpoint, like /rest/api/2/issue/{issueIdOrKey}')
             ->addOption('client-key', 'c', InputOption::VALUE_REQUIRED, 'Client-key from tenant')
             ->addOption('tenant-id', 't', InputOption::VALUE_REQUIRED, 'Tenant-id')
-            ->setDescription('Request REST end-points. 
-Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
+            ->setDescription('Request REST end-points. Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
     }
 
     /**
@@ -65,12 +65,13 @@ Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $restUrl = $input->getArgument('rest-url');
+
+        /** @var TenantInterface $tenant */
         if ($input->getOption('tenant-id')) {
-            $tenant = $this->em->getRepository($this->tenantClass)
-                ->find($input->getOption('tenant-id'));
+            $tenant = $this->em->getRepository($this->tenantClass)->find($input->getOption('tenant-id'));
         } elseif ($input->getOption('client-key')) {
-            $tenant = $this->em->getRepository($this->tenantClass)
-                ->findOneByClientKey($input->getOption('client-key'));
+            /** @noinspection PhpUndefinedMethodInspection */
+            $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($input->getOption('client-key'));
         } else {
             throw new \RuntimeException('Please provide client-key or tenant-id');
         }

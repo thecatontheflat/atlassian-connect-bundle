@@ -3,10 +3,10 @@
 namespace AtlassianConnectBundle\Security;
 
 use AtlassianConnectBundle\Entity\Tenant;
-use AtlassianConnectBundle\JWT\Authentication\JWT;
 use AtlassianConnectBundle\Model\QSH;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;

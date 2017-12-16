@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity()
  */
-class Tenant implements UserInterface
+class Tenant implements UserInterface, TenantInterface
 {
     use TenantTrait;
 }

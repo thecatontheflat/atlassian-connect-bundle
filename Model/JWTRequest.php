@@ -2,8 +2,8 @@
 
 namespace AtlassianConnectBundle\Model;
 
-use AtlassianConnectBundle\Entity\Tenant;
-use AtlassianConnectBundle\JWT\Authentication\JWT;
+use AtlassianConnectBundle\Entity\TenantInterface;
+use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class JWTRequest
 {
     /**
-     * @var Tenant
+     * @var TenantInterface
      */
     private $tenant;
 
@@ -30,9 +30,9 @@ class JWTRequest
     /**
      * JWTRequest constructor.
      *
-     * @param string $tenant
+     * @param TenantInterface $tenant
      */
-    public function __construct(string $tenant)
+    public function __construct(TenantInterface $tenant)
     {
         $this->tenant = $tenant;
         $this->client = new Client();

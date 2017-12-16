@@ -3,9 +3,9 @@
 namespace AtlassianConnectBundle\Security;
 
 use AtlassianConnectBundle\Entity\Tenant;
-use AtlassianConnectBundle\JWT\Authentication\JWT;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -54,10 +54,13 @@ class JWTUserProvider implements UserProviderInterface
     public function getDecodedToken(string $jwt)
     {
         try {
-            $decodedToken = JWT::decode($jwt);
+            /** @noinspection PhpUnusedLocalVariableInspection */
+            [$headb64, $bodyb64, $cryptob64] = \explode('.', $jwt);
+            $decodedToken = \json_decode(JWT::urlsafeB64Decode($bodyb64));
+
             $tenant = $this->findTenant($decodedToken->iss);
 
-            JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256'], $this->tokenLifetime);
+            JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256']);
 
             return $decodedToken;
         } catch (\Throwable $e) {
@@ -105,6 +108,8 @@ class JWTUserProvider implements UserProviderInterface
      */
     protected function findTenant(string $clientKey): ?Tenant
     {
+        /** @noinspection PhpUndefinedMethodInspection */
+
         return $this->em
             ->getRepository($this->tenantClass)
             ->findOneByClientKey($clientKey);
