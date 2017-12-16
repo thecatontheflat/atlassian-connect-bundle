@@ -2,6 +2,7 @@
 
 namespace AtlassianConnectBundle\Security;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -21,9 +22,9 @@ class JWTUserProvider implements UserProviderInterface
     protected $tokenLifetime;
     protected $tenantClass;
 
-    public function __construct(EntityManager $em, $tokenLifetime, $tenantClass)
+    public function __construct(ManagerRegistry $registry, $tokenLifetime, $tenantClass)
     {
-        $this->em = $em;
+        $this->em = $registry->getManager();
         $this->tokenLifetime = $tokenLifetime;
         $this->tenantClass = $tenantClass;
     }

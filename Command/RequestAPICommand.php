@@ -2,38 +2,73 @@
 namespace AtlassianConnectBundle\Command;
 
 use AtlassianConnectBundle\Model\JWTRequest;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RequestAPICommand extends ContainerAwareCommand
+class RequestAPICommand extends Command
 {
-    protected function configure()
+    /**
+     * @var bool
+     */
+    protected $shouldNotRun;
+
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private $em;
+
+    /**
+     * @var string
+     */
+    private $tenantClass;
+
+    /**
+     * @param ManagerRegistry $registry
+     * @param string          $tenantClass
+     */
+    public function __construct(ManagerRegistry $registry, string $tenantClass)
+    {
+        $this->em = $registry->getManager();
+        $this->tenantClass = $tenantClass;
+
+        parent::__construct();
+    }
+
+    /**
+     * @return void
+     */
+    protected function configure(): void
     {
         $this
             ->setName('ac:request-api')
-            ->addArgument('rest-url', InputArgument::REQUIRED, "REST api endpoint, like /rest/api/2/issue/{issueIdOrKey}")
-            ->addOption('client-key', "c", InputOption::VALUE_REQUIRED, "Client-key from tenant")
-            ->addOption('tenant-id', "t", InputOption::VALUE_REQUIRED, "Tenant-id")
+            ->addArgument('rest-url', InputArgument::REQUIRED, 'REST api endpoint, like /rest/api/2/issue/{issueIdOrKey}')
+            ->addOption('client-key', 'c', InputOption::VALUE_REQUIRED, 'Client-key from tenant')
+            ->addOption('tenant-id', 't', InputOption::VALUE_REQUIRED, 'Tenant-id')
             ->setDescription('Request REST end-points. 
 Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return void
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $restUrl = $input->getArgument('rest-url');
-        $em = $this->getContainer()->get('doctrine')->getManager();
-        $tenantClass = $this->getContainer()->getParameter("atlassian_connect_tenant_entity_class");
-        if($input->getOption("tenant-id")) {
-            $tenant = $em->getRepository($tenantClass)
-                ->find($input->getOption("tenant-id"));
-        } elseif($input->getOption("client-key")) {
-            $tenant = $em->getRepository($tenantClass)
+        if($input->getOption('tenant-id')) {
+            $tenant = $this->em->getRepository($this->tenantClass)
+                ->find($input->getOption('tenant-id'));
+        } elseif($input->getOption('client-key')) {
+            $tenant = $this->em->getRepository($this->tenantClass)
                 ->findOneByClientKey($input->getOption('client-key'));
         } else {
-            throw new \Exception("Please provide client-key or tenant-id");
+            throw new \RuntimeException('Please provide client-key or tenant-id');
         }
 
         $request = new JWTRequest($tenant);

@@ -31,7 +31,7 @@ class JWTRequest
         $savedFile = $file->move('/tmp/', $file->getClientOriginalName());
 
         $options['body'] = [
-            'file' => fopen($savedFile->getRealPath(), 'r')
+            'file' => fopen($savedFile->getRealPath(), 'rb')
         ];
 
         unlink($savedFile->getRealPath());
@@ -51,7 +51,7 @@ class JWTRequest
 
         return $response->json();
     }
-    
+
     public function post($restUrl, $json)
     {
         $url = $this->buildURL($restUrl);
@@ -93,8 +93,8 @@ class JWTRequest
 
     private function buildURL($restUrl)
     {
-        // Jira return absolute self links, so its more easy to work with get with absolute urls in such cases  
-        if((substr($restUrl,0,7) != 'http://') && (substr($restUrl,0,8) != 'https://')) {
+        // Jira return absolute self links, so its more easy to work with get with absolute urls in such cases
+        if((substr($restUrl,0,7) !== 'http://') && (substr($restUrl,0,8) !== 'https://')) {
             return $this->tenant->getBaseUrl().$restUrl;
         } else {
             return $restUrl;

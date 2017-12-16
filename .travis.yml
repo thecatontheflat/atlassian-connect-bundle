@@ -1,0 +1,30 @@
+language: php
+sudo: false
+
+php:
+  - 7.1
+
+env:
+  - SYMFONY_VERSION="3.3.*"
+  - SYMFONY_VERSION="4.0.*"
+
+before_script:
+  - composer self-update
+  - sed -i -e 's/^3.3|^4.0/${SYMFONY_VERSION}/g' composer.json;
+  - composer install --dev --prefer-dist --no-interaction -o
+
+script:
+  - ./vendor/bin/phpcs -p --standard=./ruleset.xml
+  - ./vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=coverage.xml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+cache:
+  directories:
+    - $COMPOSER_CACHE_DIR
+
+notifications:
+  email:
+    - vitaliy.zurian@gmail.com
+    - bukashk0zzz@gmail.com
