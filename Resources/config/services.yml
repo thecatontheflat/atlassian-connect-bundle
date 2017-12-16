@@ -42,7 +42,7 @@ services:
         arguments:
             $router: '@Symfony\Component\Routing\RouterInterface'
             $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
-            $tokenStorage: '@Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage'
+            $tokenStorage: '@Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
 
     jwt_user_provider:
         class: '%atlassian_connect_jwt_user_provider_class%'

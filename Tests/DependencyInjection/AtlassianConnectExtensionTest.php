@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * AtlassianConnectExtensionTest
@@ -46,7 +46,7 @@ class AtlassianConnectExtensionTest extends TestCase
     {
         $this->container->set(RouterInterface::class, new \stdClass());
         $this->container->set(KernelInterface::class, new \stdClass());
-        $this->container->set(TokenStorage::class, new \stdClass());
+        $this->container->set(TokenStorageInterface::class, new \stdClass());
         $this->container->set(ManagerRegistry::class, new \stdClass());
         $this->container->set(LoggerInterface::class, new \stdClass());
         $this->container->set('twig', new \stdClass());
