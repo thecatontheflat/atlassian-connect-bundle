@@ -10,6 +10,26 @@ services:
         autowire: false
         autoconfigure: true
 
+    AtlassianConnectBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+
+    AtlassianConnectBundle\Controller\UnlicensedController:
+        arguments:
+            $twig: '@twig'
+
+    AtlassianConnectBundle\Controller\HandshakeController:
+        arguments:
+            $registry: '@Doctrine\Common\Persistence\ManagerRegistry'
+            $logger: '@Psr\Log\LoggerInterface'
+            $tenantClass: '%atlassian_connect_tenant_entity_class%'
+
+    AtlassianConnectBundle\Controller\DescriptorController:
+        arguments:
+            $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
+            $config: '%atlassian_connect%'
+
     AtlassianConnectBundle\Command\RequestAPICommand:
         public: false
         arguments:

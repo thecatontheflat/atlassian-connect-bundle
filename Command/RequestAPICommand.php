@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace AtlassianConnectBundle\Command;
 
 use AtlassianConnectBundle\Model\JWTRequest;
@@ -9,6 +10,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class RequestAPICommand
+ */
 class RequestAPICommand extends Command
 {
     /**
@@ -61,10 +65,10 @@ Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $restUrl = $input->getArgument('rest-url');
-        if($input->getOption('tenant-id')) {
+        if ($input->getOption('tenant-id')) {
             $tenant = $this->em->getRepository($this->tenantClass)
                 ->find($input->getOption('tenant-id'));
-        } elseif($input->getOption('client-key')) {
+        } elseif ($input->getOption('client-key')) {
             $tenant = $this->em->getRepository($this->tenantClass)
                 ->findOneByClientKey($input->getOption('client-key'));
         } else {
@@ -75,7 +79,7 @@ Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
         $json = $request->get($restUrl);
 
         $output->writeln('');
-        print json_encode($json, JSON_PRETTY_PRINT);
+        echo \json_encode($json, \JSON_PRETTY_PRINT);
         $output->writeln('');
     }
 }
