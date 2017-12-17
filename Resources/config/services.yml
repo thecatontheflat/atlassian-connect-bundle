@@ -2,19 +2,60 @@ parameters:
     atlassian_connect_license_listener_class: AtlassianConnectBundle\Listener\LicenseListener
     atlassian_connect_jwt_user_provider_class: AtlassianConnectBundle\Security\JWTUserProvider
     atlassian_connect_jwt_authenticator_class: AtlassianConnectBundle\Security\JWTAuthenticator
-    atlassian_connect_tenant_entity_class: AtlassianConnectBundle:Tenant
+    atlassian_connect_tenant_entity_class: AtlassianConnectBundle\Entity\Tenant
 
 services:
+    _defaults:
+        public: true
+        autowire: false
+        autoconfigure: true
+
+    AtlassianConnectBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+
+    AtlassianConnectBundle\Controller\UnlicensedController:
+        arguments:
+            $twig: '@twig'
+
+    AtlassianConnectBundle\Controller\HandshakeController:
+        arguments:
+            $registry: '@Doctrine\Common\Persistence\ManagerRegistry'
+            $logger: '@Psr\Log\LoggerInterface'
+            $tenantClass: '%atlassian_connect_tenant_entity_class%'
+
+    AtlassianConnectBundle\Controller\DescriptorController:
+        arguments:
+            $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
+            $config: '%atlassian_connect%'
+
+    AtlassianConnectBundle\Command\RequestAPICommand:
+        public: false
+        arguments:
+            $registry: '@Doctrine\Common\Persistence\ManagerRegistry'
+            $tenantClass: '%atlassian_connect_tenant_entity_class%'
+
+
     kernel.listener.license_listener:
-        class: "%atlassian_connect_license_listener_class%"
-        arguments: ['@router', '@kernel', '@security.token_storage']
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+        class: '%atlassian_connect_license_listener_class%'
+        arguments:
+            $router: '@Symfony\Component\Routing\RouterInterface'
+            $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
+            $tokenStorage: '@Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
 
     jwt_user_provider:
-        class: "%atlassian_connect_jwt_user_provider_class%"
-        arguments: ['@doctrine.orm.entity_manager','%atlassian_connect_token_lifetime%',"%atlassian_connect_tenant_entity_class%"]
+        class: '%atlassian_connect_jwt_user_provider_class%'
+        arguments:
+            $registry: '@Doctrine\Common\Persistence\ManagerRegistry'
+            $tokenLifetime: '%atlassian_connect_token_lifetime%'
+            $tenantClass: '%atlassian_connect_tenant_entity_class%'
 
     jwt_authenticator:
         class: "%atlassian_connect_jwt_authenticator_class%"
-        arguments: ['@jwt_user_provider', '@kernel', '@doctrine.orm.entity_manager', "%atlassian_connect_tenant_entity_class%", "%atlassian_connect_dev_tenant%"]
+        arguments:
+            $userProvider: '@jwt_user_provider'
+            $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
+            $registry: '@Doctrine\Common\Persistence\ManagerRegistry'
+            $tenantEntityClass: '%atlassian_connect_tenant_entity_class%'
+            $devTenant: '%atlassian_connect_dev_tenant%'

@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<ruleset name="Coding standard">
+    <description>Coding standard.</description>
+
+    <rule ref="./vendor/escapestudios/symfony2-coding-standard/Symfony"/>
+    <rule ref="./vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml" />
+
+    <rule ref="./vendor/escapestudios/symfony2-coding-standard/Symfony">
+        <exclude name="Symfony.Functions.Arguments.Invalid"/>
+        <exclude name="Symfony.Commenting.License.Warning"/>
+        <exclude name="Symfony.Commenting.Annotations.Invalid"/>
+        <exclude name="Symfony.ControlStructure.YodaConditions.Invalid"/>
+        <exclude name="Symfony.ControlStructure.UnaryOperators.Invalid"/>
+        <exclude name="Symfony.Functions.ReturnType.Invalid"/>
+    </rule>
+
+    <rule ref="./vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
+        <exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison.RequiredYodaComparison"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName"/>
+        <exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
+        <exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName"/>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces">
+        <properties>
+            <property name="linesCountAfterOpeningBrace" value="0"/>
+            <property name="linesCountBeforeClosingBrace" value="0"/>
+        </properties>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
+        <properties>
+            <property name="allowFullyQualifiedExceptions" value="true"/>
+            <property name="allowPartialUses" value="true"/>
+            <property name="allowFullyQualifiedGlobalClasses" value="true"/>
+            <property name="allowFullyQualifiedGlobalFunctions" value="true"/>
+            <property name="allowFullyQualifiedGlobalConstants" value="true"/>
+        </properties>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
+        <properties>
+            <property name="forbiddenAnnotations" type="array" value="@author, @created, @version, @package, @copyright, @license, @throws"/>
+        </properties>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" value="true"/>
+        </properties>
+    </rule>
+
+    <rule ref="Squiz.Commenting.FunctionComment.MissingParamComment">
+        <severity>0</severity>
+    </rule>
+
+    <rule ref="Squiz.Commenting.FunctionComment.InvalidReturn">
+        <severity>0</severity>
+    </rule>
+
+    <arg name="colors"/>
+    <arg name="encoding" value="utf-8"/>
+    <arg name="extensions" value="php"/>
+
+    <exclude-pattern>vendor/</exclude-pattern>
+
+    <file>./</file>
+</ruleset>

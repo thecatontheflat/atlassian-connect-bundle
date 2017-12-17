@@ -1,46 +1,54 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AtlassianConnectBundle\Model;
 
+/**
+ * Class QSH
+ */
 class QSH
 {
-    public function create($method, $url)
+    /**
+     * @param string $methodIn
+     * @param string $url
+     *
+     * @return string
+     */
+    public function create(string $methodIn, string $url): string
     {
-        $method = strtoupper($method);
+        $method = \mb_strtoupper($methodIn);
 
-        $parts = parse_url($url);
+        $parts = \parse_url($url);
         $path = $parts['path'];
 
         $canonicalQuery = '';
         if (!empty($parts['query'])) {
             $query = $parts['query'];
-            $queryParts = explode('&', $query);
+            $queryParts = \explode('&', $query);
             $queryArray = [];
 
             foreach ($queryParts as $queryPart) {
-                $pieces = explode('=', $queryPart);
-                $key = array_shift($pieces);
-                $key = rawurlencode($key);
+                $pieces = \explode('=', $queryPart);
+                $key = \array_shift($pieces);
+                $key = \rawurlencode($key);
 
-                $value = substr($queryPart, strlen($key) + 1);
-                $value = rawurlencode($value);
+                $value = \mb_substr($queryPart, \mb_strlen($key) + 1);
+                $value = \rawurlencode($value);
 
                 $queryArray[$key][] = $value;
             }
 
-            ksort($queryArray);
+            \ksort($queryArray);
 
             foreach ($queryArray as $key => $pieceOfQuery) {
-                $pieceOfQuery = implode(',', $pieceOfQuery);
+                $pieceOfQuery = \implode(',', $pieceOfQuery);
                 $canonicalQuery .= $key.'='.$pieceOfQuery.'&';
             }
 
-            $canonicalQuery = rtrim($canonicalQuery, '&');
+            $canonicalQuery = \rtrim($canonicalQuery, '&');
         }
 
         $qshString = $method.'&'.$path.'&'.$canonicalQuery;
-        $qsh = hash('sha256', $qshString);
 
-        return $qsh;
+        return \hash('sha256', $qshString);
     }
 }

@@ -1,38 +1,75 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AtlassianConnectBundle\Controller;
 
-use AtlassianConnectBundle\JWT\Authentication\JWT;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AtlassianConnectBundle\Entity\Tenant;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Firebase\JWT\JWT;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class HandshakeController extends Controller
+/**
+ * Class HandshakeController
+ */
+class HandshakeController
 {
-    public function registerAction(Request $request)
+    /**
+     * @var \Doctrine\Common\Persistence\ObjectManager
+     */
+    private $em;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var string
+     */
+    private $tenantClass;
+
+    /**
+     * @param ManagerRegistry $registry
+     * @param LoggerInterface $logger
+     * @param string          $tenantClass
+     */
+    public function __construct(ManagerRegistry $registry, LoggerInterface $logger, string $tenantClass)
+    {
+        $this->em = $registry->getManager();
+        $this->logger = $logger;
+        $this->tenantClass = $tenantClass;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function registerAction(Request $request): Response
     {
         $content = $request->getContent();
-        $content = json_decode($content, true);
+        $content = \json_decode($content, true);
 
-        $tenantClass = $this->getParameter("atlassian_connect_tenant_entity_class");
-        $tenant = $this->getDoctrine()->getRepository($tenantClass)
-            ->findOneByClientKey($content['clientKey']);
-
-        if ($tenant) {
+        /** @var Tenant $tenant */
+        /** @noinspection PhpUndefinedMethodInspection */
+        $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($content['clientKey']);
+        if ($tenant !== null) {
             try {
-                $authorizationHeaderArray = explode(' ', $request->headers->get('authorization'));
-                if (count($authorizationHeaderArray) > 1) {
+                $authorizationHeaderArray = \explode(' ', $request->headers->get('authorization'));
+                if (\count($authorizationHeaderArray) > 1) {
                     $jwt = $authorizationHeaderArray[1];
                     JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256']);
                 } else {
                     throw new \InvalidArgumentException('Bad authorization header');
                 }
-            } catch (\Exception $e) {
-                $this->get('logger')->error($e->getMessage(), ['exception' => $e]);
+            } catch (\Throwable $e) {
+                $this->logger->error($e->getMessage(), ['exception' => $e]);
+
                 return new Response('Unauthorized', 401);
             }
         } else {
+            $tenantClass = $this->tenantClass;
             $tenant = new $tenantClass();
         }
 
@@ -48,8 +85,8 @@ class HandshakeController extends Controller
             ->setDescription($content['description'])
             ->setEventType($content['eventType']);
 
-        $this->getDoctrine()->getManager()->persist($tenant);
-        $this->getDoctrine()->getManager()->flush();
+        $this->em->persist($tenant);
+        $this->em->flush();
 
         return new Response('OK', 200);
     }

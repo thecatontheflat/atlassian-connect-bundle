@@ -1,18 +1,42 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace AtlassianConnectBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-class DescriptorController extends Controller
+/**
+ * Class DescriptorController
+ */
+class DescriptorController
 {
-    public function indexAction()
+    /**
+     * @var KernelInterface
+     */
+    private $kernel;
+
+    /**
+     * @var mixed[]
+     */
+    private $config;
+
+    /**
+     * @param KernelInterface $kernel
+     * @param mixed[]         $config
+     */
+    public function __construct(KernelInterface $kernel, array $config)
     {
-        $kernel = $this->container->get('kernel');
-        $config = $this->getParameter('atlassian_connect');
-        $envConfig = $config[$kernel->getEnvironment()];
-        $descriptor = json_encode($envConfig);
+        $this->kernel = $kernel;
+        $this->config = $config;
+    }
+
+    /**
+     * @return Response
+     */
+    public function indexAction(): Response
+    {
+        $envConfig = $this->config[$this->kernel->getEnvironment()];
+        $descriptor = \json_encode($envConfig);
 
         $response = new Response();
         $response->setContent($descriptor);

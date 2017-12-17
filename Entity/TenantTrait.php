@@ -1,15 +1,19 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace AtlassianConnectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Trait TenantTrait
+ */
 trait TenantTrait
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -28,6 +32,9 @@ trait TenantTrait
      */
     private $clientKey;
 
+    /**
+     * @var string
+     */
     private $username;
 
     /**
@@ -101,19 +108,25 @@ trait TenantTrait
     private $updatedAt;
 
     /**
+     * @var bool
+     *
      * @ORM\Column(name="is_white_listed", type="boolean", options={"default":0})
      */
     private $isWhiteListed = false;
 
     /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="white_listed_until", type="datetime", nullable=true)
      */
     private $whiteListedUntil;
 
     /**
-     * @ORM\PrePersist
+     * @ORM\PrePersist()
+     *
+     * @return void
      */
-    public function setCreatedAt()
+    public function setCreatedAt(): void
     {
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
@@ -122,15 +135,17 @@ trait TenantTrait
     /**
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * @ORM\PreUpdate
+     * @ORM\PreUpdate()
+     *
+     * @return void
      */
-    public function setUpdatedAt()
+    public function setUpdatedAt(): void
     {
         $this->updatedAt = new \DateTime();
     }
@@ -138,18 +153,17 @@ trait TenantTrait
     /**
      * @return \DateTime
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
 
-
     /**
      * Get id
      *
-     * @return integer
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -158,9 +172,10 @@ trait TenantTrait
      * Set addonKey
      *
      * @param string $addonKey
+     *
      * @return self
      */
-    public function setAddonKey($addonKey)
+    public function setAddonKey(string $addonKey): self
     {
         $this->addonKey = $addonKey;
 
@@ -170,9 +185,9 @@ trait TenantTrait
     /**
      * Get addonKey
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddonKey()
+    public function getAddonKey(): ?string
     {
         return $this->addonKey;
     }
@@ -181,9 +196,10 @@ trait TenantTrait
      * Set clientKey
      *
      * @param string $clientKey
+     *
      * @return self
      */
-    public function setClientKey($clientKey)
+    public function setClientKey(string $clientKey): self
     {
         $this->clientKey = $clientKey;
 
@@ -193,9 +209,9 @@ trait TenantTrait
     /**
      * Get clientKey
      *
-     * @return string
+     * @return string|null
      */
-    public function getClientKey()
+    public function getClientKey(): ?string
     {
         return $this->clientKey;
     }
@@ -204,9 +220,10 @@ trait TenantTrait
      * Set publicKey
      *
      * @param string $publicKey
+     *
      * @return self
      */
-    public function setPublicKey($publicKey)
+    public function setPublicKey(string $publicKey): self
     {
         $this->publicKey = $publicKey;
 
@@ -216,9 +233,9 @@ trait TenantTrait
     /**
      * Get publicKey
      *
-     * @return string
+     * @return string|null
      */
-    public function getPublicKey()
+    public function getPublicKey(): ?string
     {
         return $this->publicKey;
     }
@@ -227,9 +244,10 @@ trait TenantTrait
      * Set sharedSecret
      *
      * @param string $sharedSecret
+     *
      * @return self
      */
-    public function setSharedSecret($sharedSecret)
+    public function setSharedSecret(string $sharedSecret): self
     {
         $this->sharedSecret = $sharedSecret;
 
@@ -239,9 +257,9 @@ trait TenantTrait
     /**
      * Get sharedSecret
      *
-     * @return string
+     * @return string|null
      */
-    public function getSharedSecret()
+    public function getSharedSecret(): ?string
     {
         return $this->sharedSecret;
     }
@@ -250,9 +268,10 @@ trait TenantTrait
      * Set serverVersion
      *
      * @param string $serverVersion
+     *
      * @return self
      */
-    public function setServerVersion($serverVersion)
+    public function setServerVersion(string $serverVersion): self
     {
         $this->serverVersion = $serverVersion;
 
@@ -262,9 +281,9 @@ trait TenantTrait
     /**
      * Get serverVersion
      *
-     * @return string
+     * @return string|null
      */
-    public function getServerVersion()
+    public function getServerVersion(): ?string
     {
         return $this->serverVersion;
     }
@@ -273,9 +292,10 @@ trait TenantTrait
      * Set pluginsVersion
      *
      * @param string $pluginsVersion
+     *
      * @return self
      */
-    public function setPluginsVersion($pluginsVersion)
+    public function setPluginsVersion(string $pluginsVersion): self
     {
         $this->pluginsVersion = $pluginsVersion;
 
@@ -285,9 +305,9 @@ trait TenantTrait
     /**
      * Get pluginsVersion
      *
-     * @return string
+     * @return string|null
      */
-    public function getPluginsVersion()
+    public function getPluginsVersion(): ?string
     {
         return $this->pluginsVersion;
     }
@@ -296,9 +316,10 @@ trait TenantTrait
      * Set baseUrl
      *
      * @param string $baseUrl
+     *
      * @return self
      */
-    public function setBaseUrl($baseUrl)
+    public function setBaseUrl(string $baseUrl): self
     {
         $this->baseUrl = $baseUrl;
 
@@ -308,9 +329,9 @@ trait TenantTrait
     /**
      * Get baseUrl
      *
-     * @return string
+     * @return string|null
      */
-    public function getBaseUrl()
+    public function getBaseUrl(): ?string
     {
         return $this->baseUrl;
     }
@@ -319,9 +340,10 @@ trait TenantTrait
      * Set productType
      *
      * @param string $productType
+     *
      * @return self
      */
-    public function setProductType($productType)
+    public function setProductType(string $productType): self
     {
         $this->productType = $productType;
 
@@ -331,9 +353,9 @@ trait TenantTrait
     /**
      * Get productType
      *
-     * @return string
+     * @return string|null
      */
-    public function getProductType()
+    public function getProductType(): ?string
     {
         return $this->productType;
     }
@@ -342,9 +364,10 @@ trait TenantTrait
      * Set description
      *
      * @param string $description
+     *
      * @return self
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -354,9 +377,9 @@ trait TenantTrait
     /**
      * Get description
      *
-     * @return string
+     * @return string|null
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -365,9 +388,10 @@ trait TenantTrait
      * Set eventType
      *
      * @param string $eventType
+     *
      * @return self
      */
-    public function setEventType($eventType)
+    public function setEventType(string $eventType): self
     {
         $this->eventType = $eventType;
 
@@ -377,90 +401,113 @@ trait TenantTrait
     /**
      * Get eventType
      *
-     * @return string
+     * @return string|null
      */
-    public function getEventType()
+    public function getEventType(): ?string
     {
         return $this->eventType;
     }
 
     /**
-     *
      * Implementing UserInterface
      *
+     * @return string[]
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return ['ROLE_USER'];
     }
 
-    public function getPassword()
+    /**
+     * @return string
+     */
+    public function getPassword(): string
     {
         return '';
     }
 
-
-    public function getSalt()
+    /**
+     * @return string
+     */
+    public function getSalt(): string
     {
         return '';
     }
 
-    public function getUsername()
+    /**
+     * @return null|string
+     */
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    public function setUsername($name)
+    /**
+     * @param string $name
+     *
+     * @return self
+     */
+    public function setUsername(string $name): self
     {
         $this->username = $name;
+
+        return $this;
     }
 
-    public function eraseCredentials()
+    /**
+     * @return void
+     */
+    public function eraseCredentials(): void
     {
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function getIsWhiteListed()
+    public function getIsWhiteListed(): bool
     {
         return $this->isWhiteListed;
     }
 
     /**
-     * @param boolean $isWhiteListed
+     * @param bool $isWhiteListed
+     *
      * @return self
      */
-    public function setIsWhiteListed($isWhiteListed)
+    public function setIsWhiteListed(bool $isWhiteListed): self
     {
         $this->isWhiteListed = $isWhiteListed;
+
         return $this;
     }
 
     /**
      * @return null|\DateTime
      */
-    public function getWhiteListedUntil()
+    public function getWhiteListedUntil(): ?\DateTime
     {
         return $this->whiteListedUntil;
     }
 
     /**
      * @param \DateTime $whiteListedUntil
+     *
      * @return self
      */
-    public function setWhiteListedUntil($whiteListedUntil)
+    public function setWhiteListedUntil(\DateTime $whiteListedUntil): self
     {
         $this->whiteListedUntil = $whiteListedUntil;
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isWhiteListed()
+    public function isWhiteListed(): bool
     {
         $now = new \DateTime();
-        return $this->getIsWhiteListed() && (is_null($this->getWhiteListedUntil()) || ($now < $this->getWhiteListedUntil()));
+
+        return $this->getIsWhiteListed() && ($this->getWhiteListedUntil() === null || ($now < $this->getWhiteListedUntil()));
     }
 }
