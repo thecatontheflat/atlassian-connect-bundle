@@ -1,10 +1,10 @@
 {
   "name": "thecatontheflat/atlassian-connect-bundle",
   "description": "Atlassian Connect Symfony Bundle",
-  "keywords": ["bundle", "symfony", "atlassian", "connect", "jira", "atlassian-connect"],
+  "keywords": ["bundle", "symfony", "atlassian", "connect", "jira", "confluence", "atlassian-connect"],
   "homepage": "https://github.com/thecatontheflat/atlassian-connect-bundle",
   "type": "symfony-bundle",
-  "license": "GPL-2.0",
+  "license": "MIT",
   "require": {
     "php": "^7.1",
     "symfony/dependency-injection": "^3.3|^4.0",
