@@ -2,15 +2,17 @@
 
 [![Build Status](https://img.shields.io/travis/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://travis-ci.org/thecatontheflat/atlassian-connect-bundle)
 [![Code Coverage](https://img.shields.io/codecov/c/github/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://codecov.io/github/thecatontheflat/atlassian-connect-bundle)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://scrutinizer-ci.com/g/thecatontheflat/atlassian-connect-bundle/?branch=master)
 [![License](https://img.shields.io/packagist/l/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://packagist.org/packages/thecatontheflat/atlassian-connect-bundle)
 [![Latest Stable Version](https://img.shields.io/packagist/v/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://packagist.org/packages/thecatontheflat/atlassian-connect-bundle)
 [![Total Downloads](https://img.shields.io/packagist/dt/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://packagist.org/packages/thecatontheflat/atlassian-connect-bundle)
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/968d2e49-373d-45ca-b2bf-43e10e845d08/small.png)](https://insight.sensiolabs.com/projects/968d2e49-373d-45ca-b2bf-43e10e845d08)
 [![knpbundles.com](http://knpbundles.com/thecatontheflat/atlassian-connect-bundle/badge-short)](http://knpbundles.com/thecatontheflat/atlassian-connect-bundle)
 
 About
 -----
-
+Symfony Bundle for Atlassian Connect platform
 
 Installation
 ------------
