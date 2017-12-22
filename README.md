@@ -90,8 +90,8 @@ To configure security part - use the following configuration in your `security.y
     
 ### Step 5. Include Routes
  
-- For symfony 4 and Flex to `config/routes.yaml`
-- For symfony 2/3 to `app/config/routing.yml`
+- For Symfony 4 and Flex to `config/routes.yaml`
+- For Symfony 2/3 to `app/config/routing.yml`
 
 Add the following:
 ```yaml
