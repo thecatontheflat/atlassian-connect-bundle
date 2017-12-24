@@ -2,6 +2,8 @@
 
 namespace AtlassianConnectBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Class UnlicensedController
  */
@@ -21,10 +23,10 @@ class UnlicensedController
     }
 
     /**
-     * @return string
+     * @return Response
      */
-    public function unlicensedAction(): string
+    public function unlicensedAction(): Response
     {
-        return $this->twig->render('@AtlassianConnect/unlicensed.html.twig');
+        return new Response($this->twig->render('@AtlassianConnect/unlicensed.html.twig'));
     }
 }

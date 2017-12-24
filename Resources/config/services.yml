@@ -21,13 +21,13 @@ services:
 
     AtlassianConnectBundle\Controller\HandshakeController:
         arguments:
-            $registry: '@Doctrine\Common\Persistence\ManagerRegistry'
+            $em: '@Doctrine\Common\Persistence\ObjectManager'
             $logger: '@Psr\Log\LoggerInterface'
             $tenantClass: '%atlassian_connect_tenant_entity_class%'
 
     AtlassianConnectBundle\Controller\DescriptorController:
         arguments:
-            $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
+            $env: '%kernel.environment%'
             $config: '%atlassian_connect%'
 
     AtlassianConnectBundle\Command\RequestAPICommand:
@@ -43,6 +43,8 @@ services:
             $router: '@Symfony\Component\Routing\RouterInterface'
             $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
             $tokenStorage: '@Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
     jwt_user_provider:
         class: '%atlassian_connect_jwt_user_provider_class%'
