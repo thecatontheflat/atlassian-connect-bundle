@@ -3,7 +3,7 @@
 namespace AtlassianConnectBundle\Controller;
 
 use AtlassianConnectBundle\Entity\Tenant;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class HandshakeController
 {
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager
+     * @var ObjectManager
      */
     private $em;
 
@@ -30,13 +30,13 @@ class HandshakeController
     private $tenantClass;
 
     /**
-     * @param ManagerRegistry $registry
+     * @param ObjectManager   $em
      * @param LoggerInterface $logger
      * @param string          $tenantClass
      */
-    public function __construct(ManagerRegistry $registry, LoggerInterface $logger, string $tenantClass)
+    public function __construct(ObjectManager $em, LoggerInterface $logger, string $tenantClass)
     {
-        $this->em = $registry->getManager();
+        $this->em = $em;
         $this->logger = $logger;
         $this->tenantClass = $tenantClass;
     }

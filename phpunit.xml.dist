@@ -12,6 +12,10 @@
         </testsuite>
     </testsuites>
 
+    <php>
+        <server name="KERNEL_CLASS" value="AtlassianConnectBundle\Test\Kernel" />
+    </php>
+
     <filter>
         <whitelist>
             <directory>./</directory>

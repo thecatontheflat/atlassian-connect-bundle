@@ -7,16 +7,17 @@
 
     <script src="{{ app.user.baseUrl|default('') }}/atlassian-connect/all.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="{{ asset('bundles/atlassianconnect/aui/css/aui.min.css') }}" media="all">
-    <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('bundles/atlassianconnect/aui/js/aui.min.js') }}"></script>
+    <link rel="stylesheet" href="//unpkg.com/@atlaskit/css-reset@latest" />
+    <link rel="stylesheet" href="//unpkg.com/@atlaskit/reduced-ui-pack@latest" />
 </head>
-<body class="aui-page-focused aui-page-focused-xlarge">
-<div class="aui-message aui-message-error">
-    <p class="title">
-        <strong>Not Licensed</strong>
-    </p>
-    <p>You need to start the Trial to be able to use the Add-On</p>
-</div>
+<body>
+    <ak-grid>
+        <ak-grid-column>
+            <h2>Not Licensed</h2>
+            <p>
+                You need to start the Trial to be able to use the Add-On
+            </p>
+        </ak-grid-column>
+    </ak-grid>
 </body>
 </html>

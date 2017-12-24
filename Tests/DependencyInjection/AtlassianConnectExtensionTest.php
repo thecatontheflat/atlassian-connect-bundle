@@ -7,6 +7,7 @@ use AtlassianConnectBundle\Controller\HandshakeController;
 use AtlassianConnectBundle\Controller\UnlicensedController;
 use AtlassianConnectBundle\DependencyInjection\AtlassianConnectExtension;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -48,8 +49,10 @@ class AtlassianConnectExtensionTest extends TestCase
         $this->container->set(KernelInterface::class, new \stdClass());
         $this->container->set(TokenStorageInterface::class, new \stdClass());
         $this->container->set(ManagerRegistry::class, new \stdClass());
+        $this->container->set(ObjectManager::class, new \stdClass());
         $this->container->set(LoggerInterface::class, new \stdClass());
         $this->container->set('twig', new \stdClass());
+        $this->container->setParameter('kernel.environment', 'test');
 
         $this->container->prependExtensionConfig($this->extension->getAlias(), [
             'token_lifetime' => 86400,
