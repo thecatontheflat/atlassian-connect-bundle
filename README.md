@@ -111,7 +111,7 @@ To perform a license check for a certain route - specify the `requires_license` 
 ### Step 7. Update Database
 
 ```bash
-app/console doctrine:schema:update --force
+bin/console doctrine:schema:update --force
 ```
 
 
@@ -122,9 +122,30 @@ Usage Examples
 
 In your **protected** controller action you can make a signed request to JIRA instance:
 ```php
-<?php 
-    $request = new \AtlassianConnectBundle\Service\AtlassianRestClient($this->getUser());
-    $json = $request->get('/rest/api/2/issue/KEY-XXX');
+<?php declare(strict_types = 1);
+
+namespace App\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @Route("/protected")
+ */
+class ProtectedController extends Controller
+{
+    /**
+     * @Route("/", name="main")
+     */
+    public function index()
+    {
+        $client = $this->container->get(AtlassianRestClient::class);
+        $json = $client->get('/rest/api/2/issue/KEY-XXX');
+        
+        return new Response($json);
+    }
+}
 ```
 
 ### White listening licences
