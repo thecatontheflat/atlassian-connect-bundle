@@ -36,6 +36,10 @@ services:
             $registry: '@Doctrine\Common\Persistence\ManagerRegistry'
             $tenantClass: '%atlassian_connect_tenant_entity_class%'
 
+    AtlassianConnectBundle\Service\AtlassianRestClient:
+        arguments:
+            $tenant: null
+            $tokenStorage: '@Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
 
     kernel.listener.license_listener:
         class: '%atlassian_connect_license_listener_class%'

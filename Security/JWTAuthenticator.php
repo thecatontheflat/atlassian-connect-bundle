@@ -3,7 +3,7 @@
 namespace AtlassianConnectBundle\Security;
 
 use AtlassianConnectBundle\Entity\Tenant;
-use AtlassianConnectBundle\Model\QSH;
+use AtlassianConnectBundle\Service\QSHGenerator;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Firebase\JWT\JWT;
@@ -87,19 +87,14 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
             if ($tenant === null) {
                 throw new \RuntimeException(\sprintf('Cant find tenant with id %s - please set atlassian_connect.dev_tenant to false to disable dedicated dev tenant OR add valid id', $this->devTenant));
             }
-            $clientKey = $tenant->getClientKey();
-            $sharedSecret = $tenant->getSharedSecret();
-            $qshHelper = new QSH();
-            $qsh = $qshHelper->create('GET', $request->getRequestUri());
-            $payload = [
-                'iss' => $clientKey,
+
+            $jwt = JWT::encode([
+                'iss' => $tenant->getClientKey(),
                 'iat' => \time(),
                 'exp' => \strtotime('+1 day'),
-                'qsh' => $qsh,
+                'qsh' => QSHGenerator::generate($request->getRequestUri(), 'GET'),
                 'sub' => 'admin',
-            ];
-
-            $jwt = JWT::encode($payload, $sharedSecret);
+            ], $tenant->getSharedSecret());
         }
 
         if (!$jwt) {

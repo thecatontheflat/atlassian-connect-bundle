@@ -3,7 +3,7 @@
 namespace AtlassianConnectBundle\Command;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
-use AtlassianConnectBundle\Service\JWTRequest;
+use AtlassianConnectBundle\Service\AtlassianRestClient;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -76,7 +76,7 @@ class RequestAPICommand extends Command
             throw new \RuntimeException('Please provide client-key or tenant-id');
         }
 
-        $request = new JWTRequest($tenant);
+        $request = new AtlassianRestClient($tenant);
         $json = $request->get($restUrl);
 
         $output->writeln('');

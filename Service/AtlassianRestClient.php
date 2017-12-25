@@ -7,11 +7,12 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class JWTRequest
+ * Class AtlassianRestClient
  */
-class JWTRequest
+class AtlassianRestClient
 {
     /**
      * @var TenantInterface
@@ -24,13 +25,12 @@ class JWTRequest
     private $client;
 
     /**
-     * JWTRequest constructor.
-     *
-     * @param TenantInterface $tenant
+     * @param TenantInterface|null       $tenant
+     * @param TokenStorageInterface|null $tokenStorage
      */
-    public function __construct(TenantInterface $tenant)
+    public function __construct(?TenantInterface $tenant, ?TokenStorageInterface $tokenStorage = null)
     {
-        $this->tenant = $tenant;
+        $this->setTenant($tenant, $tokenStorage);
         $this->client = $this->createClient();
     }
 
@@ -126,11 +126,36 @@ class JWTRequest
     {
         $stack = new HandlerStack();
         $stack->setHandler(new CurlHandler());
-        $stack->push(JWTMiddleware::authTokenMiddleware(
+        $stack->push(GuzzleJWTMiddleware::authTokenMiddleware(
             $this->tenant->getAddonKey(),
             $this->tenant->getSharedSecret()
         ));
 
         return new Client(['handler' => $stack]);
+    }
+
+    /**
+     * @param TenantInterface|null       $tenant
+     * @param null|TokenStorageInterface $tokenStorage
+     *
+     * @return void
+     */
+    private function setTenant(?TenantInterface $tenant, ?TokenStorageInterface $tokenStorage): void
+    {
+        if ($tenant !== null) {
+            $this->tenant = $tenant;
+        } elseif ($tokenStorage !== null) {
+            $token = $tokenStorage->getToken();
+
+            if ($token !== null) {
+                $tenant = $token->getUser();
+
+                if ($tenant instanceof TenantInterface) {
+                    $this->tenant = $tenant;
+                }
+            }
+        } else {
+            throw new \RuntimeException('Can\'t get tenant');
+        }
     }
 }

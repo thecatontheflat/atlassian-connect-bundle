@@ -7,9 +7,6 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://packagist.org/packages/thecatontheflat/atlassian-connect-bundle)
 [![Total Downloads](https://img.shields.io/packagist/dt/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://packagist.org/packages/thecatontheflat/atlassian-connect-bundle)
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/968d2e49-373d-45ca-b2bf-43e10e845d08/small.png)](https://insight.sensiolabs.com/projects/968d2e49-373d-45ca-b2bf-43e10e845d08)
-[![knpbundles.com](http://knpbundles.com/thecatontheflat/atlassian-connect-bundle/badge-short)](http://knpbundles.com/thecatontheflat/atlassian-connect-bundle)
-
 About
 -----
 Symfony Bundle for Atlassian Connect platform
@@ -125,7 +122,8 @@ Usage Examples
 
 In your **protected** controller action you can make a signed request to JIRA instance:
 ```php
-    $request = new JWTRequest($this->getUser());
+<?php 
+    $request = new \AtlassianConnectBundle\Service\AtlassianRestClient($this->getUser());
     $json = $request->get('/rest/api/2/issue/KEY-XXX');
 ```
 
@@ -150,6 +148,7 @@ If you need to add more properties to tenant entity or reverse-side of your app 
     
     use Doctrine\ORM\Mapping as ORM;
     use AtlassianConnectBundle\Entity\TenantTrait;
+    use AtlassianConnectBundle\Entity\TenantInterface;
     use Symfony\Component\Security\Core\User\UserInterface;
      
     /**
@@ -159,7 +158,7 @@ If you need to add more properties to tenant entity or reverse-side of your app 
      * @ORM\HasLifecycleCallbacks()
      * @ORM\Entity()
      */
-    class JiraTenant implements UserInterface
+    class JiraTenant implements UserInterface, TenantInterface
     {
         /**
          * @ORM\OneToMany(type="MyEntity", mappedBy="jiraTenant")
