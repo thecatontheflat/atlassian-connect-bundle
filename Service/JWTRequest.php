@@ -1,10 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace AtlassianConnectBundle\Model;
+namespace AtlassianConnectBundle\Service;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
-use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\HandlerStack;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -23,11 +24,6 @@ class JWTRequest
     private $client;
 
     /**
-     * @var QSH
-     */
-    private $qshHelper;
-
-    /**
      * JWTRequest constructor.
      *
      * @param TenantInterface $tenant
@@ -35,18 +31,17 @@ class JWTRequest
     public function __construct(TenantInterface $tenant)
     {
         $this->tenant = $tenant;
-        $this->client = new Client();
-        $this->qshHelper = new QSH();
+        $this->client = $this->createClient();
     }
 
     /**
      * @param UploadedFile $file
      * @param string       $restUrl
+     *
+     * @return string
      */
-    public function sendFile(UploadedFile $file, string $restUrl): void
+    public function sendFile(UploadedFile $file, string $restUrl): string
     {
-        $url = $this->buildURL($restUrl);
-        $options = ['headers' => $this->buildAuthHeader('POST', $restUrl)];
         $options['headers']['X-Atlassian-Token'] = 'nocheck';
         $savedFile = $file->move('/tmp/', $file->getClientOriginalName());
 
@@ -56,7 +51,7 @@ class JWTRequest
 
         \unlink($savedFile->getRealPath());
 
-        $this->client->post($url, $options);
+        return $this->client->post($this->buildURL($restUrl), $options)->getBody()->getContents();
     }
 
     /**
@@ -67,15 +62,10 @@ class JWTRequest
      */
     public function put(string $restUrl, array $json): string
     {
-        $url = $this->buildURL($restUrl);
-        $options = ['headers' => $this->buildAuthHeader('PUT', $restUrl)];
         $options['headers']['Content-Type'] = 'application/json';
-
         $options['json'] = $json;
 
-        $response = $this->client->put($url, $options);
-
-        return $response->getBody()->getContents();
+        return $this->client->put($this->buildURL($restUrl), $options)->getBody()->getContents();
     }
 
     /**
@@ -86,15 +76,10 @@ class JWTRequest
      */
     public function post(string $restUrl, array $json): string
     {
-        $url = $this->buildURL($restUrl);
-        $options = ['headers' => $this->buildAuthHeader('POST', $restUrl)];
         $options['headers']['Content-Type'] = 'application/json';
-
         $options['json'] = $json;
 
-        $response = $this->client->post($url, $options);
-
-        return $response->getBody()->getContents();
+        return $this->client->post($this->buildURL($restUrl), $options)->getBody()->getContents();
     }
 
     /**
@@ -104,37 +89,17 @@ class JWTRequest
      */
     public function get(string $restUrl): string
     {
-        $url = $this->buildURL($restUrl);
-        $options = ['headers' => $this->buildAuthHeader('GET', $restUrl)];
-
-        $response = $this->client->get($url, $options);
-
-        return $response->getBody()->getContents();
+        return $this->client->get($this->buildURL($restUrl))->getBody()->getContents();
     }
 
     /**
-     * @param string $restUrl
-     */
-    public function delete(string $restUrl): void
-    {
-        $url = $this->buildURL($restUrl);
-        $options = ['headers' => $this->buildAuthHeader('DELETE', $restUrl)];
-
-        $this->client->delete($url, $options);
-    }
-
-    /**
-     * @param string $method
      * @param string $restUrl
      *
-     * @return mixed[]
+     * @return string
      */
-    private function buildAuthHeader(string $method, string $restUrl): array
+    public function delete(string $restUrl): string
     {
-        $token = $this->buildPayload($method, $restUrl);
-        $jwt = JWT::encode($token, $this->tenant->getSharedSecret());
-
-        return ['Authorization' => 'JWT '.$jwt];
+        return $this->client->delete($this->buildURL($restUrl))->getBody()->getContents();
     }
 
     /**
@@ -153,18 +118,19 @@ class JWTRequest
     }
 
     /**
-     * @param string $method
-     * @param string $restUrl
+     * Create a HTTP client
      *
-     * @return mixed[]
+     * @return Client
      */
-    private function buildPayload(string $method, string $restUrl): array
+    private function createClient(): Client
     {
-        return [
-            'iss' => $this->tenant->getAddonKey(),
-            'iat' => \time(),
-            'exp' => \strtotime('+1 day'),
-            'qsh' => $this->qshHelper->create($method, $restUrl),
-        ];
+        $stack = new HandlerStack();
+        $stack->setHandler(new CurlHandler());
+        $stack->push(JWTMiddleware::authTokenMiddleware(
+            $this->tenant->getAddonKey(),
+            $this->tenant->getSharedSecret()
+        ));
+
+        return new Client(['handler' => $stack]);
     }
 }

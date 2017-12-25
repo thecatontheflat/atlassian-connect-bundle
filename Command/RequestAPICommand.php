@@ -3,7 +3,7 @@
 namespace AtlassianConnectBundle\Command;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
-use AtlassianConnectBundle\Model\JWTRequest;
+use AtlassianConnectBundle\Service\JWTRequest;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
