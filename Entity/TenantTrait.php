@@ -173,9 +173,9 @@ trait TenantTrait
      *
      * @param string $addonKey
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setAddonKey(string $addonKey): self
+    public function setAddonKey(string $addonKey): TenantInterface
     {
         $this->addonKey = $addonKey;
 
@@ -197,9 +197,9 @@ trait TenantTrait
      *
      * @param string $clientKey
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setClientKey(string $clientKey): self
+    public function setClientKey(string $clientKey): TenantInterface
     {
         $this->clientKey = $clientKey;
 
@@ -221,9 +221,9 @@ trait TenantTrait
      *
      * @param string $publicKey
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setPublicKey(string $publicKey): self
+    public function setPublicKey(string $publicKey): TenantInterface
     {
         $this->publicKey = $publicKey;
 
@@ -245,9 +245,9 @@ trait TenantTrait
      *
      * @param string $sharedSecret
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setSharedSecret(string $sharedSecret): self
+    public function setSharedSecret(string $sharedSecret): TenantInterface
     {
         $this->sharedSecret = $sharedSecret;
 
@@ -269,9 +269,9 @@ trait TenantTrait
      *
      * @param string $serverVersion
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setServerVersion(string $serverVersion): self
+    public function setServerVersion(string $serverVersion): TenantInterface
     {
         $this->serverVersion = $serverVersion;
 
@@ -293,9 +293,9 @@ trait TenantTrait
      *
      * @param string $pluginsVersion
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setPluginsVersion(string $pluginsVersion): self
+    public function setPluginsVersion(string $pluginsVersion): TenantInterface
     {
         $this->pluginsVersion = $pluginsVersion;
 
@@ -317,9 +317,9 @@ trait TenantTrait
      *
      * @param string $baseUrl
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setBaseUrl(string $baseUrl): self
+    public function setBaseUrl(string $baseUrl): TenantInterface
     {
         $this->baseUrl = $baseUrl;
 
@@ -341,9 +341,9 @@ trait TenantTrait
      *
      * @param string $productType
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setProductType(string $productType): self
+    public function setProductType(string $productType): TenantInterface
     {
         $this->productType = $productType;
 
@@ -365,9 +365,9 @@ trait TenantTrait
      *
      * @param string $description
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setDescription(string $description): self
+    public function setDescription(string $description): TenantInterface
     {
         $this->description = $description;
 
@@ -389,9 +389,9 @@ trait TenantTrait
      *
      * @param string $eventType
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setEventType(string $eventType): self
+    public function setEventType(string $eventType): TenantInterface
     {
         $this->eventType = $eventType;
 
@@ -445,9 +445,9 @@ trait TenantTrait
     /**
      * @param string $name
      *
-     * @return self
+     * @return TenantTrait|TenantInterface
      */
-    public function setUsername(string $name): self
+    public function setUsername(string $name): TenantInterface
     {
         $this->username = $name;
 

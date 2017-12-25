@@ -2,7 +2,7 @@
 
 namespace AtlassianConnectBundle\Security;
 
-use AtlassianConnectBundle\Entity\Tenant;
+use AtlassianConnectBundle\Entity\TenantInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Firebase\JWT\JWT;
@@ -58,9 +58,8 @@ class JWTUserProvider implements UserProviderInterface
             [$headb64, $bodyb64, $cryptob64] = \explode('.', $jwt);
             $decodedToken = \json_decode(JWT::urlsafeB64Decode($bodyb64));
 
-            $tenant = $this->findTenant($decodedToken->iss);
-
-            JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256']);
+            /** @noinspection NullPointerExceptionInspection */
+            JWT::decode($jwt, $this->findTenant($decodedToken->iss)->getSharedSecret(), ['HS256']);
 
             return $decodedToken;
         } catch (\Throwable $e) {
@@ -71,9 +70,9 @@ class JWTUserProvider implements UserProviderInterface
     /**
      * @param mixed $clientKey
      *
-     * @return Tenant
+     * @return TenantInterface
      */
-    public function loadUserByUsername($clientKey): Tenant
+    public function loadUserByUsername($clientKey): TenantInterface
     {
         $tenant = $this->findTenant($clientKey);
         if (!$tenant) {
@@ -98,15 +97,15 @@ class JWTUserProvider implements UserProviderInterface
      */
     public function supportsClass($class): bool
     {
-        return ($class === 'AtlassianConnectBundle\Entity\Tenant') || \is_subclass_of($class, Tenant::class);
+        return \is_subclass_of($class, TenantInterface::class);
     }
 
     /**
      * @param string $clientKey
      *
-     * @return Tenant|null
+     * @return TenantInterface|null
      */
-    protected function findTenant(string $clientKey): ?Tenant
+    protected function findTenant(string $clientKey): ?TenantInterface
     {
         /** @noinspection PhpUndefinedMethodInspection */
 

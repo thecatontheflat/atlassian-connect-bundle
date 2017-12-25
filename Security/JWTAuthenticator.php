@@ -2,7 +2,7 @@
 
 namespace AtlassianConnectBundle\Security;
 
-use AtlassianConnectBundle\Entity\Tenant;
+use AtlassianConnectBundle\Entity\TenantInterface;
 use AtlassianConnectBundle\Service\QSHGenerator;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
@@ -123,7 +123,7 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
             );
         }
 
-        /** @var Tenant $user */
+        /** @var TenantInterface $user */
         $user = $this->userProvider->loadUserByUsername($clientKey);
         if (\property_exists($token, 'sub')) {
             // for some reasons, when webhooks are called - field sub is undefined

@@ -2,7 +2,7 @@
 
 namespace AtlassianConnectBundle\Controller;
 
-use AtlassianConnectBundle\Entity\Tenant;
+use AtlassianConnectBundle\Entity\TenantInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
@@ -51,7 +51,7 @@ class HandshakeController
         $content = $request->getContent();
         $content = \json_decode($content, true);
 
-        /** @var Tenant $tenant */
+        /** @var TenantInterface $tenant */
         /** @noinspection PhpUndefinedMethodInspection */
         $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($content['clientKey']);
         if ($tenant !== null) {

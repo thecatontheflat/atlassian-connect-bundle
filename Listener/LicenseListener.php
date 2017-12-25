@@ -2,7 +2,7 @@
 
 namespace AtlassianConnectBundle\Listener;
 
-use AtlassianConnectBundle\Entity\Tenant;
+use AtlassianConnectBundle\Entity\TenantInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -64,7 +64,7 @@ class LicenseListener
             try {
                 /** @noinspection NullPointerExceptionInspection */
                 $user = $this->tokenStorage->getToken()->getUser();
-                if ($user instanceof Tenant) {
+                if ($user instanceof TenantInterface) {
                     if ($user->isWhiteListed()) {
                         return;
                     }
