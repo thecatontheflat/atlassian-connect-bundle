@@ -145,7 +145,7 @@ class ProtectedController extends Controller
         // Send request from system user
         $issue = $client->get('/rest/api/2/issue/KEY-XXX');
         
-        // Send request from system user
+        // Send request from choosen
         $user = $client
             ->setUser('admin') // the primary key of the user in Jira/Confluence etc.
             ->get('/rest/api/2/myself')
