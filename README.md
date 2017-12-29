@@ -142,10 +142,10 @@ class ProtectedController extends Controller
     {
         $client = $this->container->get(AtlassianRestClient::class);
         
-        // Send request from system user
+        // Send request from anonymous plugin user
         $issue = $client->get('/rest/api/2/issue/KEY-XXX');
         
-        // Send request from choosen
+        // Send request from choosen user
         $user = $client
             ->setUser('admin') // the primary key of the user in Jira/Confluence etc.
             ->get('/rest/api/2/myself')
