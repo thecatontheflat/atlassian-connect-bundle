@@ -23,11 +23,6 @@ class JWTUserProvider implements UserProviderInterface
     protected $em;
 
     /**
-     * @var int
-     */
-    protected $tokenLifetime;
-
-    /**
      * @var string
      */
     protected $tenantClass;
@@ -36,13 +31,11 @@ class JWTUserProvider implements UserProviderInterface
      * JWTUserProvider constructor.
      *
      * @param ManagerRegistry $registry
-     * @param int             $tokenLifetime
      * @param string          $tenantClass
      */
-    public function __construct(ManagerRegistry $registry, int $tokenLifetime, string $tenantClass)
+    public function __construct(ManagerRegistry $registry, string $tenantClass)
     {
         $this->em = $registry->getManager();
-        $this->tokenLifetime = $tokenLifetime;
         $this->tenantClass = $tenantClass;
     }
 

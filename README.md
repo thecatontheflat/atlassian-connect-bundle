@@ -42,7 +42,6 @@ Sample configuration in `config.yml`:
 ```yaml
     atlassian_connect:
         dev_tenant: 1
-        token_lifetime: 86400
         prod:
             key: 'your-addon-key'
             name: 'Your Add-On Name'
@@ -126,6 +125,7 @@ In your **protected** controller action you can make a signed request to JIRA in
 
 namespace App\Controller;
 
+use AtlassianConnectBundle\Service\AtlassianRestClient;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -141,9 +141,17 @@ class ProtectedController extends Controller
     public function index()
     {
         $client = $this->container->get(AtlassianRestClient::class);
-        $json = $client->get('/rest/api/2/issue/KEY-XXX');
         
-        return new Response($json);
+        // Send request from system user
+        $issue = $client->get('/rest/api/2/issue/KEY-XXX');
+        
+        // Send request from system user
+        $user = $client
+            ->setUser('admin') // the primary key of the user in Jira/Confluence etc.
+            ->get('/rest/api/2/myself')
+        ;
+        
+        return new Response([$issue, $user]);
     }
 }
 ```

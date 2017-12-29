@@ -20,7 +20,6 @@ class DescriptorControllerTest extends TestCase
         ];
 
         $controller = new DescriptorController('dev', [
-            'token_lifetime' => 86400,
             'dev_tenant' => 1,
             'prod' => [],
             'dev' => $data,

@@ -55,7 +55,6 @@ class AtlassianConnectExtensionTest extends TestCase
         $this->container->setParameter('kernel.environment', 'test');
 
         $this->container->prependExtensionConfig($this->extension->getAlias(), [
-            'token_lifetime' => 86400,
             'dev_tenant' => 1,
             'prod' => [],
             'dev' => [],
