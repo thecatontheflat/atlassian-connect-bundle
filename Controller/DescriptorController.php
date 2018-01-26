@@ -25,7 +25,7 @@ class DescriptorController
      */
     public function __construct(string $env, array $config)
     {
-        $this->env = $env;
+        $this->env = $env ?: 'dev';
         $this->config = $config;
     }
 
