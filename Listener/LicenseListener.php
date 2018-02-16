@@ -59,32 +59,34 @@ class LicenseListener
             return;
         }
 
-        if ($request->get('lic') !== 'active' && $this->kernel->getEnvironment() === 'prod') {
-            // Checking for whitelisted users
-            try {
-                /** @noinspection NullPointerExceptionInspection */
-                $user = $this->tokenStorage->getToken()->getUser();
-                if ($user instanceof TenantInterface) {
-                    if ($user->isWhiteListed()) {
+        if ($request->get('lic') === 'active' || $this->kernel->getEnvironment() !== 'prod') {
+            return;
+        }
+
+        // Checking for whitelisted users
+        try {
+            /** @noinspection NullPointerExceptionInspection */
+            $user = $this->tokenStorage->getToken()->getUser();
+            if ($user instanceof TenantInterface) {
+                if ($user->isWhiteListed()) {
+                    return;
+                }
+
+                $today = \date('Y-m-d');
+                $whitelist = $this->kernel->getContainer()->getParameter('license_whitelist');
+                /** @noinspection ForeachSourceInspection */
+                foreach ($whitelist as $allowed) {
+                    if ($today <= $allowed['valid_till'] && $allowed['client_key'] === $user->getClientKey()) {
                         return;
                     }
-
-                    $today = \date('Y-m-d');
-                    $whitelist = $this->kernel->getContainer()->getParameter('license_whitelist');
-                    /** @noinspection ForeachSourceInspection */
-                    foreach ($whitelist as $allowed) {
-                        if ($today <= $allowed['valid_till'] && $allowed['client_key'] === $user->getClientKey()) {
-                            return;
-                        }
-                    }
                 }
-            } catch (\Throwable $e) {
-                // Do nothing
             }
-
-            $url = $this->router->generate('atlassian_connect_unlicensed', $request->query->all());
-            $response = new RedirectResponse($url);
-            $event->setResponse($response);
+        } catch (\Throwable $e) {
+            // Do nothing
         }
+
+        $url = $this->router->generate('atlassian_connect_unlicensed', $request->query->all());
+        $response = new RedirectResponse($url);
+        $event->setResponse($response);
     }
 }

@@ -57,12 +57,12 @@ class HandshakeController
         if ($tenant !== null) {
             try {
                 $authorizationHeaderArray = \explode(' ', $request->headers->get('authorization'));
-                if (\count($authorizationHeaderArray) > 1) {
-                    $jwt = $authorizationHeaderArray[1];
-                    JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256']);
-                } else {
+                if (\count($authorizationHeaderArray) <= 1) {
                     throw new \InvalidArgumentException('Bad authorization header');
                 }
+
+                $jwt = $authorizationHeaderArray[1];
+                JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256']);
             } catch (\Throwable $e) {
                 $this->logger->error($e->getMessage(), ['exception' => $e]);
 

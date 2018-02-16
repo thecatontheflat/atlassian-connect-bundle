@@ -528,7 +528,7 @@ trait TenantTrait
         $this->oauthClientId = $oauthClientId;
 
         return $this;
-}
+    }
 
     /**
      * @return string|null
