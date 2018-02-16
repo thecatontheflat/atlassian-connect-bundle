@@ -83,7 +83,12 @@ class HandshakeController
             ->setBaseUrl($content['baseUrl'])
             ->setProductType($content['productType'])
             ->setDescription($content['description'])
-            ->setEventType($content['eventType']);
+            ->setEventType($content['eventType'])
+        ;
+
+        if (\array_key_exists('oauthClientId', $content)) {
+            $tenant->setOauthClientId($content['oauthClientId']);
+        }
 
         $this->em->persist($tenant);
         $this->em->flush();

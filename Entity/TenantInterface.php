@@ -103,4 +103,11 @@ interface TenantInterface
      * @return TenantInterface
      */
     public function setEventType(string $eventType): TenantInterface;
+
+    /**
+     * @param string|null $oauthClientId
+     *
+     * @return TenantInterface
+     */
+    public function setOauthClientId(?string $oauthClientId): TenantInterface;
 }

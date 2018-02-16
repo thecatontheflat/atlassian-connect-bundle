@@ -33,6 +33,13 @@ trait TenantTrait
     private $clientKey;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="oauth_client_id", type="string", length=255, nullable=true)
+     */
+    private $oauthClientId;
+
+    /**
      * @var string
      */
     private $username;
@@ -509,5 +516,25 @@ trait TenantTrait
         $now = new \DateTime();
 
         return $this->getIsWhiteListed() && ($this->getWhiteListedUntil() === null || ($now < $this->getWhiteListedUntil()));
+    }
+
+    /**
+     * @param string|null $oauthClientId
+     *
+     * @return TenantInterface
+     */
+    public function setOauthClientId(?string $oauthClientId): TenantInterface
+    {
+        $this->oauthClientId = $oauthClientId;
+
+        return $this;
+}
+
+    /**
+     * @return string|null
+     */
+    public function getOauthClientId(): ?string
+    {
+        return $this->oauthClientId;
     }
 }
