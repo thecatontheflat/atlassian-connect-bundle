@@ -115,7 +115,7 @@ class AtlassianRestClient
     public function setUser(?string $user): AtlassianRestClient
     {
         $this->user = $user;
-        $this->createClient();
+        $this->client = $this->createClient();
 
         return $this;
     }
@@ -144,11 +144,20 @@ class AtlassianRestClient
     {
         $stack = new HandlerStack();
         $stack->setHandler(new CurlHandler());
-        $stack->push(GuzzleJWTMiddleware::authTokenMiddleware(
-            $this->tenant->getAddonKey(),
-            $this->tenant->getSharedSecret(),
-            $this->user
-        ));
+
+        if ($this->user === null) {
+            $stack->push(GuzzleJWTMiddleware::authTokenMiddleware(
+                $this->tenant->getAddonKey(),
+                $this->tenant->getSharedSecret()
+            ));
+        } else {
+            $stack->push(GuzzleJWTMiddleware::authUserTokenMiddleware(
+                $this->tenant->getOauthClientId(),
+                $this->tenant->getSharedSecret(),
+                $this->tenant->getBaseUrl(),
+                $this->user
+            ));
+        }
 
         return new Client(['handler' => $stack]);
     }

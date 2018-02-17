@@ -20,6 +20,11 @@ interface TenantInterface
     /**
      * @return null|string
      */
+    public function getOauthClientId(): ?string;
+
+    /**
+     * @return null|string
+     */
     public function getBaseUrl(): ?string;
 
     /**

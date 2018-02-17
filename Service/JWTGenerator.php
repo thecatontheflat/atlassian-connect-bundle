@@ -16,11 +16,10 @@ class JWTGenerator
      * @param RequestInterface $request
      * @param string           $issuer  Key of the add-on
      * @param string           $secret  Shared secret of the Tenant
-     * @param null|string      $user
      *
      * @return string
      */
-    public static function generate(RequestInterface $request, string $issuer, string $secret, ?string $user): string
+    public static function generate(RequestInterface $request, string $issuer, string $secret): string
     {
         $data = [
             'iss' => $issuer,
@@ -29,9 +28,27 @@ class JWTGenerator
             'qsh' => QSHGenerator::generate((string) $request->getUri(), $request->getMethod()),
         ];
 
-        if ($user !== null) {
-            $data['sub'] = $user;
-        }
+        return JWT::encode($data, $secret);
+    }
+
+    /**
+     * @param string $secret
+     * @param string $oauthClientId
+     * @param string $baseUrl
+     * @param string $user
+     *
+     * @return string
+     */
+    public static function generateAssertion(string $secret, string $oauthClientId, string $baseUrl, string $user): string
+    {
+        $data = [
+            'iss' => 'urn:atlassian:connect:clientid:'.$oauthClientId,
+            'sub' => 'urn:atlassian:connect:userkey:'.$user,
+            'iat' => \time(),
+            'exp' => \strtotime('+1 minutes'),
+            'tnt' => $baseUrl,
+            'aud' => 'https://auth.atlassian.io',
+        ];
 
         return JWT::encode($data, $secret);
     }

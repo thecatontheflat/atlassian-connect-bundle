@@ -521,7 +521,7 @@ trait TenantTrait
     /**
      * @param string|null $oauthClientId
      *
-     * @return TenantInterface
+     * @return TenantTrait|TenantInterface
      */
     public function setOauthClientId(?string $oauthClientId): TenantInterface
     {
