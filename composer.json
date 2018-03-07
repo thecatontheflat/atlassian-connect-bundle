@@ -23,7 +23,7 @@
     "escapestudios/symfony2-coding-standard": "^3.0",
     "friendsofphp/php-cs-fixer": "^2.3",
     "slevomat/coding-standard": "^4.0",
-    "phpunit/phpunit": "^6.3"
+    "phpunit/phpunit": "^7.0"
   },
   "authors": [
     {
