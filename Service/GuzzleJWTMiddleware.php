@@ -73,7 +73,6 @@ class GuzzleJWTMiddleware
             'form_params' => [
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
                 'assertion' => JWTGenerator::generateAssertion($secret, $oauthClientId, $baseUrl, $username),
-                'scope' => 'READ WRITE',
             ],
         ]);
 
