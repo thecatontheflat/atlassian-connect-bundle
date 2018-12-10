@@ -24,6 +24,17 @@
         <exclude name="SlevomatCodingStandard.Commenting.DocCommentSpacing.IncorrectLinesCountBetweenDifferentAnnotationsTypes"/>
         <exclude name="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment.MultiLinePropertyComment"/>
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix"/>
+        <exclude name="SlevomatCodingStandard.PHP.UselessParentheses"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.DisallowEmpty"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator"/>
+        <exclude name="SlevomatCodingStandard.Variables.UnusedVariable"/>
+        <exclude name="SlevomatCodingStandard.Functions.UnusedParameter"/>
+        <exclude name="SlevomatCodingStandard.Functions.StaticClosure"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition"/>
+        <exclude name="SlevomatCodingStandard.Classes.TraitUseSpacing"/>
+        <exclude name="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
     </rule>
 
     <rule ref="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces">
