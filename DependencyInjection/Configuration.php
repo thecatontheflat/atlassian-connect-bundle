@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        if (method_exists(TreeBuilder::class, 'getRootNode')) {
+        if (\method_exists(TreeBuilder::class, 'getRootNode')) {
             $treeBuilder = new TreeBuilder('atlassian_connect');
             $rootNode = $treeBuilder->getRootNode();
         } else {
