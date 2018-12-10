@@ -98,12 +98,11 @@ Add the following:
     
 ### Step 6. (Optional): Configure License Check
 
-To perform a license check for a certain route - specify the `requires_license` options in your `routing.yml`
+To perform a license check for a certain route - specify the `requires_license` default in your `routing.yml`
 ```yaml
     some_route:
         path: ...
-        defaults: ...
-        options:
+        defaults:
             requires_license: true
 ```      
 

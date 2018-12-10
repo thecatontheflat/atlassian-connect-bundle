@@ -52,10 +52,9 @@ class LicenseListener
         }
 
         $request = $event->getRequest();
-        $routes = $this->router->getRouteCollection();
-        $route = $routes->get($request->attributes->get('_route'));
+        $route = $request->attributes->get('_route');
 
-        if ($route !== null && !$route->getOption('requires_license')) {
+        if ($route !== null && !$request->attributes->get('requires_license')) {
             return;
         }
 
