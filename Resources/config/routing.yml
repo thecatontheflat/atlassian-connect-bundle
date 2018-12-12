@@ -1,14 +1,14 @@
 atlassian_connect_descriptor:
     path: /atlassian-connect.json
     defaults:
-        _controller: AtlassianConnectBundle::Descriptor::index
+        _controller: AtlassianConnectBundle:Descriptor:index
 
 atlassian_connect_handshake:
     path: /handshake
     defaults:
-        _controller: AtlassianConnectBundle::Handshake::register
+        _controller: AtlassianConnectBundle:Handshake:register
 
 atlassian_connect_unlicensed:
     path: /protected/unlicensed
     defaults:
-        _controller: AtlassianConnectBundle::Unlicensed::unlicensed
+        _controller: AtlassianConnectBundle:Unlicensed:unlicensed
