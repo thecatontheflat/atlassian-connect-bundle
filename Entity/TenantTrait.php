@@ -442,7 +442,7 @@ trait TenantTrait
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getUsername(): ?string
     {
@@ -489,7 +489,7 @@ trait TenantTrait
     }
 
     /**
-     * @return null|\DateTime
+     * @return \DateTime|null
      */
     public function getWhiteListedUntil(): ?\DateTime
     {

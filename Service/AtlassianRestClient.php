@@ -40,6 +40,14 @@ class AtlassianRestClient
     }
 
     /**
+     * @return Client
+     */
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
+    /**
      * @param UploadedFile $file
      * @param string       $restUrl
      *
@@ -51,7 +59,7 @@ class AtlassianRestClient
         $savedFile = $file->move('/tmp/', $file->getClientOriginalName());
 
         $options['body'] = [
-            'file' => \fopen($savedFile->getRealPath(), 'rb'),
+            'file' => \fopen($savedFile->getRealPath(), 'r'),
         ];
 
         \unlink($savedFile->getRealPath());
@@ -164,7 +172,7 @@ class AtlassianRestClient
 
     /**
      * @param TenantInterface|null       $tenant
-     * @param null|TokenStorageInterface $tokenStorage
+     * @param TokenStorageInterface|null $tokenStorage
      *
      * @return void
      */

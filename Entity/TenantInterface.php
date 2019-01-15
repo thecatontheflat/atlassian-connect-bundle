@@ -13,22 +13,22 @@ interface TenantInterface
     public function getRoles(): array;
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getSharedSecret(): ?string;
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getOauthClientId(): ?string;
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getBaseUrl(): ?string;
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getAddonKey(): ?string;
 
