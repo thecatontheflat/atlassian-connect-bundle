@@ -10,18 +10,16 @@ use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
-use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
+use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 /**
  * Class JWTAuthenticator
  */
-class JWTAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
+class JWTAuthenticator extends AbstractGuardAuthenticator
 {
     /**
      * @var JWTUserProvider
@@ -67,12 +65,34 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
     }
 
     /**
-     * @param Request $request
-     * @param mixed   $providerKey
+     * @param Request                      $request
+     * @param AuthenticationException|null $authException
      *
-     * @return PreAuthenticatedToken
+     * @return Response
      */
-    public function createToken(Request $request, $providerKey): PreAuthenticatedToken
+    public function start(Request $request, ?AuthenticationException $authException = null): Response
+    {
+        return new Response('Authentication header required', 401);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function supports(Request $request): bool
+    {
+        return $request->query->has('jwt') ||
+            $request->headers->has('authorization') ||
+            ($this->devTenant && ($this->kernel->getEnvironment() === 'dev'));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return mixed Any non-null value
+     */
+    public function getCredentials(Request $request)
     {
         $jwt = $request->query->get('jwt');
         if (!$jwt && $request->headers->has('authorization')) {
@@ -98,60 +118,78 @@ class JWTAuthenticator implements SimplePreAuthenticatorInterface, Authenticatio
         }
 
         if (!$jwt) {
-            throw new BadCredentialsException('No JWT token found');
+            return null;
         }
 
-        return new PreAuthenticatedToken('anon.', $jwt, $providerKey);
+        return ['jwt' => $jwt];
     }
 
     /**
-     * @param TokenInterface        $token
+     * @param mixed                 $credentials
      * @param UserProviderInterface $userProvider
-     * @param mixed                 $providerKey
      *
-     * @return PreAuthenticatedToken
+     * @return UserInterface|null
      */
-    public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey): PreAuthenticatedToken
+    public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
     {
-        $jwt = $token->getCredentials();
-        $token = $this->userProvider->getDecodedToken($jwt);
+        $token = $this->userProvider->getDecodedToken($credentials['jwt']);
         $clientKey = $token->iss;
 
         if (!$clientKey) {
             throw new AuthenticationException(
-                \sprintf('API Key "%s" does not exist.', $jwt)
+                \sprintf('API Key "%s" does not exist.', $credentials['jwt'])
             );
         }
 
-        /** @var TenantInterface $user */
+        /** @var TenantInterface|UserInterface $user */
         $user = $this->userProvider->loadUserByUsername($clientKey);
         if (\property_exists($token, 'sub')) {
             // for some reasons, when webhooks are called - field sub is undefined
             $user->setUsername($token->sub);
         }
 
-        return new PreAuthenticatedToken($user, $jwt, $providerKey, $user->getRoles());
+        return $user;
     }
 
     /**
-     * @param TokenInterface $token
-     * @param mixed          $providerKey
+     * @param mixed         $credentials
+     * @param UserInterface $user
      *
      * @return bool
      */
-    public function supportsToken(TokenInterface $token, $providerKey): bool
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
-        return $token instanceof PreAuthenticatedToken && $token->getProviderKey() === $providerKey;
+        return true;
     }
 
     /**
      * @param Request                 $request
      * @param AuthenticationException $exception
      *
-     * @return Response
+     * @return Response|null
      */
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         return new Response('Authentication Failed: '.$exception->getMessage(), 403);
+    }
+
+    /**
+     * @param Request        $request
+     * @param TokenInterface $token
+     * @param mixed|string   $providerKey The provider (i.e. firewall) key
+     *
+     * @return Response|null
+     */
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
+    {
+        return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function supportsRememberMe(): bool
+    {
+        return false;
     }
 }
