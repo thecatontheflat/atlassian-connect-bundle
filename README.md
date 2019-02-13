@@ -68,20 +68,21 @@ Sample configuration in `config.yml`:
 
 ### Step 4. Security configuration
 
-To configure security part - use the following configuration in your `security.yml`
+To configure security part - use the following configuration in your `security.yml`. If you have another firewall that has the `"^/"` pattern, be sure to set the `jwt_secured_area` firewall first.
 
 ```yaml
     security:
         providers:
             jwt_user_provider:
                 id: jwt_user_provider
-    
         firewalls:
             jwt_secured_area:
                 pattern: "^/protected"
                 stateless: true
-                simple_preauth:
-                    authenticator: jwt_authenticator
+                guard:
+                    authenticators:
+                        - jwt_authenticator
+                provider: jwt_user_provider
 ```
     
 ### Step 5. Include Routes

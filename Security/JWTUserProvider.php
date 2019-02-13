@@ -63,7 +63,7 @@ class JWTUserProvider implements UserProviderInterface
     /**
      * @param mixed $clientKey
      *
-     * @return TenantInterface
+     * @return TenantInterface|UserInterface
      */
     public function loadUserByUsername($clientKey): TenantInterface
     {
