@@ -3,7 +3,6 @@
 namespace AtlassianConnectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Tenant
@@ -12,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity()
  */
-class Tenant implements UserInterface, TenantInterface
+class Tenant implements TenantInterface
 {
     use TenantTrait;
 }
