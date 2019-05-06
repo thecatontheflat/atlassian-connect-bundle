@@ -3,8 +3,8 @@
 namespace AtlassianConnectBundle\Security;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -29,19 +29,19 @@ class JWTUserProvider implements JWTUserProviderInterface
     /**
      * JWTUserProvider constructor.
      *
-     * @param ManagerRegistry $registry
-     * @param string          $tenantClass
+     * @param EntityManagerInterface $entityManager
+     * @param string                 $tenantClass
      */
-    public function __construct(ManagerRegistry $registry, string $tenantClass)
+    public function __construct(EntityManagerInterface $entityManager, string $tenantClass)
     {
-        $this->em = $registry->getManager();
+        $this->em = $entityManager;
         $this->tenantClass = $tenantClass;
     }
 
     /**
      * @param string $jwt
      *
-     * @return object
+     * @return object|mixed
      */
     public function getDecodedToken(string $jwt)
     {
@@ -71,7 +71,7 @@ class JWTUserProvider implements JWTUserProviderInterface
             throw new UsernameNotFoundException('Can\'t find tenant with such username');
         }
 
-        return $this->findTenant($clientKey);
+        return $tenant;
     }
 
     /**
@@ -95,14 +95,14 @@ class JWTUserProvider implements JWTUserProviderInterface
     /**
      * @param string $clientKey
      *
-     * @return TenantInterface|null
+     * @return TenantInterface|object|null
      */
-    protected function findTenant(string $clientKey): ?TenantInterface
+    private function findTenant(string $clientKey): ?TenantInterface
     {
         /** @noinspection PhpUndefinedMethodInspection */
 
         return $this->em
             ->getRepository($this->tenantClass)
-            ->findOneByClientKey($clientKey);
+            ->findOneBy(['clientKey' => $clientKey]);
     }
 }
