@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Bukashk0zzz\FilterBundle\Tests\DependencyInjection;
+namespace AtlassianConnectBundle\Tests\DependencyInjection;
 
 use AtlassianConnectBundle\Controller\HandshakeController;
 use AtlassianConnectBundle\Entity\Tenant;
