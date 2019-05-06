@@ -41,6 +41,9 @@
     "issues": "https://github.com/thecatontheflat/atlassian-connect-bundle/issues"
   },
   "autoload": {
-    "psr-4": {"AtlassianConnectBundle\\": ""}
+    "psr-4": {"AtlassianConnectBundle\\": "src"}
+  },
+  "autoload-dev": {
+    "psr-4": {"AtlassianConnectBundle\\Tests\\":  "Tests"}
   }
 }
