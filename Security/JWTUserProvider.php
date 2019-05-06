@@ -10,12 +10,11 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * Class JWTUserProvider
  */
-class JWTUserProvider implements UserProviderInterface
+class JWTUserProvider implements JWTUserProviderInterface
 {
     /**
      * @var EntityManager
@@ -42,7 +41,7 @@ class JWTUserProvider implements UserProviderInterface
     /**
      * @param string $jwt
      *
-     * @return mixed
+     * @return object
      */
     public function getDecodedToken(string $jwt)
     {

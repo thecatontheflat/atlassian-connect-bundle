@@ -7,6 +7,7 @@ use AtlassianConnectBundle\Service\QSHGenerator;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Firebase\JWT\JWT;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -132,6 +133,13 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
     {
+        if (!$userProvider instanceof JWTUserProviderInterface) {
+            throw new InvalidArgumentException(sprintf(
+                'UserProvider must implement %s',
+                JWTUserProviderInterface::class
+            ));
+        }
+
         $token = $this->userProvider->getDecodedToken($credentials['jwt']);
         $clientKey = $token->iss;
 
