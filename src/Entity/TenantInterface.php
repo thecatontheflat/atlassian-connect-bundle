@@ -2,10 +2,12 @@
 
 namespace AtlassianConnectBundle\Entity;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
  * Interface TenantInterface
  */
-interface TenantInterface
+interface TenantInterface extends UserInterface
 {
     /**
      * @return string[]

@@ -4,9 +4,10 @@ namespace AtlassianConnectBundle\Security;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
 use AtlassianConnectBundle\Service\QSHGenerator;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -21,11 +22,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
  */
 class JWTAuthenticator extends AbstractGuardAuthenticator
 {
-    /**
-     * @var JWTUserProvider
-     */
-    protected $userProvider;
-
     /**
      * @var KernelInterface
      */
@@ -49,17 +45,15 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
     /**
      * JWTAuthenticator constructor.
      *
-     * @param JWTUserProvider $userProvider
-     * @param KernelInterface $kernel
-     * @param ManagerRegistry $registry
-     * @param string          $tenantEntityClass
-     * @param int             $devTenant
+     * @param KernelInterface        $kernel
+     * @param EntityManagerInterface $entityManager
+     * @param string                 $tenantEntityClass
+     * @param int                    $devTenant
      */
-    public function __construct(JWTUserProvider $userProvider, KernelInterface $kernel, ManagerRegistry $registry, string $tenantEntityClass, int $devTenant)
+    public function __construct(KernelInterface $kernel, EntityManagerInterface $entityManager, string $tenantEntityClass, int $devTenant)
     {
-        $this->userProvider = $userProvider;
         $this->kernel = $kernel;
-        $this->em = $registry->getManager();
+        $this->em = $entityManager;
         $this->tenantEntityClass = $tenantEntityClass;
         $this->devTenant = $devTenant;
     }
@@ -132,7 +126,14 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
     {
-        $token = $this->userProvider->getDecodedToken($credentials['jwt']);
+        if (!$userProvider instanceof JWTUserProviderInterface) {
+            throw new InvalidArgumentException(\sprintf(
+                'UserProvider must implement %s',
+                JWTUserProviderInterface::class
+            ));
+        }
+
+        $token = $userProvider->getDecodedToken($credentials['jwt']);
         $clientKey = $token->iss;
 
         if (!$clientKey) {
@@ -142,7 +143,7 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
         }
 
         /** @var TenantInterface|UserInterface $user */
-        $user = $this->userProvider->loadUserByUsername($clientKey);
+        $user = $userProvider->loadUserByUsername($clientKey);
         if (\property_exists($token, 'sub')) {
             // for some reasons, when webhooks are called - field sub is undefined
             $user->setUsername($token->sub);

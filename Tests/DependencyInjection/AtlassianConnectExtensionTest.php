@@ -6,8 +6,8 @@ use AtlassianConnectBundle\Controller\DescriptorController;
 use AtlassianConnectBundle\Controller\HandshakeController;
 use AtlassianConnectBundle\Controller\UnlicensedController;
 use AtlassianConnectBundle\DependencyInjection\AtlassianConnectExtension;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -48,7 +48,7 @@ class AtlassianConnectExtensionTest extends TestCase
         $this->container->set(RouterInterface::class, new \stdClass());
         $this->container->set(KernelInterface::class, new \stdClass());
         $this->container->set(TokenStorageInterface::class, new \stdClass());
-        $this->container->set(ManagerRegistry::class, new \stdClass());
+        $this->container->set(EntityManagerInterface::class, new \stdClass());
         $this->container->set(ObjectManager::class, new \stdClass());
         $this->container->set(LoggerInterface::class, new \stdClass());
         $this->container->set('twig', new \stdClass());
