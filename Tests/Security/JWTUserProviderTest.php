@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -123,10 +125,12 @@ final class JWTUserProviderTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * Test it fails to load a user by user name
      */
     public function testItFailsToLoadAUserByUserName(): void
     {
+        $this->expectException(UsernameNotFoundException::class);
+
         $this->entityRepository
             ->expects($this->once())
             ->method('findOneBy')
@@ -139,10 +143,12 @@ final class JWTUserProviderTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
+     * Test refresh user is not supported
      */
     public function testRefreshUserIsNotSupported(): void
     {
+        $this->expectException(UnsupportedUserException::class);
+
         $this->userProvider->refreshUser($this->createMock(UserInterface::class));
     }
 

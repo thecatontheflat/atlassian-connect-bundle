@@ -23,7 +23,7 @@ class GuzzleJWTMiddleware
     public static function authTokenMiddleware(string $issuer, string $secret): callable
     {
         return Middleware::mapRequest(
-            function (RequestInterface $request) use ($issuer, $secret) {
+            static function (RequestInterface $request) use ($issuer, $secret) {
                 return new Request(
                     $request->getMethod(),
                     $request->getUri(),
@@ -45,7 +45,7 @@ class GuzzleJWTMiddleware
     public static function authUserTokenMiddleware(string $oauthClientId, string $secret, string $baseUrl, string $username): callable
     {
         return Middleware::mapRequest(
-            function (RequestInterface $request) use ($oauthClientId, $secret, $baseUrl, $username) {
+            static function (RequestInterface $request) use ($oauthClientId, $secret, $baseUrl, $username) {
                 return new Request(
                     $request->getMethod(),
                     $request->getUri(),

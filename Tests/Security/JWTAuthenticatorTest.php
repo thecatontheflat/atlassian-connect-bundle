@@ -174,10 +174,12 @@ final class JWTAuthenticatorTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * Test it fails when no tenant exists
      */
     public function testItFailsWhenNoTenantExists(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $repository = $this->createMock(ObjectRepository::class);
         $repository
             ->expects($this->once())
@@ -200,22 +202,26 @@ final class JWTAuthenticatorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage UserProvider must implement AtlassianConnectBundle\Security\JWTUserProviderInterface
+     * Test get user gets invalid user provider
      */
     public function testGetUserGetsInvalidUserProvider(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('UserProvider must implement AtlassianConnectBundle\Security\JWTUserProviderInterface');
+
         $userProvider = $this->createMock(UserProviderInterface::class);
 
         $this->jwtAuthenticator->getUser('credentials', $userProvider);
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     * @expectedExceptionMessage API Key "token" does not exist.
+     * Test get user without client key throws exception
      */
     public function testGetUserWithoutClientKeyThrowsException(): void
     {
+        $this->expectException(AuthenticationException::class);
+        $this->expectExceptionMessage('API Key "token" does not exist.');
+
         $token = [
             'sub' => 'username',
             'iss' => null,

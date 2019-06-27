@@ -5,7 +5,7 @@ namespace AtlassianConnectBundle\Security;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
- * @class JWTUserProviderInterface
+ * @class() JWTUserProviderInterface
  */
 interface JWTUserProviderInterface extends UserProviderInterface
 {

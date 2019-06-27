@@ -184,10 +184,10 @@ class AtlassianRestClient
             $token = $tokenStorage->getToken();
 
             if ($token !== null) {
-                $tenant = $token->getUser();
+                $user = $token->getUser();
 
                 if ($tenant instanceof TenantInterface) {
-                    $this->tenant = $tenant;
+                    $this->tenant = $user;
                 }
             }
         } else {

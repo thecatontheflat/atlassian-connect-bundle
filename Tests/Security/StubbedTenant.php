@@ -48,6 +48,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $name
+     *
      * @return TenantInterface
      */
     public function setUsername(string $name): TenantInterface
@@ -56,6 +57,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $addonKey
+     *
      * @return TenantInterface
      */
     public function setAddonKey(string $addonKey): TenantInterface
@@ -64,6 +66,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $clientKey
+     *
      * @return TenantInterface
      */
     public function setClientKey(string $clientKey): TenantInterface
@@ -72,6 +75,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $publicKey
+     *
      * @return TenantInterface
      */
     public function setPublicKey(string $publicKey): TenantInterface
@@ -80,6 +84,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $sharedSecret
+     *
      * @return TenantInterface
      */
     public function setSharedSecret(string $sharedSecret): TenantInterface
@@ -88,6 +93,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $serverVersion
+     *
      * @return TenantInterface
      */
     public function setServerVersion(string $serverVersion): TenantInterface
@@ -96,6 +102,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $pluginsVersion
+     *
      * @return TenantInterface
      */
     public function setPluginsVersion(string $pluginsVersion): TenantInterface
@@ -104,6 +111,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $baseUrl
+     *
      * @return TenantInterface
      */
     public function setBaseUrl(string $baseUrl): TenantInterface
@@ -112,6 +120,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $productType
+     *
      * @return TenantInterface
      */
     public function setProductType(string $productType): TenantInterface
@@ -120,6 +129,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $description
+     *
      * @return TenantInterface
      */
     public function setDescription(string $description): TenantInterface
@@ -128,6 +138,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string $eventType
+     *
      * @return TenantInterface
      */
     public function setEventType(string $eventType): TenantInterface
@@ -136,6 +147,7 @@ class StubbedTenant implements TenantInterface
 
     /**
      * @param string|null $oauthClientId
+     *
      * @return TenantInterface
      */
     public function setOauthClientId(?string $oauthClientId): TenantInterface

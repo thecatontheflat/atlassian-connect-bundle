@@ -43,7 +43,7 @@ class JWTGenerator
     {
         $data = [
             'iss' => 'urn:atlassian:connect:clientid:'.$oauthClientId,
-            'sub' => 'urn:atlassian:connect:userkey:'.$user,
+            'sub' => 'urn:atlassian:connect:useraccountid:'.$user,
             'iat' => \time(),
             'exp' => \strtotime('+1 minutes'),
             'tnt' => $baseUrl,
