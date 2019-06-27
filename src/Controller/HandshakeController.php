@@ -54,9 +54,11 @@ class HandshakeController
         /** @var TenantInterface $tenant */
         /** @noinspection PhpUndefinedMethodInspection */
         $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($content['clientKey']);
+
         if ($tenant !== null) {
             try {
                 $authorizationHeaderArray = \explode(' ', $request->headers->get('authorization'));
+
                 if (\count($authorizationHeaderArray) <= 1) {
                     throw new \InvalidArgumentException('Bad authorization header');
                 }

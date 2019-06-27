@@ -66,6 +66,7 @@ class LicenseListener
         try {
             /** @noinspection NullPointerExceptionInspection */
             $user = $this->tokenStorage->getToken()->getUser();
+
             if ($user instanceof TenantInterface) {
                 if ($user->isWhiteListed()) {
                     return;
@@ -73,6 +74,7 @@ class LicenseListener
 
                 $today = \date('Y-m-d');
                 $whitelist = $this->kernel->getContainer()->getParameter('license_whitelist');
+
                 /** @noinspection ForeachSourceInspection */
                 foreach ($whitelist as $allowed) {
                     if ($today <= $allowed['valid_till'] && $allowed['client_key'] === $user->getClientKey()) {

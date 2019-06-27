@@ -47,7 +47,7 @@ class JWTUserProvider implements JWTUserProviderInterface
     {
         try {
             /** @noinspection PhpUnusedLocalVariableInspection */
-            [$headb64, $bodyb64, $cryptob64] = \explode('.', $jwt);
+            $bodyb64 = \explode('.', $jwt)[1];
             $decodedToken = \json_decode(JWT::urlsafeB64Decode($bodyb64));
 
             /** @noinspection NullPointerExceptionInspection */
@@ -67,6 +67,7 @@ class JWTUserProvider implements JWTUserProviderInterface
     public function loadUserByUsername($clientKey): TenantInterface
     {
         $tenant = $this->findTenant($clientKey);
+
         if (!$tenant) {
             throw new UsernameNotFoundException('Can\'t find tenant with such username');
         }

@@ -24,24 +24,17 @@
         <exclude name="SlevomatCodingStandard.Commenting.DocCommentSpacing.IncorrectLinesCountBetweenDifferentAnnotationsTypes"/>
         <exclude name="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment.MultiLinePropertyComment"/>
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix"/>
-        <exclude name="SlevomatCodingStandard.PHP.UselessParentheses"/>
-        <exclude name="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses"/>
-        <exclude name="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing"/>
-        <exclude name="SlevomatCodingStandard.ControlStructures.DisallowEmpty"/>
-        <exclude name="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator"/>
-        <exclude name="SlevomatCodingStandard.Variables.UnusedVariable"/>
-        <exclude name="SlevomatCodingStandard.Functions.UnusedParameter"/>
-        <exclude name="SlevomatCodingStandard.Functions.StaticClosure"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition"/>
-        <exclude name="SlevomatCodingStandard.Classes.TraitUseSpacing"/>
-        <exclude name="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
-    </rule>
-
-    <rule ref="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces">
-        <properties>
-            <property name="linesCountAfterOpeningBrace" value="0"/>
-            <property name="linesCountBeforeClosingBrace" value="0"/>
-        </properties>
+        <exclude name="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses.UselessParentheses"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator.DisallowedShortTernaryOperator"/>
+        <exclude name="SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators.DisallowedPreIncrementOperator"/>
+        <exclude name="SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter"/>
+        <exclude name="SlevomatCodingStandard.Classes.TraitUseSpacing.IncorrectLinesCountBeforeFirstUse"/>
+        <exclude name="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.NoEmptyLineAfterOpeningBrace"/>
+        <exclude name="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.NoEmptyLineBeforeClosingBrace"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousTraitNaming.SuperfluousSuffix"/>
+        <exclude name="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator.UselessTernaryOperator"/>
+        <exclude name="SlevomatCodingStandard.Functions.TrailingCommaInCall.MissingTrailingComma"/>
     </rule>
 
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
@@ -78,6 +71,7 @@
     <arg name="encoding" value="utf-8"/>
     <arg name="extensions" value="php"/>
 
+    <exclude-pattern>src/Entity/Tenant.php</exclude-pattern>
     <exclude-pattern>vendor/</exclude-pattern>
 
     <file>./</file>

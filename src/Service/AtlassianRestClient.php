@@ -55,6 +55,8 @@ class AtlassianRestClient
      */
     public function sendFile(UploadedFile $file, string $restUrl): string
     {
+        $options = [];
+
         $options['headers']['X-Atlassian-Token'] = 'nocheck';
         $savedFile = $file->move('/tmp/', $file->getClientOriginalName());
 
@@ -68,13 +70,15 @@ class AtlassianRestClient
     }
 
     /**
-     * @param string  $restUrl
-     * @param mixed[] $json
+     * @param string       $restUrl
+     * @param array<mixed> $json
      *
      * @return string
      */
     public function put(string $restUrl, array $json): string
     {
+        $options = [];
+
         $options['headers']['Content-Type'] = 'application/json';
         $options['json'] = $json;
 
@@ -82,13 +86,15 @@ class AtlassianRestClient
     }
 
     /**
-     * @param string  $restUrl
-     * @param mixed[] $json
+     * @param string       $restUrl
+     * @param array<mixed> $json
      *
      * @return string
      */
     public function post(string $restUrl, array $json): string
     {
+        $options = [];
+
         $options['headers']['Content-Type'] = 'application/json';
         $options['json'] = $json;
 

@@ -15,13 +15,13 @@ class DescriptorController
     private $env;
 
     /**
-     * @var mixed[]
+     * @var array<mixed>
      */
     private $config;
 
     /**
-     * @param string  $env
-     * @param mixed[] $config
+     * @param string       $env
+     * @param array<mixed> $config
      */
     public function __construct(string $env, array $config)
     {

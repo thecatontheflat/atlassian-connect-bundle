@@ -89,8 +89,10 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
     public function getCredentials(Request $request)
     {
         $jwt = $request->query->get('jwt');
+
         if (!$jwt && $request->headers->has('authorization')) {
             $authorizationHeaderArray = \explode(' ', $request->headers->get('authorization'));
+
             if (\count($authorizationHeaderArray) > 1) {
                 $jwt = $authorizationHeaderArray[1];
             }
@@ -98,6 +100,7 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
 
         if (!$jwt && $this->devTenant && ($this->kernel->getEnvironment() === 'dev')) {
             $tenant = $this->em->getRepository($this->tenantEntityClass)->find($this->devTenant);
+
             if ($tenant === null) {
                 throw new \RuntimeException(\sprintf('Cant find tenant with id %s - please set atlassian_connect.dev_tenant to false to disable dedicated dev tenant OR add valid id', $this->devTenant));
             }
@@ -144,6 +147,7 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
 
         /** @var TenantInterface|UserInterface $user */
         $user = $userProvider->loadUserByUsername($clientKey);
+
         if (\property_exists($token, 'sub')) {
             // for some reasons, when webhooks are called - field sub is undefined
             $user->setUsername($token->sub);

@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class AtlassianConnectExtension extends Extension
 {
     /**
-     * @param mixed[]          $configs
+     * @param array<mixed>     $configs
      * @param ContainerBuilder $container
      *
      * @return void

@@ -418,7 +418,7 @@ trait TenantTrait
     /**
      * Implementing UserInterface
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getRoles(): array
     {

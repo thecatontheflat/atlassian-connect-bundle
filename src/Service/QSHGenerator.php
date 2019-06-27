@@ -26,10 +26,12 @@ class QSHGenerator
         // Really, I didn't find this part in the docs, but it works
         $path = \str_replace('/wiki', '', $parts['path']);
         $canonicalQuery = '';
-        if (!empty($parts['query'])) {
+
+        if (\array_key_exists('query', $parts) && $parts['query'] !== null && $parts['query'] !== '') {
             $query = $parts['query'];
             $queryParts = \explode('&', $query);
             $queryArray = [];
+
             foreach ($queryParts as $queryPart) {
                 $pieces = \explode('=', $queryPart);
                 $key = \array_shift($pieces);
@@ -38,11 +40,14 @@ class QSHGenerator
                 $value = \rawurlencode($value);
                 $queryArray[$key][] = $value;
             }
+
             \ksort($queryArray);
+
             foreach ($queryArray as $key => $pieceOfQuery) {
                 $pieceOfQuery = \implode(',', $pieceOfQuery);
                 $canonicalQuery .= $key.'='.$pieceOfQuery.'&';
             }
+
             $canonicalQuery = \rtrim($canonicalQuery, '&');
         }
 

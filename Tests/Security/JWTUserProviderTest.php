@@ -95,6 +95,7 @@ final class JWTUserProviderTest extends TestCase
             'John Doe',
             1516239022,
         ];
+
         yield [
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5ODc2NTQzMjEwIiwibmFtZSI6IkphbmUgRG9lIiwiaWF0IjoxNTE2MjM5MDIzLCJpc3MiOiJhbm90aGVySXNzVG9rZW4ifQ.wzTiSSNtS6rXoAYXL4tdmVzEbUvRd7BSuMq3kbboSA4',
             'anotherSecret',
@@ -171,7 +172,9 @@ final class JWTUserProviderTest extends TestCase
     public function classProvider(): \Generator
     {
         yield [new Tenant(), true];
+
         yield [new StubbedTenant(), true];
+
         yield [new \stdClass(), false];
     }
 }

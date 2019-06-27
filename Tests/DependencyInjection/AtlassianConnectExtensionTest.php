@@ -31,7 +31,7 @@ class AtlassianConnectExtensionTest extends TestCase
     private $container;
 
     /**
-     * {@inheritdoc}
+     * Set UP
      */
     protected function setUp(): void
     {

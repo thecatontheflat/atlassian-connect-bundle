@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 interface TenantInterface extends UserInterface
 {
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getRoles(): array;
 

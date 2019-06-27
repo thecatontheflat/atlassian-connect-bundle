@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Role\Role;
 class StubbedTenant implements TenantInterface
 {
     /**
-     * @return string[]|Role[]
+     * @return array<string>|array<Role>
      */
     public function getRoles(): array
     {
