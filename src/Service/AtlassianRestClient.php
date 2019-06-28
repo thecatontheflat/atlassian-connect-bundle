@@ -192,7 +192,7 @@ class AtlassianRestClient
             if ($token !== null) {
                 $user = $token->getUser();
 
-                if ($tenant instanceof TenantInterface) {
+                if ($user instanceof TenantInterface) {
                     $this->tenant = $user;
                 }
             }
