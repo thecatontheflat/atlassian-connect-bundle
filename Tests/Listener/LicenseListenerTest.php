@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class LicenseListenerTest
@@ -42,6 +41,9 @@ final class LicenseListenerTest extends TestCase
      */
     private $listener;
 
+    /**
+     * setUp
+     */
     protected function setUp(): void
     {
         $this->router = $this->createMock(RouterInterface::class);
@@ -54,6 +56,9 @@ final class LicenseListenerTest extends TestCase
         );
     }
 
+    /**
+     * Test
+     */
     public function testItSkipsOnASubRequest(): void
     {
         $attributeParameterBag = $this->createMock(ParameterBagInterface::class);
@@ -73,7 +78,10 @@ final class LicenseListenerTest extends TestCase
         $this->listener->onKernelRequest($event);
     }
 
-    public function testItSkipsWhenTheRouteIsNullAndRouteRequiresNoLicense()
+    /**
+     * Test
+     */
+    public function testItSkipsWhenTheRouteIsNullAndRouteRequiresNoLicense(): void
     {
         $request = new Request(
             ['lic' => 'test'],
@@ -97,6 +105,9 @@ final class LicenseListenerTest extends TestCase
         $this->listener->onKernelRequest($event);
     }
 
+    /**
+     * Test
+     */
     public function testLicenseIsNotActiveOrDevelopment(): void
     {
         $request1 = new Request(
@@ -142,6 +153,9 @@ final class LicenseListenerTest extends TestCase
         $this->listener->onKernelRequest($event2);
     }
 
+    /**
+     * Test
+     */
     public function testUserIsNoTenant(): void
     {
         $request = new Request(
@@ -192,6 +206,9 @@ final class LicenseListenerTest extends TestCase
         $this->assertEquals('http://website.com', $response->getTargetUrl());
     }
 
+    /**
+     * Test
+     */
     public function testTenantIsWhiteListed(): void
     {
         $request = new Request(
@@ -235,6 +252,9 @@ final class LicenseListenerTest extends TestCase
         $this->listener->onKernelRequest($event);
     }
 
+    /**
+     * Test
+     */
     public function testIsValidByWhiteList(): void
     {
         $request = new Request(
@@ -291,6 +311,9 @@ final class LicenseListenerTest extends TestCase
         $this->assertNull($event->getResponse());
     }
 
+    /**
+     * Test
+     */
     public function testWhiteListIsExpired(): void
     {
         $request = new Request(
@@ -356,6 +379,9 @@ final class LicenseListenerTest extends TestCase
         $this->assertEquals('http://website.com', $response->getTargetUrl());
     }
 
+    /**
+     * Test
+     */
     public function testThrowsException(): void
     {
         $request = new Request(
@@ -397,28 +423,5 @@ final class LicenseListenerTest extends TestCase
         $response = $event->getResponse();
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals('http://website.com', $response->getTargetUrl());
-    }
-}
-
-class TestUser implements UserInterface
-{
-    public function getRoles()
-    {
-    }
-
-    public function getPassword()
-    {
-    }
-
-    public function getSalt()
-    {
-    }
-
-    public function getUsername()
-    {
-    }
-
-    public function eraseCredentials()
-    {
     }
 }
