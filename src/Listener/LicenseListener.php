@@ -5,9 +5,8 @@ namespace AtlassianConnectBundle\Listener;
 use AtlassianConnectBundle\Entity\TenantInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class LicenseListener
@@ -20,23 +19,17 @@ class LicenseListener
     protected $router;
 
     /**
-     * @var KernelInterface
-     */
-    protected $kernel;
-    /**
-     * @var TokenStorage
+     * @var TokenStorageInterface
      */
     protected $tokenStorage;
 
     /**
-     * @param RouterInterface $router
-     * @param KernelInterface $kernel
-     * @param TokenStorage    $tokenStorage
+     * @param RouterInterface       $router
+     * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(RouterInterface $router, KernelInterface $kernel, TokenStorage $tokenStorage)
+    public function __construct(RouterInterface $router, TokenStorageInterface $tokenStorage)
     {
         $this->router = $router;
-        $this->kernel = $kernel;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -53,12 +46,13 @@ class LicenseListener
 
         $request = $event->getRequest();
         $route = $request->attributes->get('_route');
+        $kernel = $event->getKernel();
 
         if ($route !== null && !$request->attributes->get('requires_license')) {
             return;
         }
 
-        if ($request->get('lic') === 'active' || $this->kernel->getEnvironment() !== 'prod') {
+        if ($request->get('lic') === 'active' || $kernel->getEnvironment() !== 'prod') {
             return;
         }
 
@@ -73,7 +67,7 @@ class LicenseListener
                 }
 
                 $today = \date('Y-m-d');
-                $whitelist = $this->kernel->getContainer()->getParameter('license_whitelist');
+                $whitelist = $kernel->getContainer()->getParameter('license_whitelist');
 
                 /** @noinspection ForeachSourceInspection */
                 foreach ($whitelist as $allowed) {
