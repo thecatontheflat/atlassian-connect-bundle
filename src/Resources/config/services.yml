@@ -45,7 +45,6 @@ services:
         class: '%atlassian_connect_license_listener_class%'
         arguments:
             $router: '@Symfony\Component\Routing\RouterInterface'
-            $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
             $tokenStorage: '@Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
