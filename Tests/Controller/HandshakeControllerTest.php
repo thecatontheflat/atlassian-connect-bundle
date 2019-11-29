@@ -4,8 +4,8 @@ namespace AtlassianConnectBundle\Tests\DependencyInjection;
 
 use AtlassianConnectBundle\Controller\HandshakeController;
 use AtlassianConnectBundle\Entity\Tenant;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\Logger;
@@ -20,12 +20,12 @@ class HandshakeControllerTest extends TestCase
      */
     public function testIndexAction(): void
     {
-        $tenantRepository = $this->getMockBuilder(ObjectRepository::class)->setMethods(['findOneByClientKey'])->getMockForAbstractClass();
+        $tenantRepository = $this->getMockBuilder(ObjectRepository::class)->addMethods(['findOneByClientKey'])->getMockForAbstractClass();
         $tenantRepository->expects($this->any())
             ->method('findOneByClientKey')
             ->willReturn(null);
 
-        $objectManager = $this->createMock(ObjectManager::class);
+        $objectManager = $this->createMock(EntityManagerInterface::class);
         $objectManager->expects($this->any())
             ->method('getRepository')
             ->willReturn($tenantRepository);

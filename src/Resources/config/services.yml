@@ -21,7 +21,7 @@ services:
 
     AtlassianConnectBundle\Controller\HandshakeController:
         arguments:
-            $em: '@Doctrine\Common\Persistence\ObjectManager'
+            $em: '@Doctrine\ORM\EntityManagerInterface'
             $logger: '@Psr\Log\LoggerInterface'
             $tenantClass: '%atlassian_connect_tenant_entity_class%'
 

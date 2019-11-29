@@ -3,6 +3,7 @@
 namespace AtlassianConnectBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 /**
  * Class UnlicensedController
@@ -10,14 +11,14 @@ use Symfony\Component\HttpFoundation\Response;
 class UnlicensedController
 {
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     private $twig;
 
     /**
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      */
-    public function __construct(\Twig_Environment $twig)
+    public function __construct(Environment $twig)
     {
         $this->twig = $twig;
     }
