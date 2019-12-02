@@ -5,6 +5,7 @@ namespace AtlassianConnectBundle\Listener;
 use AtlassianConnectBundle\Entity\TenantInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -34,12 +35,16 @@ class LicenseListener
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param GetResponseEvent|RequestEvent $event
      *
      * @return void
      */
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest($event): void
     {
+        if (!$event instanceof RequestEvent && !$event instanceof GetResponseEvent) {
+            throw new \InvalidArgumentException();
+        }
+
         if (!$event->isMasterRequest()) {
             return;
         }

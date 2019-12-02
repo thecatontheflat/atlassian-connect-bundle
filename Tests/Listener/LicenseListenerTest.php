@@ -11,10 +11,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class LicenseListenerTest
@@ -69,7 +71,7 @@ final class LicenseListenerTest extends TestCase
         $request = new Request();
         $request->attributes = $attributeParameterBag;
 
-        $event = new GetResponseEvent(
+        $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::SUB_REQUEST
@@ -96,7 +98,7 @@ final class LicenseListenerTest extends TestCase
             ->expects($this->never())
             ->method('getEnvironment');
 
-        $event = new GetResponseEvent(
+        $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::MASTER_REQUEST
@@ -137,13 +139,13 @@ final class LicenseListenerTest extends TestCase
             ->expects($this->never())
             ->method('getToken');
 
-        $event1 = new GetResponseEvent(
+        $event1 = $this->getEvent(
             $this->kernel,
             $request1,
             KernelInterface::MASTER_REQUEST
         );
 
-        $event2 = new GetResponseEvent(
+        $event2 = $this->getEvent(
             $this->kernel,
             $request2,
             KernelInterface::MASTER_REQUEST
@@ -180,7 +182,7 @@ final class LicenseListenerTest extends TestCase
         $token
             ->expects($this->once())
             ->method('getUser')
-            ->willReturn(new TestUser());
+            ->willReturn($this->createMock(UserInterface::class));
 
         $this->tokenStorage
             ->expects($this->once())
@@ -193,7 +195,7 @@ final class LicenseListenerTest extends TestCase
             ->with('atlassian_connect_unlicensed')
             ->willReturn('http://website.com');
 
-        $event = new GetResponseEvent(
+        $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::MASTER_REQUEST
@@ -243,7 +245,7 @@ final class LicenseListenerTest extends TestCase
             ->expects($this->never())
             ->method('getContainer');
 
-        $event = new GetResponseEvent(
+        $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::MASTER_REQUEST
@@ -301,7 +303,7 @@ final class LicenseListenerTest extends TestCase
             ->method('getContainer')
             ->willReturn($container);
 
-        $event = new GetResponseEvent(
+        $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::MASTER_REQUEST
@@ -366,7 +368,7 @@ final class LicenseListenerTest extends TestCase
             ->with('atlassian_connect_unlicensed')
             ->willReturn('http://website.com');
 
-        $event = new GetResponseEvent(
+        $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::MASTER_REQUEST
@@ -412,7 +414,7 @@ final class LicenseListenerTest extends TestCase
             ->with('atlassian_connect_unlicensed')
             ->willReturn('http://website.com');
 
-        $event = new GetResponseEvent(
+        $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::MASTER_REQUEST
@@ -423,5 +425,23 @@ final class LicenseListenerTest extends TestCase
         $response = $event->getResponse();
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals('http://website.com', $response->getTargetUrl());
+    }
+
+    /**
+     * Gets an event according to the symfony version
+     *
+     * @param KernelInterface $kernel
+     * @param Request         $request
+     * @param int             $type
+     *
+     * @return GetResponseEvent|RequestEvent
+     */
+    private function getEvent(KernelInterface $kernel, Request $request, int $type)
+    {
+        if (\class_exists(RequestEvent::class)) {
+            return new RequestEvent($kernel, $request, $type);
+        }
+
+        return new GetResponseEvent($kernel, $request, $type);
     }
 }

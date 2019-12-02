@@ -4,6 +4,8 @@ namespace AtlassianConnectBundle\Tests\DependencyInjection;
 
 use AtlassianConnectBundle\Controller\UnlicensedController;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * UnlicensedControllerTest
@@ -15,10 +17,10 @@ class UnlicensedControllerTest extends TestCase
      */
     public function testUnlicensedAction(): void
     {
-        $loader = new \Twig_Loader_Filesystem();
+        $loader = new FilesystemLoader();
         $loader->addPath(__DIR__.'/../../src/Resources/views', 'AtlassianConnect');
 
-        $twig = new \Twig_Environment($loader, [
+        $twig = new Environment($loader, [
             'debug' => true,
             'cache' => false,
         ]);
