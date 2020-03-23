@@ -37,6 +37,7 @@ $bundles = array(
 Bundle configuration includes has two main nodes - `prod` and `dev`. 
 When requesting descriptor - this configuration is converted to JSON. 
 Whatever you specify under `dev` node will override same option from `prod`.
+
 Sample configuration in `config.yml`:
 
 ```yaml
@@ -46,13 +47,15 @@ Sample configuration in `config.yml`:
             key: 'your-addon-key'
             name: 'Your Add-On Name'
             description: 'Your Add-On Description'
+	    authentication:
+            	type: jwt
             vendor:
                 name: 'Your Vendor Name'
                 url: 'https://marketplace.atlassian.com/vendors/1211528'
             baseUrl: 'https://your-production-domain.com/'
             lifecycle:
                 installed: '/handshake'
-            scopes: ['READ', 'WRITE']
+            scopes: ['READ', 'WRITE', 'ACT_AS_USER'] # If you want get oauth_client_id need to add scope ACT_AS_USER
             modules:
                 jiraIssueTabPanels:
                     -
