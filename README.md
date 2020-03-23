@@ -47,7 +47,7 @@ Sample configuration in `config.yml`:
             key: 'your-addon-key'
             name: 'Your Add-On Name'
             description: 'Your Add-On Description'
-	    authentication:
+            authentication:
             	type: jwt
             vendor:
                 name: 'Your Vendor Name'
