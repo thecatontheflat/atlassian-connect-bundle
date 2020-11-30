@@ -159,7 +159,7 @@ class ProtectedController extends Controller
 }
 ```
 
-### White listening licences
+### Whitelisting licences
 
 You could white-list any licence by editing related row in table tenant and setting field is_white_listed to 1.
 If you will also set white_listed_until - you will be able to set white-list expiration
