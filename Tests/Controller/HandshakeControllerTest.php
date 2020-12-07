@@ -4,8 +4,8 @@ namespace AtlassianConnectBundle\Tests\DependencyInjection;
 
 use AtlassianConnectBundle\Controller\HandshakeController;
 use AtlassianConnectBundle\Entity\Tenant;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectRepository;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\Logger;

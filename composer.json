@@ -6,7 +6,7 @@
   "type": "symfony-bundle",
   "license": "MIT",
   "require": {
-    "php": "^7.2",
+    "php": "^7.2|^8.0",
     "ext-json": "*",
     "symfony/dependency-injection": "^3.4|^4.3|^5.0",
     "symfony/http-kernel": "^3.4|^4.3|^5.0",
@@ -18,7 +18,7 @@
     "symfony/console": "^3.4|^4.3|^5.0",
     "doctrine/orm": "^2.5",
     "guzzlehttp/guzzle": "^6.0",
-    "twig/twig": "^2.10|3.0",
+    "twig/twig": "^2.10|^3.0",
     "firebase/php-jwt": "^5.0"
   },
   "require-dev": {
