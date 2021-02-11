@@ -1,3 +1,7 @@
+build:
+    environment:
+        php:
+            version: 7.4
 checks:
     php: true
 

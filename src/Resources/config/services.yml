@@ -33,7 +33,7 @@ services:
     AtlassianConnectBundle\Command\RequestAPICommand:
         public: false
         arguments:
-            $registry: '@Doctrine\Common\Persistence\ManagerRegistry'
+            $registry: '@Doctrine\Persistence\ManagerRegistry'
             $tenantClass: '%atlassian_connect_tenant_entity_class%'
 
     AtlassianConnectBundle\Service\AtlassianRestClient:
