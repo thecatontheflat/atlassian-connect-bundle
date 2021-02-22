@@ -35,6 +35,22 @@
         <exclude name="SlevomatCodingStandard.Classes.SuperfluousTraitNaming.SuperfluousSuffix"/>
         <exclude name="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator.UselessTernaryOperator"/>
         <exclude name="SlevomatCodingStandard.Functions.TrailingCommaInCall.MissingTrailingComma"/>
+        <exclude name="SlevomatCodingStandard.Commenting.RequireOneLineDocComment"/>
+        <exclude name="SlevomatCodingStandard.Commenting.UselessFunctionDocComment"/>
+        <exclude name="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
+        <exclude name="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
+        <exclude name="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
+        <exclude name="SlevomatCodingStandard.Functions.RequireArrowFunction"/>
+        <exclude name="SlevomatCodingStandard.Functions.RequireMultiLineCall"/>
+        <exclude name="SlevomatCodingStandard.Functions.RequireSingleLineCall"/>
+        <exclude name="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature"/>
+        <exclude name="SlevomatCodingStandard.Classes.ClassStructure"/>
+        <exclude name="SlevomatCodingStandard.Files.LineLength"/>
+        <exclude name="SlevomatCodingStandard.PHP.RequireExplicitAssertion"/>
+        <exclude name="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator"/>
     </rule>
 
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
