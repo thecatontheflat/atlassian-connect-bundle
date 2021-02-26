@@ -1,0 +1,80 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    - name: Install dependencies
+      if: steps.composer-cache.outputs.cache-hit != 'true'
+      run: composer install --prefer-dist --no-progress --no-suggest
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - description: 'PHP 7.3 - SF 3.4'
+            php: '7.3'
+            symfony_version: '3.4.*'
+          - description: 'PHP 7.3 - SF 4.4'
+            php: '7.3'
+            symfony_version: '4.4.*'
+          - description: 'PHP 7.3 - SF 5.1'
+            php: '7.3'
+            symfony_version: '5.1.*'
+          - description: 'PHP 7.3 - SF 5.2'
+            php: '7.3'
+            symfony_version: '5.2.*'
+          - description: 'PHP 7.4 - SF 5.2'
+            php: '7.4'
+            symfony_version: '5.2.*'
+          - description: 'PHP 8.0 - SF 5.2.*'
+            php: '8.0'
+            symfony_version: '5.2.*'
+            composer_flags: '--ignore-platform-reqs'
+    name: Tests ${{ matrix.description }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: "Determine composer cache directory"
+        id: "determine-composer-cache-directory"
+        run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+          key: "v1-php-${{ matrix.php }}-sf-${{ matrix.symfony_version }}-${{ hashFiles('composer.json') }}"
+          restore-keys: "v1-php-${{ matrix.php }}-sf-${{ matrix.symfony_version }}-"
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: "pcov"
+      - run: composer require --prefer-dist --no-interaction ${{ matrix.composer_flags }} symfony/symfony:${{ matrix.symfony_version}}
+      - name: Run PHP CS
+        run: vendor/bin/phpcs -p --standard=./ruleset.xml
+      - name: Run Tests
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          files: ./coverage.xml
