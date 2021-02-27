@@ -1,6 +1,6 @@
 # Atlassian Connect Bundle
 
-[![Build Status](https://img.shields.io/travis/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://travis-ci.org/thecatontheflat/atlassian-connect-bundle)
+![Build Status](https://github.com/thecatontheflat/atlassian-connect-bundle/actions/workflows/php.yml/badge.svg)
 [![Code Coverage](https://img.shields.io/codecov/c/github/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://codecov.io/github/thecatontheflat/atlassian-connect-bundle)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://scrutinizer-ci.com/g/thecatontheflat/atlassian-connect-bundle/?branch=master)
 [![License](https://img.shields.io/packagist/l/thecatontheflat/atlassian-connect-bundle.svg?style=flat-square)](https://packagist.org/packages/thecatontheflat/atlassian-connect-bundle)
