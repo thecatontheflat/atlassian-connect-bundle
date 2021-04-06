@@ -166,6 +166,7 @@ class AtlassianRestClient
             ));
         } else {
             $stack->push(GuzzleJWTMiddleware::authUserTokenMiddleware(
+                new Client(),
                 $this->tenant->getOauthClientId(),
                 $this->tenant->getSharedSecret(),
                 $this->tenant->getBaseUrl(),
