@@ -45,7 +45,12 @@ class LicenseListener
             throw new \InvalidArgumentException();
         }
 
-        if (!$event->isMasterRequest()) {
+        $mainRequest = \method_exists($event, 'isMainRequest')
+            ? 'isMainRequest'
+            : 'isMasterRequest'
+        ;
+
+        if (!$event->$mainRequest()) {
             return;
         }
 

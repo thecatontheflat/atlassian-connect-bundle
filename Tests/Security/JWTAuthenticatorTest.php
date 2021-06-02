@@ -4,6 +4,7 @@ namespace AtlassianConnectBundle\Tests\Security;
 
 use AtlassianConnectBundle\Entity\Tenant;
 use AtlassianConnectBundle\Security\JWTAuthenticator;
+use AtlassianConnectBundle\Security\JWTUserProvider;
 use AtlassianConnectBundle\Security\JWTUserProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
@@ -234,6 +235,36 @@ final class JWTAuthenticatorTest extends TestCase
             ->willReturn((object) $token);
 
         $this->jwtAuthenticator->getUser(['jwt' => 'token'], $userProvider);
+    }
+
+    /**
+     * Test UserProvider with loadByIdentifier metdho
+     */
+    public function testUserProviderHasLoadMethod(): void
+    {
+        $token = [
+            'iss' => 'iss',
+            'sub' => 'username',
+        ];
+
+        $tenant = new Tenant();
+
+        $userProvider = $this->createMock(JWTUserProvider::class);
+        $userProvider
+            ->expects($this->once())
+            ->method('getDecodedToken')
+            ->willReturn((object) $token);
+
+        $userProvider
+            ->expects($this->once())
+            ->method('loadUserByIdentifier')
+            ->with('iss')
+            ->willReturn($tenant);
+
+        $user = $this->jwtAuthenticator->getUser(['jwt' => 'token'], $userProvider);
+
+        $this->assertInstanceOf(Tenant::class, $user);
+        $this->assertEquals('username', $tenant->getUsername());
     }
 
     /**

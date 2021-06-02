@@ -146,7 +146,11 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
         }
 
         /** @var TenantInterface|UserInterface $user */
-        $user = $userProvider->loadUserByUsername($clientKey);
+        $loadUserMethod = \method_exists($userProvider, 'loadUserByIdentifier')
+            ? 'loadUserByIdentifier'
+            : 'loadUserByUsername'
+        ;
+        $user = $userProvider->$loadUserMethod($clientKey);
 
         if (\property_exists($token, 'sub')) {
             // for some reasons, when webhooks are called - field sub is undefined
