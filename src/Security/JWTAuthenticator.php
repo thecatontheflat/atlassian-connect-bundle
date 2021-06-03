@@ -4,8 +4,7 @@ namespace AtlassianConnectBundle\Security;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
 use AtlassianConnectBundle\Service\QSHGenerator;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
+use AtlassianConnectBundle\Storage\TenantStorageInterface;
 use Firebase\JWT\JWT;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,34 +27,27 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
     protected $kernel;
 
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
-     * @var string
-     */
-    protected $tenantEntityClass;
-
-    /**
      * @var int
      */
     protected $devTenant;
 
     /**
+     * @var TenantStorageInterface
+     */
+    private $tenantStorage;
+
+    /**
      * JWTAuthenticator constructor.
      *
      * @param KernelInterface        $kernel
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $tenantEntityClass
+     * @param TenantStorageInterface $tenantStorage
      * @param int                    $devTenant
      */
-    public function __construct(KernelInterface $kernel, EntityManagerInterface $entityManager, string $tenantEntityClass, int $devTenant)
+    public function __construct(KernelInterface $kernel, TenantStorageInterface $tenantStorage, int $devTenant)
     {
         $this->kernel = $kernel;
-        $this->em = $entityManager;
-        $this->tenantEntityClass = $tenantEntityClass;
         $this->devTenant = $devTenant;
+        $this->tenantStorage = $tenantStorage;
     }
 
     /**
@@ -99,7 +91,7 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
         }
 
         if (!$jwt && $this->devTenant && ($this->kernel->getEnvironment() === 'dev')) {
-            $tenant = $this->em->getRepository($this->tenantEntityClass)->find($this->devTenant);
+            $tenant = $this->tenantStorage->findById($this->devTenant);
 
             if ($tenant === null) {
                 throw new \RuntimeException(\sprintf('Cant find tenant with id %s - please set atlassian_connect.dev_tenant to false to disable dedicated dev tenant OR add valid id', $this->devTenant));
@@ -146,7 +138,11 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
         }
 
         /** @var TenantInterface|UserInterface $user */
-        $user = $userProvider->loadUserByUsername($clientKey);
+        $loadUserMethod = \method_exists($userProvider, 'loadUserByIdentifier')
+            ? 'loadUserByIdentifier'
+            : 'loadUserByUsername'
+        ;
+        $user = $userProvider->$loadUserMethod($clientKey);
 
         if (\property_exists($token, 'sub')) {
             // for some reasons, when webhooks are called - field sub is undefined

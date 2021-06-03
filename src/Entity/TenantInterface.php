@@ -117,4 +117,9 @@ interface TenantInterface extends UserInterface
      * @return TenantInterface
      */
     public function setOauthClientId(?string $oauthClientId): TenantInterface;
+
+    /**
+     * @return string|null
+     */
+    public function getClientKey(): ?string;
 }

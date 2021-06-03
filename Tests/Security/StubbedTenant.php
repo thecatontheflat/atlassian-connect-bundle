@@ -181,4 +181,11 @@ class StubbedTenant implements TenantInterface
     public function eraseCredentials(): void
     {
     }
+
+    /**
+     * @return string|null
+     */
+    public function getClientKey(): ?string
+    {
+    }
 }
