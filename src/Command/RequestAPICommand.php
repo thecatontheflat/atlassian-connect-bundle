@@ -4,7 +4,7 @@ namespace AtlassianConnectBundle\Command;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
 use AtlassianConnectBundle\Service\AtlassianRestClient;
-use Doctrine\Persistence\ManagerRegistry;
+use AtlassianConnectBundle\Storage\TenantStorageInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,23 +22,18 @@ class RequestAPICommand extends Command
     protected $shouldNotRun;
 
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var TenantStorageInterface
      */
-    private $em;
+    private $tenantStorage;
 
     /**
-     * @var string
+     * RequestAPICommand constructor.
+     *
+     * @param TenantStorageInterface $tenantStorage
      */
-    private $tenantClass;
-
-    /**
-     * @param ManagerRegistry $registry
-     * @param string          $tenantClass
-     */
-    public function __construct(ManagerRegistry $registry, string $tenantClass)
+    public function __construct(TenantStorageInterface $tenantStorage)
     {
-        $this->em = $registry->getManager();
-        $this->tenantClass = $tenantClass;
+        $this->tenantStorage = $tenantStorage;
 
         parent::__construct();
     }
@@ -68,10 +63,9 @@ class RequestAPICommand extends Command
 
         /** @var TenantInterface $tenant */
         if ($input->getOption('tenant-id')) {
-            $tenant = $this->em->getRepository($this->tenantClass)->find($input->getOption('tenant-id'));
+            $tenant = $this->tenantStorage->findById((int) $input->getOption('tenant-id'));
         } elseif ($input->getOption('client-key')) {
-            /** @noinspection PhpUndefinedMethodInspection */
-            $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($input->getOption('client-key'));
+            $tenant = $this->tenantStorage->findByClientKey($input->getOption('client-key'));
         } else {
             throw new \RuntimeException('Please provide client-key or tenant-id');
         }

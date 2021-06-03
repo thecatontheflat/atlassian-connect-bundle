@@ -6,8 +6,7 @@ use AtlassianConnectBundle\Entity\Tenant;
 use AtlassianConnectBundle\Security\JWTAuthenticator;
 use AtlassianConnectBundle\Security\JWTUserProvider;
 use AtlassianConnectBundle\Security\JWTUserProviderInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectRepository;
+use AtlassianConnectBundle\Storage\TenantStorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,14 +27,9 @@ final class JWTAuthenticatorTest extends TestCase
     private $kernel;
 
     /**
-     * @var EntityManagerInterface|MockObject
+     * @var TenantStorageInterface|MockObject
      */
-    private $em;
-
-    /**
-     * @var string
-     */
-    private $tenantEntityClass;
+    private $tenantStorage;
 
     /**
      * @var int
@@ -53,14 +47,12 @@ final class JWTAuthenticatorTest extends TestCase
     public function setUp(): void
     {
         $this->kernel = $this->createMock(KernelInterface::class);
-        $this->em = $this->createMock(EntityManagerInterface::class);
-        $this->tenantEntityClass = Tenant::class;
+        $this->tenantStorage = $this->createMock(TenantStorageInterface::class);
         $this->devTenant = 1;
 
         $this->jwtAuthenticator = new JWTAuthenticator(
             $this->kernel,
-            $this->em,
-            $this->tenantEntityClass,
+            $this->tenantStorage,
             $this->devTenant
         );
     }
@@ -150,17 +142,11 @@ final class JWTAuthenticatorTest extends TestCase
         $tenant->setClientKey('client_key');
         $tenant->setSharedSecret('shared_secret');
 
-        $repository = $this->createMock(ObjectRepository::class);
-        $repository
+        $this->tenantStorage
             ->expects($this->once())
-            ->method('find')
+            ->method('findById')
             ->with(1)
             ->willReturn($tenant);
-
-        $this->em
-            ->expects($this->once())
-            ->method('getRepository')
-            ->willReturn($repository);
 
         $this->kernel
             ->expects($this->once())
@@ -181,17 +167,11 @@ final class JWTAuthenticatorTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $repository = $this->createMock(ObjectRepository::class);
-        $repository
+        $this->tenantStorage
             ->expects($this->once())
-            ->method('find')
+            ->method('findById')
             ->with(1)
             ->willReturn(null);
-
-        $this->em
-            ->expects($this->once())
-            ->method('getRepository')
-            ->willReturn($repository);
 
         $this->kernel
             ->expects($this->once())

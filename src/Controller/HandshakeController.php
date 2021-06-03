@@ -2,8 +2,7 @@
 
 namespace AtlassianConnectBundle\Controller;
 
-use AtlassianConnectBundle\Entity\TenantInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use AtlassianConnectBundle\Storage\TenantStorageInterface;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,11 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 class HandshakeController
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -30,15 +24,22 @@ class HandshakeController
     private $tenantClass;
 
     /**
-     * @param EntityManagerInterface $em
+     * @var TenantStorageInterface
+     */
+    private $tenantStorage;
+
+    /**
+     * HandshakeController constructor.
+     *
+     * @param TenantStorageInterface $tenantStorage
      * @param LoggerInterface        $logger
      * @param string                 $tenantClass
      */
-    public function __construct(EntityManagerInterface $em, LoggerInterface $logger, string $tenantClass)
+    public function __construct(TenantStorageInterface $tenantStorage, LoggerInterface $logger, string $tenantClass)
     {
-        $this->em = $em;
         $this->logger = $logger;
         $this->tenantClass = $tenantClass;
+        $this->tenantStorage = $tenantStorage;
     }
 
     /**
@@ -51,9 +52,7 @@ class HandshakeController
         $content = $request->getContent();
         $content = \json_decode($content, true);
 
-        /** @var TenantInterface $tenant */
-        /** @noinspection PhpUndefinedMethodInspection */
-        $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($content['clientKey']);
+        $tenant = $this->tenantStorage->findByClientKey($content['clientKey']);
 
         if ($tenant !== null) {
             try {
@@ -92,8 +91,7 @@ class HandshakeController
             $tenant->setOauthClientId($content['oauthClientId']);
         }
 
-        $this->em->persist($tenant);
-        $this->em->flush();
+        $this->tenantStorage->persist($tenant);
 
         return new Response('OK', 200);
     }

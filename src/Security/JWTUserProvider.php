@@ -3,8 +3,7 @@
 namespace AtlassianConnectBundle\Security;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
+use AtlassianConnectBundle\Storage\TenantStorageInterface;
 use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -18,25 +17,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class JWTUserProvider implements JWTUserProviderInterface
 {
     /**
-     * @var EntityManager
+     * @var TenantStorageInterface
      */
-    protected $em;
-
-    /**
-     * @var string
-     */
-    protected $tenantClass;
+    private $tenantStorage;
 
     /**
      * JWTUserProvider constructor.
      *
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $tenantClass
+     * @param TenantStorageInterface $tenantStorage
      */
-    public function __construct(EntityManagerInterface $entityManager, string $tenantClass)
+    public function __construct(TenantStorageInterface $tenantStorage)
     {
-        $this->em = $entityManager;
-        $this->tenantClass = $tenantClass;
+        $this->tenantStorage = $tenantStorage;
     }
 
     /**
@@ -52,7 +44,7 @@ class JWTUserProvider implements JWTUserProviderInterface
             $decodedToken = \json_decode(JWT::urlsafeB64Decode($bodyb64));
 
             /** @noinspection NullPointerExceptionInspection */
-            JWT::decode($jwt, $this->findTenant($decodedToken->iss)->getSharedSecret(), ['HS256']);
+            JWT::decode($jwt, $this->tenantStorage->findByClientKey($decodedToken->iss)->getSharedSecret(), ['HS256']);
 
             return $decodedToken;
         } catch (\Throwable $e) {
@@ -67,7 +59,7 @@ class JWTUserProvider implements JWTUserProviderInterface
      */
     public function loadUserByUsername($clientKey): TenantInterface
     {
-        $tenant = $this->findTenant($clientKey);
+        $tenant = $this->tenantStorage->findByClientKey($clientKey);
 
         if (!$tenant) {
             throw new UsernameNotFoundException('Can\'t find tenant with such username');
@@ -101,7 +93,7 @@ class JWTUserProvider implements JWTUserProviderInterface
      */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
-        $tenant = $this->findTenant($identifier);
+        $tenant = $this->tenantStorage->findByClientKey($identifier);
 
         if (!$tenant) {
             throw new UserNotFoundException('Can\'t find tenant with such identifier');
@@ -110,17 +102,4 @@ class JWTUserProvider implements JWTUserProviderInterface
         return $tenant;
     }
 
-    /**
-     * @param string $clientKey
-     *
-     * @return TenantInterface|object|null
-     */
-    private function findTenant(string $clientKey): ?TenantInterface
-    {
-        /** @noinspection PhpUndefinedMethodInspection */
-
-        return $this->em
-            ->getRepository($this->tenantClass)
-            ->findOneBy(['clientKey' => $clientKey]);
-    }
 }

@@ -21,7 +21,7 @@ services:
 
     AtlassianConnectBundle\Controller\HandshakeController:
         arguments:
-            $em: '@Doctrine\ORM\EntityManagerInterface'
+            $tenantStorage: '@AtlassianConnectBundle\Storage\TenantStorageInterface'
             $logger: '@Psr\Log\LoggerInterface'
             $tenantClass: '%atlassian_connect_tenant_entity_class%'
 
@@ -33,8 +33,7 @@ services:
     AtlassianConnectBundle\Command\RequestAPICommand:
         public: false
         arguments:
-            $registry: '@Doctrine\Persistence\ManagerRegistry'
-            $tenantClass: '%atlassian_connect_tenant_entity_class%'
+            $tenantStorage: '@AtlassianConnectBundle\Storage\TenantStorageInterface'
 
     AtlassianConnectBundle\Service\AtlassianRestClient:
         arguments:
@@ -52,13 +51,17 @@ services:
     jwt_user_provider:
         class: '%atlassian_connect_jwt_user_provider_class%'
         arguments:
-            $entityManager: '@Doctrine\ORM\EntityManagerInterface'
-            $tenantClass: '%atlassian_connect_tenant_entity_class%'
+            $tenantStorage: '@AtlassianConnectBundle\Storage\TenantStorageInterface'
 
     jwt_authenticator:
         class: "%atlassian_connect_jwt_authenticator_class%"
         arguments:
             $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
+            $tenantStorage: '@AtlassianConnectBundle\Storage\TenantStorageInterface'
+            $devTenant: '%atlassian_connect_dev_tenant%'
+
+    AtlassianConnectBundle\Storage\TenantStorageInterface:
+        class: AtlassianConnectBundle\Storage\DoctrineTenantStorage
+        arguments:
             $entityManager: '@Doctrine\ORM\EntityManagerInterface'
             $tenantEntityClass: '%atlassian_connect_tenant_entity_class%'
-            $devTenant: '%atlassian_connect_dev_tenant%'
