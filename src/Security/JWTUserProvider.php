@@ -9,6 +9,7 @@ use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -91,6 +92,22 @@ class JWTUserProvider implements JWTUserProviderInterface
     public function supportsClass($class): bool
     {
         return \is_subclass_of($class, TenantInterface::class);
+    }
+
+    /**
+     * @param string $identifier
+     *
+     * @return UserInterface
+     */
+    public function loadUserByIdentifier(string $identifier): UserInterface
+    {
+        $tenant = $this->findTenant($identifier);
+
+        if (!$tenant) {
+            throw new UserNotFoundException('Can\'t find tenant with such identifier');
+        }
+
+        return $tenant;
     }
 
     /**
