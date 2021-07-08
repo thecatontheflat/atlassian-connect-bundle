@@ -29,7 +29,7 @@ final class GuzzleJWTMiddlewareTest extends TestCase
             $this->assertTrue($request->hasHeader('Authorization'));
             $this->assertTrue($request->hasHeader('existing-header'));
             $this->assertSame('GET', $request->getMethod());
-            $this->assertEquals(new Uri('https://atlassian.io/api/test'), $request->getUri());
+            $this->assertEquals((string) new Uri('https://atlassian.io/api/test'), (string) $request->getUri());
         });
 
         $request = new Request('GET', 'https://atlassian.io/api/test', [

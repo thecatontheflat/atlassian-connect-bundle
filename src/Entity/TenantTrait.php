@@ -446,6 +446,14 @@ trait TenantTrait
      */
     public function getUsername(): ?string
     {
+        return $this->getUserIdentifier();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserIdentifier(): ?string
+    {
         return $this->username;
     }
 

@@ -1,7 +1,8 @@
 parameters:
     atlassian_connect_license_listener_class: AtlassianConnectBundle\Listener\LicenseListener
     atlassian_connect_jwt_user_provider_class: AtlassianConnectBundle\Security\JWTUserProvider
-    atlassian_connect_jwt_authenticator_class: AtlassianConnectBundle\Security\JWTAuthenticator
+    atlassian_connect_jwt_authenticator_class: AtlassianConnectBundle\Security\LegacyJWTAuthenticator
+    atlassian_connect_jwt_authenticator_class_new: AtlassianConnectBundle\Security\JWTAuthenticator
     atlassian_connect_tenant_entity_class: AtlassianConnectBundle\Entity\Tenant
 
 services:
@@ -13,7 +14,6 @@ services:
     AtlassianConnectBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
-
 
     AtlassianConnectBundle\Controller\UnlicensedController:
         arguments:
@@ -41,6 +41,15 @@ services:
             $tenant: null
             $tokenStorage: '@Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
 
+    AtlassianConnectBundle\Security\JWTSecurityHelper:
+        arguments:
+            $entityManager: '@Doctrine\ORM\EntityManagerInterface'
+            $devTenant: '%atlassian_connect_dev_tenant%'
+            $environment: '%kernel.environment%'
+            $tenantEntityClass: '%atlassian_connect_tenant_entity_class%'
+
+    AtlassianConnectBundle\Security\JWTSecurityHelperInterface: '@AtlassianConnectBundle\Security\JWTSecurityHelper'
+
     kernel.listener.license_listener:
         class: '%atlassian_connect_license_listener_class%'
         arguments:
@@ -58,7 +67,12 @@ services:
     jwt_authenticator:
         class: "%atlassian_connect_jwt_authenticator_class%"
         arguments:
-            $kernel: '@Symfony\Component\HttpKernel\KernelInterface'
-            $entityManager: '@Doctrine\ORM\EntityManagerInterface'
-            $tenantEntityClass: '%atlassian_connect_tenant_entity_class%'
-            $devTenant: '%atlassian_connect_dev_tenant%'
+            - '@AtlassianConnectBundle\Security\JWTSecurityHelperInterface'
+
+    new_jwt_authenticator:
+        class: "%atlassian_connect_jwt_authenticator_class_new%"
+        arguments:
+            - '@jwt_user_provider'
+            - '@AtlassianConnectBundle\Security\JWTSecurityHelperInterface'
+
+    AtlassianConnectBundle\Security\JWTAuthenticator: '@new_jwt_authenticator'

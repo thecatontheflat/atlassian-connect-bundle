@@ -1,0 +1,15 @@
+security:
+    enable_authenticator_manager: true
+    providers:
+        jwt_user_provider:
+            id: jwt_user_provider
+    firewalls:
+        jwt_secured_area:
+            custom_authenticators:
+                - AtlassianConnectBundle\Security\JWTAuthenticator
+            pattern: "^/protected"
+            stateless: true
+            provider: jwt_user_provider
+            entry_point: AtlassianConnectBundle\Security\JWTAuthenticator
+    access_control:
+        - { path: '^/protected', roles: ROLE_USER}
