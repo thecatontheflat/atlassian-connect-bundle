@@ -1,0 +1,23 @@
+atlassian_connect:
+    dev_tenant: 1
+    prod:
+        key: 'key'
+        name: 'name'
+        description: 'description'
+        vendor:
+            name: 'AtlassianConnectBundle'
+            url: 'https://github.com/thecatontheflat/atlassian-connect-bundle'
+        baseUrl: ''
+        authentication:
+            type: jwt
+        lifecycle:
+            installed: '/handshake'
+        scopes: ['ADMIN']
+        modules:
+            webhooks:
+                -
+                    event: "jira:issue_created"
+                    url: "/protected/jira/issue_created"
+                    filter: "project = TEST"
+                    excludeBody: false
+    dev: []

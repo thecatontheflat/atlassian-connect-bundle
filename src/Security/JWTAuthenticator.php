@@ -2,173 +2,100 @@
 
 namespace AtlassianConnectBundle\Security;
 
-use AtlassianConnectBundle\Entity\TenantInterface;
-use AtlassianConnectBundle\Service\QSHGenerator;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Firebase\JWT\JWT;
-use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 
 /**
  * Class JWTAuthenticator
  */
-class JWTAuthenticator extends AbstractGuardAuthenticator
+class JWTAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
     /**
-     * @var KernelInterface
+     * @var JWTUserProviderInterface
      */
-    protected $kernel;
+    private $userProvider;
 
     /**
-     * @var EntityManager
+     * @var JWTSecurityHelperInterface
      */
-    protected $em;
-
-    /**
-     * @var string
-     */
-    protected $tenantEntityClass;
-
-    /**
-     * @var int
-     */
-    protected $devTenant;
+    private $securityHelper;
 
     /**
      * JWTAuthenticator constructor.
      *
-     * @param KernelInterface        $kernel
-     * @param EntityManagerInterface $entityManager
-     * @param string                 $tenantEntityClass
-     * @param int                    $devTenant
+     * @param JWTUserProviderInterface   $userProvider
+     * @param JWTSecurityHelperInterface $securityHelper
      */
-    public function __construct(KernelInterface $kernel, EntityManagerInterface $entityManager, string $tenantEntityClass, int $devTenant)
+    public function __construct(JWTUserProviderInterface $userProvider, JWTSecurityHelperInterface $securityHelper)
     {
-        $this->kernel = $kernel;
-        $this->em = $entityManager;
-        $this->tenantEntityClass = $tenantEntityClass;
-        $this->devTenant = $devTenant;
-    }
-
-    /**
-     * @param Request                      $request
-     * @param AuthenticationException|null $authException
-     *
-     * @return Response
-     */
-    public function start(Request $request, ?AuthenticationException $authException = null): Response
-    {
-        return new Response('Authentication header required', 401);
+        $this->userProvider = $userProvider;
+        $this->securityHelper = $securityHelper;
     }
 
     /**
      * @param Request $request
      *
-     * @return bool
+     * @return bool|null
      */
-    public function supports(Request $request): bool
+    public function supports(Request $request): ?bool
     {
-        return $request->query->has('jwt') ||
-            $request->headers->has('authorization') ||
-            ($this->devTenant && ($this->kernel->getEnvironment() === 'dev'));
+        return $this->securityHelper->supportsRequest($request);
     }
 
     /**
      * @param Request $request
      *
-     * @return mixed Any non-null value
+     * @return PassportInterface
      */
-    public function getCredentials(Request $request)
+    public function authenticate(Request $request): PassportInterface
     {
-        $jwt = $request->query->get('jwt');
-
-        if (!$jwt && $request->headers->has('authorization')) {
-            $authorizationHeaderArray = \explode(' ', $request->headers->get('authorization'));
-
-            if (\count($authorizationHeaderArray) > 1) {
-                $jwt = $authorizationHeaderArray[1];
-            }
-        }
-
-        if (!$jwt && $this->devTenant && ($this->kernel->getEnvironment() === 'dev')) {
-            $tenant = $this->em->getRepository($this->tenantEntityClass)->find($this->devTenant);
-
-            if ($tenant === null) {
-                throw new \RuntimeException(\sprintf('Cant find tenant with id %s - please set atlassian_connect.dev_tenant to false to disable dedicated dev tenant OR add valid id', $this->devTenant));
-            }
-
-            $jwt = JWT::encode([
-                'iss' => $tenant->getClientKey(),
-                'iat' => \time(),
-                'exp' => \strtotime('+1 day'),
-                'qsh' => QSHGenerator::generate($request->getRequestUri(), 'GET'),
-                'sub' => 'admin',
-            ], $tenant->getSharedSecret());
-        }
+        $jwt = $this->securityHelper->getJWTToken($request);
 
         if (!$jwt) {
-            return null;
+            throw new CustomUserMessageAuthenticationException('JWT Token not provided');
         }
 
-        return ['jwt' => $jwt];
-    }
-
-    /**
-     * @param mixed                 $credentials
-     * @param UserProviderInterface $userProvider
-     *
-     * @return UserInterface|null
-     */
-    public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
-    {
-        if (!$userProvider instanceof JWTUserProviderInterface) {
-            throw new InvalidArgumentException(\sprintf(
-                'UserProvider must implement %s',
-                JWTUserProviderInterface::class
-            ));
-        }
-
-        $token = $userProvider->getDecodedToken($credentials['jwt']);
+        $token = $this->userProvider->getDecodedToken($jwt);
         $clientKey = $token->iss;
 
         if (!$clientKey) {
-            throw new AuthenticationException(
-                \sprintf('API Key "%s" does not exist.', $credentials['jwt'])
+            throw new CustomUserMessageAuthenticationException(
+                \sprintf('API Key %s does not exist', $jwt)
             );
         }
 
-        /** @var TenantInterface|UserInterface $user */
-        $loadUserMethod = \method_exists($userProvider, 'loadUserByIdentifier')
-            ? 'loadUserByIdentifier'
-            : 'loadUserByUsername'
-        ;
-        $user = $userProvider->$loadUserMethod($clientKey);
+        $user = $this->userProvider->loadUserByIdentifier($clientKey);
 
         if (\property_exists($token, 'sub')) {
             // for some reasons, when webhooks are called - field sub is undefined
             $user->setUsername($token->sub);
         }
 
-        return $user;
+        if (!\class_exists(UserBadge::class)) {
+            return new SelfValidatingPassport($user);
+        }
+
+        return new SelfValidatingPassport(new UserBadge($clientKey));
     }
 
     /**
-     * @param mixed         $credentials
-     * @param UserInterface $user
+     * @param Request        $request
+     * @param TokenInterface $token
+     * @param string         $firewallName
      *
-     * @return bool
+     * @return Response|null
      */
-    public function checkCredentials($credentials, UserInterface $user): bool
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        return true;
+        return null;
     }
 
     /**
@@ -183,22 +110,13 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
     }
 
     /**
-     * @param Request        $request
-     * @param TokenInterface $token
-     * @param mixed|string   $providerKey The provider (i.e. firewall) key
+     * @param Request                      $request
+     * @param AuthenticationException|null $authException
      *
-     * @return Response|null
+     * @return Response
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
+    public function start(Request $request, AuthenticationException $authException = null)
     {
-        return null;
-    }
-
-    /**
-     * @return bool
-     */
-    public function supportsRememberMe(): bool
-    {
-        return false;
+        return new Response('Authentication header required', 401);
     }
 }

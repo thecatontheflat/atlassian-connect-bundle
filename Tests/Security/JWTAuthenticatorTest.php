@@ -4,18 +4,19 @@ namespace AtlassianConnectBundle\Tests\Security;
 
 use AtlassianConnectBundle\Entity\Tenant;
 use AtlassianConnectBundle\Security\JWTAuthenticator;
+use AtlassianConnectBundle\Security\JWTSecurityHelperInterface;
 use AtlassianConnectBundle\Security\JWTUserProvider;
 use AtlassianConnectBundle\Security\JWTUserProviderInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 /**
  * Class JWTAuthenticatorTest
@@ -23,24 +24,14 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 final class JWTAuthenticatorTest extends TestCase
 {
     /**
-     * @var KernelInterface|MockObject
+     * @var JWTUserProviderInterface|MockObject
      */
-    private $kernel;
+    private $userProvider;
 
     /**
-     * @var EntityManagerInterface|MockObject
+     * @var JWTSecurityHelperInterface|MockObject
      */
-    private $em;
-
-    /**
-     * @var string
-     */
-    private $tenantEntityClass;
-
-    /**
-     * @var int
-     */
-    private $devTenant;
+    private $securityHelper;
 
     /**
      * @var JWTAuthenticator
@@ -48,32 +39,20 @@ final class JWTAuthenticatorTest extends TestCase
     private $jwtAuthenticator;
 
     /**
-     * Setup method
+     * Setup function
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->kernel = $this->createMock(KernelInterface::class);
-        $this->em = $this->createMock(EntityManagerInterface::class);
-        $this->tenantEntityClass = Tenant::class;
-        $this->devTenant = 1;
+        if (Kernel::VERSION_ID < 50100) {
+            $this->markTestSkipped('This test only works with the new authenticator mechanism');
+        }
 
+        $this->userProvider = $this->createMock(JWTUserProvider::class);
+        $this->securityHelper = $this->createMock(JWTSecurityHelperInterface::class);
         $this->jwtAuthenticator = new JWTAuthenticator(
-            $this->kernel,
-            $this->em,
-            $this->tenantEntityClass,
-            $this->devTenant
+            $this->userProvider,
+            $this->securityHelper
         );
-    }
-
-    /**
-     * Test start method
-     */
-    public function testItSendsA401WhenNoAuthenticationHeaderIsSet(): void
-    {
-        $response = $this->jwtAuthenticator->start(new Request());
-
-        $this->assertEquals('Authentication header required', $response->getContent());
-        $this->assertEquals(401, $response->getStatusCode());
     }
 
     /**
@@ -81,228 +60,101 @@ final class JWTAuthenticatorTest extends TestCase
      */
     public function testSupportsRequest(): void
     {
-        $request = new Request(['jwt' => 'token']);
-        $this->assertTrue($this->jwtAuthenticator->supports($request));
-
-        $request = new Request();
-        $request->headers->set('authorization', 'jwt token');
-        $this->assertTrue($this->jwtAuthenticator->supports($request));
-
-        $request = new Request();
-
-        $this->kernel
+        $this->securityHelper
             ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('dev');
+            ->method('supportsRequest')
+            ->with($request = new Request())
+            ->willReturn(true);
 
         $this->assertTrue($this->jwtAuthenticator->supports($request));
     }
 
     /**
-     * Tests if the request is not supportd
+     * Test the authenticate method
      */
-    public function testDoesNotSupportRequest(): void
+    public function testAuthenticate(): void
     {
-        $request = new Request();
-        $this->assertFalse($this->jwtAuthenticator->supports($request));
+        $token = [
+            'sub' => 'username',
+            'iss' => 'key',
+        ];
+
+        $this->securityHelper
+            ->expects($this->once())
+            ->method('getJWTToken')
+            ->with($request = new Request())
+            ->willReturn('token');
+
+        $this->userProvider
+            ->expects($this->once())
+            ->method('getDecodedToken')
+            ->with('token')
+            ->willReturn((object) $token);
+
+        $this->userProvider
+            ->expects($this->once())
+            ->method('loadUserByIdentifier')
+            ->with('key')
+            ->willReturn($tenant = new Tenant());
+
+        $result = $this->jwtAuthenticator->authenticate($request);
+
+        if (\class_exists(UserBadge::class)) {
+            $this->assertEquals(
+                new SelfValidatingPassport(new UserBadge('key')),
+                $result
+            );
+        } else {
+            $this->assertEquals(
+                new SelfValidatingPassport($tenant),
+                $result
+            );
+        }
     }
 
     /**
-     * Test if the getCredentials method returns a valid array
+     * Test if an exception is thrown when no jwt token is present
      */
-    public function testGetsCredentials(): void
+    public function testAuthenticateHasNoJWTToken(): void
     {
-        $request = new Request(['jwt' => 'token']);
-        $credentials = $this->jwtAuthenticator->getCredentials($request);
-        $this->assertIsArray($credentials);
-        $this->assertArrayHasKey('jwt', $credentials);
-        $this->assertEquals('token', $credentials['jwt']);
+        $this->expectException(CustomUserMessageAuthenticationException::class);
+        $this->expectExceptionMessage('JWT Token not provided');
 
-        $request = new Request();
-        $request->headers->set('authorization', 'jwt token');
-        $credentials = $this->jwtAuthenticator->getCredentials($request);
-        $this->assertIsArray($credentials);
-        $this->assertArrayHasKey('jwt', $credentials);
-        $this->assertEquals('token', $credentials['jwt']);
-    }
-
-    /**
-     * Test if the getCredentials method returns null when no jwt token is passed
-     */
-    public function testGetsCredentialsTokenDoesNotExist(): void
-    {
-        $this->kernel
+        $this->securityHelper
             ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('prod');
-
-        $request = new Request();
-        $credentials = $this->jwtAuthenticator->getCredentials($request);
-        $this->assertNull($credentials);
-    }
-
-    /**
-     * Test if the getCredentials method can get the credentials in dev mode
-     */
-    public function testGetsCredentialsOnDevTenant(): void
-    {
-        $tenant = new Tenant();
-        $tenant->setClientKey('client_key');
-        $tenant->setSharedSecret('shared_secret');
-
-        $repository = $this->createMock(ObjectRepository::class);
-        $repository
-            ->expects($this->once())
-            ->method('find')
-            ->with(1)
-            ->willReturn($tenant);
-
-        $this->em
-            ->expects($this->once())
-            ->method('getRepository')
-            ->willReturn($repository);
-
-        $this->kernel
-            ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('dev');
-
-        $request = new Request();
-        $credentials = $this->jwtAuthenticator->getCredentials($request);
-        $this->assertIsArray($credentials);
-        $this->assertArrayHasKey('jwt', $credentials);
-        $this->assertIsString($credentials['jwt']);
-    }
-
-    /**
-     * Test it fails when no tenant exists
-     */
-    public function testItFailsWhenNoTenantExists(): void
-    {
-        $this->expectException(\RuntimeException::class);
-
-        $repository = $this->createMock(ObjectRepository::class);
-        $repository
-            ->expects($this->once())
-            ->method('find')
-            ->with(1)
+            ->method('getJWTToken')
+            ->with($request = new Request())
             ->willReturn(null);
 
-        $this->em
-            ->expects($this->once())
-            ->method('getRepository')
-            ->willReturn($repository);
-
-        $this->kernel
-            ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('dev');
-
-        $request = new Request();
-        $this->jwtAuthenticator->getCredentials($request);
+        $this->jwtAuthenticator->authenticate($request);
     }
 
     /**
-     * Test get user gets invalid user provider
+     * Test if an exception is thrown when no client key is present
      */
-    public function testGetUserGetsInvalidUserProvider(): void
+    public function testAuthenticateHasNoClientKey(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('UserProvider must implement AtlassianConnectBundle\Security\JWTUserProviderInterface');
-
-        $userProvider = $this->createMock(UserProviderInterface::class);
-
-        $this->jwtAuthenticator->getUser('credentials', $userProvider);
-    }
-
-    /**
-     * Test get user without client key throws exception
-     */
-    public function testGetUserWithoutClientKeyThrowsException(): void
-    {
-        $this->expectException(AuthenticationException::class);
-        $this->expectExceptionMessage('API Key "token" does not exist.');
+        $this->expectException(CustomUserMessageAuthenticationException::class);
+        $this->expectExceptionMessage('API Key token does not exist');
 
         $token = [
             'sub' => 'username',
             'iss' => null,
         ];
 
-        $userProvider = $this->createMock(JWTUserProviderInterface::class);
-        $userProvider
+        $this->securityHelper
+            ->expects($this->once())
+            ->method('getJWTToken')
+            ->with($request = new Request())
+            ->willReturn('token');
+
+        $this->userProvider
             ->expects($this->once())
             ->method('getDecodedToken')
+            ->with('token')
             ->willReturn((object) $token);
 
-        $this->jwtAuthenticator->getUser(['jwt' => 'token'], $userProvider);
-    }
-
-    /**
-     * Test UserProvider with loadByIdentifier metdho
-     */
-    public function testUserProviderHasLoadMethod(): void
-    {
-        $token = [
-            'iss' => 'iss',
-            'sub' => 'username',
-        ];
-
-        $tenant = new Tenant();
-
-        $userProvider = $this->createMock(JWTUserProvider::class);
-        $userProvider
-            ->expects($this->once())
-            ->method('getDecodedToken')
-            ->willReturn((object) $token);
-
-        $userProvider
-            ->expects($this->once())
-            ->method('loadUserByIdentifier')
-            ->with('iss')
-            ->willReturn($tenant);
-
-        $user = $this->jwtAuthenticator->getUser(['jwt' => 'token'], $userProvider);
-
-        $this->assertInstanceOf(Tenant::class, $user);
-        $this->assertEquals('username', $tenant->getUsername());
-    }
-
-    /**
-     * Test if a user gets fetched
-     */
-    public function testGetsUser(): void
-    {
-        $token = [
-            'iss' => 'iss',
-            'sub' => 'username',
-        ];
-
-        $tenant = new Tenant();
-
-        $userProvider = $this->createMock(JWTUserProviderInterface::class);
-        $userProvider
-            ->expects($this->once())
-            ->method('getDecodedToken')
-            ->willReturn((object) $token);
-
-        $userProvider
-            ->expects($this->once())
-            ->method('loadUserByUsername')
-            ->with('iss')
-            ->willReturn($tenant);
-
-        $user = $this->jwtAuthenticator->getUser(['jwt' => 'token'], $userProvider);
-
-        $this->assertInstanceOf(Tenant::class, $user);
-        $this->assertEquals('username', $tenant->getUsername());
-    }
-
-    /**
-     * test checkCredentials method
-     */
-    public function testItChecksCredentials(): void
-    {
-        $this->assertTrue($this->jwtAuthenticator->checkCredentials(null, $this->createMock(UserInterface::class)));
+        $this->jwtAuthenticator->authenticate($request);
     }
 
     /**
@@ -325,10 +177,13 @@ final class JWTAuthenticatorTest extends TestCase
     }
 
     /**
-     * test supportsRememberMe method
+     * test start method
      */
-    public function testItDoesNotSupportRememberMeFunctionality(): void
+    public function testStartMethod(): void
     {
-        $this->assertFalse($this->jwtAuthenticator->supportsRememberMe());
+        $this->assertEquals(
+            new Response('Authentication header required', 401),
+            $this->jwtAuthenticator->start(new Request())
+        );
     }
 }

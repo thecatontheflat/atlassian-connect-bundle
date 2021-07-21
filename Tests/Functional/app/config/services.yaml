@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    AtlassianConnectBundle\Tests\Functional\App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Kernel.php'

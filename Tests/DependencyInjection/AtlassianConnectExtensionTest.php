@@ -6,11 +6,13 @@ use AtlassianConnectBundle\Controller\DescriptorController;
 use AtlassianConnectBundle\Controller\HandshakeController;
 use AtlassianConnectBundle\Controller\UnlicensedController;
 use AtlassianConnectBundle\DependencyInjection\AtlassianConnectExtension;
+use AtlassianConnectBundle\Security\JWTAuthenticator;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -68,5 +70,10 @@ class AtlassianConnectExtensionTest extends TestCase
         static::assertTrue($this->container->has(DescriptorController::class));
         static::assertTrue($this->container->has(UnlicensedController::class));
         static::assertTrue($this->container->has(HandshakeController::class));
+
+        if (Kernel::VERSION_ID >= 50100) {
+            static::assertTrue($this->container->has('new_jwt_authenticator'));
+            static::assertTrue($this->container->has(JWTAuthenticator::class));
+        }
     }
 }

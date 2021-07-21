@@ -87,6 +87,26 @@ To configure security part - use the following configuration in your `security.y
                         - jwt_authenticator
                 provider: jwt_user_provider
 ```
+
+If you are using the [new Symfony authenticator](https://symfony.com/doc/current/security/authenticator_manager.html), you can use the following configuration in your `security.yml`
+
+```yaml
+    security:
+      enable_authenticator_manager: true
+      providers:
+        jwt_user_provider:
+          id: jwt_user_provider
+      firewalls:
+        jwt_secured_area:
+          custom_authenticators:
+            - AtlassianConnectBundle\Security\JWTAuthenticator
+          pattern: "^/protected"
+          stateless: true
+          provider: jwt_user_provider
+          # If you also need an entry_point
+          entry_point: AtlassianConnectBundle\Security\JWTAuthenticator
+
+```
     
 ### Step 5. Include Routes
  
