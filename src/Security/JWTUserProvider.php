@@ -56,7 +56,7 @@ class JWTUserProvider implements JWTUserProviderInterface
 
             return $decodedToken;
         } catch (\Throwable $e) {
-            throw new AuthenticationException($e->getMessage());
+            throw new AuthenticationException("Failed to parse token");
         }
     }
 
