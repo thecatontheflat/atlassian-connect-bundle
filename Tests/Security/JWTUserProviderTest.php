@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -104,6 +105,16 @@ final class JWTUserProviderTest extends TestCase
             'Jane Doe',
             1516239023,
         ];
+    }
+
+    /**
+     * test decoded token fails
+     */
+    public function testItFailsToDecodeToken(): void
+    {
+        $this->expectException(AuthenticationException::class);
+        $this->expectExceptionMessage('Failed to parse token');
+        $this->userProvider->getDecodedToken('invalid_token');
     }
 
     /**

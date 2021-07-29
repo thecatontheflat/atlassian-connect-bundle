@@ -58,6 +58,18 @@ final class AuthenticationTest extends AbstractWebTestCase
     }
 
     /**
+     * test authentication with invalid jwt token
+     */
+    public function testProtectedRouteWithInvalidJWTToken(): void
+    {
+        $client = self::createClient(['environment' => 'prod']);
+
+        $client->request('GET', '/protected/route?jwt=invalid');
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertEquals('Authentication Failed: Failed to parse token', $client->getResponse()->getContent());
+    }
+
+    /**
      * @return string
      */
     public function getTenantJWTCode(): string
