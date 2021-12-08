@@ -46,7 +46,12 @@ jobs:
           - description: 'PHP 8.1 - SF 5.4.*'
             php: '8.1'
             symfony_version: '5.4.*'
-            composer_flags: '--ignore-platform-reqs'
+          - description: 'PHP 8.0 - SF 6.0.*'
+            php: '8.0'
+            symfony_version: '6.0.*'
+          - description: 'PHP 8.1 - SF 6.0.*'
+            php: '8.1'
+            symfony_version: '6.0.*'
     name: Tests ${{ matrix.description }}
     steps:
       - name: Checkout
@@ -66,7 +71,9 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: "pcov"
-      - run: composer require --prefer-dist --no-interaction ${{ matrix.composer_flags }} symfony/symfony:${{ matrix.symfony_version}}
+      - run: |
+          sed -ri 's/"symfony\/(.+)": "(.+)"/"symfony\/\1": "'${{ matrix.symfony_version }}'"/' composer.json;
+      - run: composer update --no-interaction --no-progress --ansi ${{ matrix.composer_flags }}
       - name: Run PHP CS
         run: vendor/bin/phpcs -p --standard=./ruleset.xml
       - name: Run Tests

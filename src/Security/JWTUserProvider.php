@@ -70,6 +70,10 @@ class JWTUserProvider implements JWTUserProviderInterface
         $tenant = $this->findTenant($clientKey);
 
         if (!$tenant) {
+            if (\class_exists(UserNotFoundException::class)) {
+                throw new UserNotFoundException('Can\'t find tenant with such username');
+            }
+
             throw new UsernameNotFoundException('Can\'t find tenant with such username');
         }
 

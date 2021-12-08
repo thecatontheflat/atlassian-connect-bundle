@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 /**
  * Class LegacyJWTAuthenticatorTest
@@ -29,6 +30,18 @@ final class LegacyJWTAuthenticatorTest extends TestCase
      * @var LegacyJWTAuthenticator
      */
     private $jwtAuthenticator;
+
+    /**
+     * Setup Before Class
+     *
+     * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
+        if (!\class_exists(AbstractGuardAuthenticator::class)) {
+            self::markTestSkipped('Test only applies to symfony/security-guard 5.4 or earlier');
+        }
+    }
 
     /**
      * Setup method

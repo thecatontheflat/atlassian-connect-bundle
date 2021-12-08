@@ -38,8 +38,8 @@ abstract class AbstractWebTestCase extends WebTestCase
     /**
      * @return string
      */
-    protected static function getKernelClass()
+    protected static function getKernelClass(): string
     {
-        return 'AtlassianConnectBundle\Tests\Functional\App\Kernel';
+        return App\Kernel::class;
     }
 }
