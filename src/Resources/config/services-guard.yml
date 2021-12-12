@@ -1,0 +1,12 @@
+parameters:
+    atlassian_connect_jwt_authenticator_guard_class: AtlassianConnectBundle\Security\LegacyJWTAuthenticator
+services:
+    _defaults:
+        public: true
+        autowire: false
+        autoconfigure: true
+
+    jwt_authenticator_guard:
+        class: "%atlassian_connect_jwt_authenticator_guard_class%"
+        arguments:
+            - '@AtlassianConnectBundle\Security\JWTSecurityHelperInterface'

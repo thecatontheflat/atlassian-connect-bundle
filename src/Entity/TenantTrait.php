@@ -452,7 +452,7 @@ trait TenantTrait
     /**
      * @return string|null
      */
-    public function getUserIdentifier(): ?string
+    public function getUserIdentifier(): string
     {
         return $this->username;
     }

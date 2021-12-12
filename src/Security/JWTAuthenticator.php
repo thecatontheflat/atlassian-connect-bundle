@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 
@@ -53,9 +53,9 @@ class JWTAuthenticator extends AbstractAuthenticator implements AuthenticationEn
     /**
      * @param Request $request
      *
-     * @return PassportInterface
+     * @return Passport
      */
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         $jwt = $this->securityHelper->getJWTToken($request);
 
@@ -77,10 +77,6 @@ class JWTAuthenticator extends AbstractAuthenticator implements AuthenticationEn
         if (\property_exists($token, 'sub')) {
             // for some reasons, when webhooks are called - field sub is undefined
             $user->setUsername($token->sub);
-        }
-
-        if (!\class_exists(UserBadge::class)) {
-            return new SelfValidatingPassport($user);
         }
 
         return new SelfValidatingPassport(new UserBadge($clientKey));

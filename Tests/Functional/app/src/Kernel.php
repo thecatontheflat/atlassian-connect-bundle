@@ -19,7 +19,7 @@ final class Kernel extends BaseKernel
     /**
      * @return string
      */
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         return \dirname(__DIR__);
     }
@@ -27,7 +27,7 @@ final class Kernel extends BaseKernel
     /**
      * @return string
      */
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return \sys_get_temp_dir().'/com.github.thecatontheflat.atlassian/tests/var/cache';
     }
@@ -35,7 +35,7 @@ final class Kernel extends BaseKernel
     /**
      * @return string
      */
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return \sys_get_temp_dir().'/com.github.thecatontheflat.atlassian/tests/var'.$this->environment.'/log';
     }
@@ -60,7 +60,7 @@ final class Kernel extends BaseKernel
     /**
      * @param ContainerBuilder $container
      */
-    protected function build(ContainerBuilder $container)
+    protected function build(ContainerBuilder $container): void
     {
         $container->register('logger', NullLogger::class);
     }

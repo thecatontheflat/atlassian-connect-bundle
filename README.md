@@ -84,7 +84,7 @@ To configure security part - use the following configuration in your `security.y
                 stateless: true
                 guard:
                     authenticators:
-                        - jwt_authenticator
+                        - jwt_authenticator_guard
                 provider: jwt_user_provider
 ```
 

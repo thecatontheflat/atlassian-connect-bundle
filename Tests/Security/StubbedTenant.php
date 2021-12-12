@@ -176,6 +176,14 @@ class StubbedTenant implements TenantInterface
     }
 
     /**
+     * @return string
+     */
+    public function getUserIdentifier(): string
+    {
+        return 'tenant';
+    }
+
+    /**
      * @return void
      */
     public function eraseCredentials(): void
