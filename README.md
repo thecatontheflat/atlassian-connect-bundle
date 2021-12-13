@@ -43,7 +43,7 @@ Sample configuration in `config.yml`:
 ```yaml
     atlassian_connect:
         dev_tenant: 1
-        prod:
+        descriptor:
             key: 'your-addon-key'
             name: 'Your Add-On Name'
             description: 'Your Add-On Description'
@@ -65,13 +65,32 @@ Sample configuration in `config.yml`:
                         name:
                             value: 'Tab Name'
 
-        dev:
-          baseUrl: 'http://localhost:8888'
 ```
+
+If you need to overwrite any config in dev/test environment, overwrite that config in the `packages/{env}/atlassian-connect.yaml` file.
 
 ### Step 4. Security configuration
 
 To configure security part - use the following configuration in your `security.yml`. If you have another firewall that has the `"^/"` pattern, be sure to set the `jwt_secured_area` firewall first.
+
+```yaml
+    security:
+        enable_authenticator_manager: true
+        providers:
+            jwt_user_provider:
+                id: jwt_user_provider
+        firewalls:
+            jwt_secured_area:
+                custom_authenticators:
+                    - AtlassianConnectBundle\Security\JWTAuthenticator
+                pattern: "^/protected"
+                stateless: true
+                provider: jwt_user_provider
+                # If you also need an entry_point
+                entry_point: AtlassianConnectBundle\Security\JWTAuthenticator
+```
+
+If you are still on Symfony version 4.4.*, be sure to use guards instead.
 
 ```yaml
     security:
@@ -87,33 +106,10 @@ To configure security part - use the following configuration in your `security.y
                         - jwt_authenticator_guard
                 provider: jwt_user_provider
 ```
-
-If you are using the [new Symfony authenticator](https://symfony.com/doc/current/security/authenticator_manager.html), you can use the following configuration in your `security.yml`
-
-```yaml
-    security:
-      enable_authenticator_manager: true
-      providers:
-        jwt_user_provider:
-          id: jwt_user_provider
-      firewalls:
-        jwt_secured_area:
-          custom_authenticators:
-            - AtlassianConnectBundle\Security\JWTAuthenticator
-          pattern: "^/protected"
-          stateless: true
-          provider: jwt_user_provider
-          # If you also need an entry_point
-          entry_point: AtlassianConnectBundle\Security\JWTAuthenticator
-
-```
     
 ### Step 5. Include Routes
  
-- For Symfony 4 and Flex to `config/routes.yaml`
-- For Symfony 2/3 to `app/config/routing.yml`
-
-Add the following:
+Add the following configuration to `config/routes.yaml`:
 ```yaml
     ac:
         resource: "@AtlassianConnectBundle/Resources/config/routing.yml"

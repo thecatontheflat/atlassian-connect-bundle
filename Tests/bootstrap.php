@@ -4,7 +4,6 @@ use AtlassianConnectBundle\Tests\Functional\App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 setlocale(LC_ALL, 'en_US.UTF-8');
 
@@ -16,11 +15,7 @@ if (!file_exists($file)) {
 
 require $file;
 
-if (BaseKernel::VERSION_ID < 50100) {
-    return;
-}
-
-$application = new Application(new Kernel('prod', true));
+$application = new Application(new Kernel('dev', true));
 $application->setAutoExit(false);
 
 $input = new ArrayInput(['command' => 'doctrine:database:drop', '--no-interaction' => true, '--force' => true]);

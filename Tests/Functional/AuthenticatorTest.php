@@ -6,9 +6,11 @@ use AtlassianConnectBundle\Service\QSHGenerator;
 use Firebase\JWT\JWT;
 
 /**
- * Class AuthenticationTest
+ * Class AuthenticatorTest
+ *
+ * Tests JWTAuthenticator and LegacyJWTAuthenticator
  */
-final class AuthenticationTest extends AbstractWebTestCase
+final class AuthenticatorTest extends AbstractWebTestCase
 {
     /**
      * test a protected route without any authentication headers
@@ -16,7 +18,7 @@ final class AuthenticationTest extends AbstractWebTestCase
      */
     public function testProtectedRouteWithoutAuthentication(): void
     {
-        $client = self::createClient(['environment' => 'prod']);
+        $client = self::createClient();
 
         $client->request('GET', '/protected/route');
 
@@ -29,7 +31,7 @@ final class AuthenticationTest extends AbstractWebTestCase
      */
     public function testProtectedRouteWithBearerToken(): void
     {
-        $client = self::createClient(['environment' => 'prod'], ['HTTP_AUTHORIZATION' => 'Bearer '.$this->getTenantJWTCode()]);
+        $client = self::createClient([], ['HTTP_AUTHORIZATION' => 'Bearer '.$this->getTenantJWTCode()]);
 
         $client->request('GET', '/protected/route');
         $this->assertResponseIsSuccessful();
@@ -40,7 +42,7 @@ final class AuthenticationTest extends AbstractWebTestCase
      */
     public function testProtectedRouteWithQueryToken(): void
     {
-        $client = self::createClient(['environment' => 'prod']);
+        $client = self::createClient();
 
         $client->request('GET', '/protected/route?jwt='.$this->getTenantJWTCode());
         $this->assertResponseIsSuccessful();
@@ -62,7 +64,7 @@ final class AuthenticationTest extends AbstractWebTestCase
      */
     public function testProtectedRouteWithInvalidJWTToken(): void
     {
-        $client = self::createClient(['environment' => 'prod']);
+        $client = self::createClient();
 
         $client->request('GET', '/protected/route?jwt=invalid');
         $this->assertResponseStatusCodeSame(403);

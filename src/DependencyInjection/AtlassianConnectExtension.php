@@ -24,12 +24,7 @@ class AtlassianConnectExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $prod = $config['prod'];
-        $dev = $config['dev'];
-
-        $config['dev'] = \array_merge($prod, $dev);
-
-        $container->setParameter('atlassian_connect', $config);
+        $container->setParameter('atlassian_connect', $config['descriptor']);
         $container->setParameter('atlassian_connect_dev_tenant', $config['dev_tenant']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

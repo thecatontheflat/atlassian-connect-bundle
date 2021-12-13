@@ -15,19 +15,57 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        if (\method_exists(TreeBuilder::class, 'getRootNode')) {
-            $treeBuilder = new TreeBuilder('atlassian_connect');
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            $treeBuilder = new TreeBuilder();
-            $rootNode = $treeBuilder->root('atlassian_connect');
-        }
+        $treeBuilder = new TreeBuilder('atlassian_connect');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
                 ->variableNode('dev_tenant')->defaultValue(1)->end()
-                ->variableNode('prod')->end()
-                ->variableNode('dev')->end()
+                ->arrayNode('descriptor')
+                    ->ignoreExtraKeys()
+                    ->children()
+                        ->arrayNode('authentication')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->enumNode('type')->values(['jwt', 'none', 'JWT', 'NONE'])->defaultValue('jwt')->isRequired()->end()
+                            ->end()
+                        ->end()
+                        ->scalarNode('baseUrl')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('key')->isRequired()->cannotBeEmpty()->end()
+                        ->integerNode('apiVersion')->end()
+                        ->scalarNode('name')->end()
+                        ->scalarNode('description')->end()
+                        ->booleanNode('enableLicensing')->end()
+                        ->arrayNode('lifecycle')
+                            ->children()
+                                ->scalarNode('installed')->end()
+                                ->scalarNode('enabled')->end()
+                                ->scalarNode('disabled')->end()
+                                ->scalarNode('uninstalled')->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('vendor')
+                            ->children()
+                                ->scalarNode('name')->end()
+                                ->scalarNode('url')->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('scopes')
+                            ->scalarPrototype()->end()
+                        ->end()
+                        ->variableNode('links')
+                        ->end()
+                        ->variableNode('modules')
+                        ->end()
+                        ->arrayNode('translations')
+                            ->children()
+                                ->arrayNode('paths')
+                                    ->scalarPrototype()->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
