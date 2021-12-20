@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Security;
 
+use AtlassianConnectBundle\Entity\TenantInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -47,6 +48,7 @@ class JWTAuthenticator extends AbstractAuthenticator implements AuthenticationEn
             throw new CustomUserMessageAuthenticationException(sprintf('API Key %s does not exist', $jwt));
         }
 
+        /** @var TenantInterface $user */
         $user = $this->userProvider->loadUserByIdentifier($clientKey);
 
         if (property_exists($token, 'sub')) {

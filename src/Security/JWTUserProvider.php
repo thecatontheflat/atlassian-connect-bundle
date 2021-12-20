@@ -34,7 +34,6 @@ class JWTUserProvider implements JWTUserProviderInterface
             $bodyb64 = explode('.', $jwt)[1];
             $decodedToken = json_decode(JWT::urlsafeB64Decode($bodyb64));
 
-            /* @noinspection NullPointerExceptionInspection */
             JWT::decode($jwt, $this->findTenant($decodedToken->iss)->getSharedSecret(), ['HS256']);
 
             return $decodedToken;
@@ -43,21 +42,12 @@ class JWTUserProvider implements JWTUserProviderInterface
         }
     }
 
-    /**
-     * @param mixed $clientKey
-     *
-     * @return TenantInterface|UserInterface
-     */
-    public function loadUserByUsername($clientKey): TenantInterface
+    public function loadUserByUsername($username): UserInterface
     {
-        $tenant = $this->findTenant($clientKey);
+        $tenant = $this->findTenant($username);
 
         if (!$tenant) {
-            if (class_exists(UserNotFoundException::class)) {
-                throw new UserNotFoundException('Can\'t find tenant with such username');
-            }
-
-            throw new UsernameNotFoundException('Can\'t find tenant with such username');
+            throw $this->getNotFoundException();
         }
 
         return $tenant;
@@ -81,10 +71,21 @@ class JWTUserProvider implements JWTUserProviderInterface
         $tenant = $this->findTenant($identifier);
 
         if (!$tenant) {
-            throw new UserNotFoundException('Can\'t find tenant with such identifier');
+            throw $this->getNotFoundException();
         }
 
         return $tenant;
+    }
+
+    private function getNotFoundException(): AuthenticationException
+    {
+        $message = 'Can\'t find tenant with such username';
+
+        if (class_exists(UserNotFoundException::class)) {
+            return new UserNotFoundException($message);
+        }
+
+        return new UsernameNotFoundException($message);
     }
 
     private function findTenant(string $clientKey): ?TenantInterface

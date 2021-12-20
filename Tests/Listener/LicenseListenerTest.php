@@ -8,7 +8,6 @@ use AtlassianConnectBundle\Entity\Tenant;
 use AtlassianConnectBundle\Listener\LicenseListener;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,18 +36,11 @@ final class LicenseListenerTest extends TestCase
      */
     private $tokenStorage;
 
-    private LicenseListener $listener;
-
     protected function setUp(): void
     {
         $this->router = $this->createMock(RouterInterface::class);
         $this->kernel = $this->createMock(KernelInterface::class);
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
-
-        $this->listener = new LicenseListener(
-            $this->router,
-            $this->tokenStorage
-        );
     }
 
     public function testItSkipsOnASubRequest(): void
@@ -67,7 +59,7 @@ final class LicenseListenerTest extends TestCase
             KernelInterface::SUB_REQUEST
         );
 
-        $this->listener->onKernelRequest($event);
+        $this->getLicenseListener()->onKernelRequest($event);
     }
 
     public function testItSkipsWhenTheRouteIsNullAndRouteRequiresNoLicense(): void
@@ -81,17 +73,15 @@ final class LicenseListenerTest extends TestCase
             ]
         );
 
-        $this->kernel
-            ->expects($this->never())
-            ->method('getEnvironment');
-
         $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::MASTER_REQUEST
         );
 
-        $this->listener->onKernelRequest($event);
+        $this->getLicenseListener('dev')->onKernelRequest($event);
+
+        $this->assertNull($event->getResponse());
     }
 
     public function testLicenseIsNotActiveOrDevelopment(): void
@@ -114,11 +104,6 @@ final class LicenseListenerTest extends TestCase
             ]
         );
 
-        $this->kernel
-            ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('dev');
-
         $this->tokenStorage
             ->expects($this->never())
             ->method('getToken');
@@ -135,8 +120,8 @@ final class LicenseListenerTest extends TestCase
             KernelInterface::MASTER_REQUEST
         );
 
-        $this->listener->onKernelRequest($event1);
-        $this->listener->onKernelRequest($event2);
+        $this->getLicenseListener('dev')->onKernelRequest($event1);
+        $this->getLicenseListener('dev')->onKernelRequest($event2);
     }
 
     public function testUserIsNoTenant(): void
@@ -149,15 +134,6 @@ final class LicenseListenerTest extends TestCase
                 'requires_license' => true,
             ]
         );
-
-        $this->kernel
-            ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('prod');
-
-        $this->kernel
-            ->expects($this->never())
-            ->method('getContainer');
 
         $token = $this->createMock(TokenInterface::class);
         $token
@@ -182,7 +158,7 @@ final class LicenseListenerTest extends TestCase
             KernelInterface::MASTER_REQUEST
         );
 
-        $this->listener->onKernelRequest($event);
+        $this->getLicenseListener()->onKernelRequest($event);
 
         $response = $event->getResponse();
         $this->assertInstanceOf(RedirectResponse::class, $response);
@@ -200,11 +176,6 @@ final class LicenseListenerTest extends TestCase
             ]
         );
 
-        $this->kernel
-            ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('prod');
-
         $user = new Tenant();
         $user->setIsWhiteListed(true);
 
@@ -219,17 +190,13 @@ final class LicenseListenerTest extends TestCase
             ->method('getToken')
             ->willReturn($token);
 
-        $this->kernel
-            ->expects($this->never())
-            ->method('getContainer');
-
         $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::MASTER_REQUEST
         );
 
-        $this->listener->onKernelRequest($event);
+        $this->getLicenseListener()->onKernelRequest($event);
     }
 
     public function testIsValidByWhiteList(): void
@@ -242,11 +209,6 @@ final class LicenseListenerTest extends TestCase
                 'requires_license' => true,
             ]
         );
-
-        $this->kernel
-            ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('prod');
 
         $user = new Tenant();
         $user->setClientKey('key');
@@ -265,26 +227,13 @@ final class LicenseListenerTest extends TestCase
         $date = new \DateTime();
         $date->modify('+1 day');
 
-        $container = $this->createMock(ContainerInterface::class);
-        $container
-            ->expects($this->once())
-            ->method('getParameter')
-            ->willReturn([
-                ['valid_till' => $date->format('Y-m-d'), 'client_key' => 'key'],
-            ]);
-
-        $this->kernel
-            ->expects($this->once())
-            ->method('getContainer')
-            ->willReturn($container);
-
         $event = $this->getEvent(
             $this->kernel,
             $request,
             KernelInterface::MASTER_REQUEST
         );
 
-        $this->listener->onKernelRequest($event);
+        $this->getLicenseListener('prod', [['valid_till' => $date->format('Y-m-d'), 'client_key' => 'key']])->onKernelRequest($event);
         $this->assertNull($event->getResponse());
     }
 
@@ -298,11 +247,6 @@ final class LicenseListenerTest extends TestCase
                 'requires_license' => true,
             ]
         );
-
-        $this->kernel
-            ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('prod');
 
         $user = new Tenant();
         $user->setClientKey('key');
@@ -321,19 +265,6 @@ final class LicenseListenerTest extends TestCase
         $date = new \DateTime();
         $date->modify('-1 day');
 
-        $container = $this->createMock(ContainerInterface::class);
-        $container
-            ->expects($this->once())
-            ->method('getParameter')
-            ->willReturn([
-                ['valid_till' => $date->format('Y-m-d'), 'client_key' => 'key'],
-            ]);
-
-        $this->kernel
-            ->expects($this->once())
-            ->method('getContainer')
-            ->willReturn($container);
-
         $this->router
             ->expects($this->once())
             ->method('generate')
@@ -346,7 +277,7 @@ final class LicenseListenerTest extends TestCase
             KernelInterface::MASTER_REQUEST
         );
 
-        $this->listener->onKernelRequest($event);
+        $this->getLicenseListener()->onKernelRequest($event);
         $this->assertNotNull($event->getResponse());
         $response = $event->getResponse();
         $this->assertInstanceOf(RedirectResponse::class, $response);
@@ -363,11 +294,6 @@ final class LicenseListenerTest extends TestCase
                 'requires_license' => true,
             ]
         );
-
-        $this->kernel
-            ->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn('prod');
 
         $user = new Tenant();
         $user->setClientKey('key');
@@ -389,7 +315,7 @@ final class LicenseListenerTest extends TestCase
             KernelInterface::MASTER_REQUEST
         );
 
-        $this->listener->onKernelRequest($event);
+        $this->getLicenseListener()->onKernelRequest($event);
         $this->assertNotNull($event->getResponse());
         $response = $event->getResponse();
         $this->assertInstanceOf(RedirectResponse::class, $response);
@@ -403,5 +329,10 @@ final class LicenseListenerTest extends TestCase
         }
 
         return new GetResponseEvent($kernel, $request, $type);
+    }
+
+    private function getLicenseListener(string $environment = 'prod', array $license_allow_list = [])
+    {
+        return new LicenseListener($this->router, $this->tokenStorage, $environment, $license_allow_list);
     }
 }

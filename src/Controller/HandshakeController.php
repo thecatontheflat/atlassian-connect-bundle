@@ -32,7 +32,6 @@ class HandshakeController
         $content = json_decode($content, true);
 
         /** @var TenantInterface $tenant */
-        /** @noinspection PhpUndefinedMethodInspection */
         $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($content['clientKey']);
 
         if (null !== $tenant) {

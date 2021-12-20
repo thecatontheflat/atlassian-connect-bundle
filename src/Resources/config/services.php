@@ -69,6 +69,8 @@ return static function (ContainerConfigurator $container) {
             ->args([
                 new ReferenceConfigurator(RouterInterface::class),
                 new ReferenceConfigurator(TokenStorageInterface::class),
+                '%kernel.environment%',
+                '%atlassian_connect_license_allow_list%',
             ])
             ->tag('kernel.event_listener', ['event' => 'kernel.request', 'method' => 'onKernelRequest'])
         ->set('jwt_user_provider', '%atlassian_connect_jwt_user_provider_class%')

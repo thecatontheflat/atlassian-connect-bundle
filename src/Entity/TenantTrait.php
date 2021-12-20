@@ -154,19 +154,11 @@ trait TenantTrait
         return $this->updatedAt;
     }
 
-    /**
-     * Get id.
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set addonKey.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setAddonKey(string $addonKey): TenantInterface
     {
         $this->addonKey = $addonKey;
@@ -174,19 +166,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get addonKey.
-     */
     public function getAddonKey(): ?string
     {
         return $this->addonKey;
     }
 
-    /**
-     * Set clientKey.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setClientKey(string $clientKey): TenantInterface
     {
         $this->clientKey = $clientKey;
@@ -194,19 +178,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get clientKey.
-     */
     public function getClientKey(): ?string
     {
         return $this->clientKey;
     }
 
-    /**
-     * Set publicKey.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setPublicKey(string $publicKey): TenantInterface
     {
         $this->publicKey = $publicKey;
@@ -214,19 +190,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get publicKey.
-     */
     public function getPublicKey(): ?string
     {
         return $this->publicKey;
     }
 
-    /**
-     * Set sharedSecret.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setSharedSecret(string $sharedSecret): TenantInterface
     {
         $this->sharedSecret = $sharedSecret;
@@ -234,19 +202,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get sharedSecret.
-     */
     public function getSharedSecret(): ?string
     {
         return $this->sharedSecret;
     }
 
-    /**
-     * Set serverVersion.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setServerVersion(string $serverVersion): TenantInterface
     {
         $this->serverVersion = $serverVersion;
@@ -254,19 +214,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get serverVersion.
-     */
     public function getServerVersion(): ?string
     {
         return $this->serverVersion;
     }
 
-    /**
-     * Set pluginsVersion.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setPluginsVersion(string $pluginsVersion): TenantInterface
     {
         $this->pluginsVersion = $pluginsVersion;
@@ -274,19 +226,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get pluginsVersion.
-     */
     public function getPluginsVersion(): ?string
     {
         return $this->pluginsVersion;
     }
 
-    /**
-     * Set baseUrl.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setBaseUrl(string $baseUrl): TenantInterface
     {
         $this->baseUrl = $baseUrl;
@@ -294,19 +238,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get baseUrl.
-     */
     public function getBaseUrl(): ?string
     {
         return $this->baseUrl;
     }
 
-    /**
-     * Set productType.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setProductType(string $productType): TenantInterface
     {
         $this->productType = $productType;
@@ -314,19 +250,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get productType.
-     */
     public function getProductType(): ?string
     {
         return $this->productType;
     }
 
-    /**
-     * Set description.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setDescription(string $description): TenantInterface
     {
         $this->description = $description;
@@ -334,19 +262,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get description.
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set eventType.
-     *
-     * @return TenantTrait|TenantInterface
-     */
     public function setEventType(string $eventType): TenantInterface
     {
         $this->eventType = $eventType;
@@ -354,17 +274,12 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * Get eventType.
-     */
     public function getEventType(): ?string
     {
         return $this->eventType;
     }
 
     /**
-     * Implementing UserInterface.
-     *
      * @return array<string>
      */
     public function getRoles(): array
@@ -382,22 +297,16 @@ trait TenantTrait
         return '';
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->getUserIdentifier();
     }
 
-    /**
-     * @return string|null
-     */
     public function getUserIdentifier(): string
     {
         return $this->username;
     }
 
-    /**
-     * @return TenantTrait|TenantInterface
-     */
     public function setUsername(string $name): TenantInterface
     {
         $this->username = $name;
@@ -440,9 +349,6 @@ trait TenantTrait
         return $this->getIsWhiteListed() && (null === $this->getWhiteListedUntil() || ($now < $this->getWhiteListedUntil()));
     }
 
-    /**
-     * @return TenantTrait|TenantInterface
-     */
     public function setOauthClientId(?string $oauthClientId): TenantInterface
     {
         $this->oauthClientId = $oauthClientId;

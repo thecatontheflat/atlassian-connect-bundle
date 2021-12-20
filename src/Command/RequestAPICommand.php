@@ -46,7 +46,6 @@ class RequestAPICommand extends Command
         if ($input->getOption('tenant-id')) {
             $tenant = $this->em->getRepository($this->tenantClass)->find($input->getOption('tenant-id'));
         } elseif ($input->getOption('client-key')) {
-            /** @noinspection PhpUndefinedMethodInspection */
             $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($input->getOption('client-key'));
         } else {
             throw new \RuntimeException('Please provide client-key or tenant-id');

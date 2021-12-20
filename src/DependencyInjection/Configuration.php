@@ -62,6 +62,14 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('license_allow_list')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('client_key')->end()
+                            ->scalarNode('valid_till')->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

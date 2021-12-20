@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="4"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="src" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
+    </projectFiles>
+    <issueHandlers>
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <file name="src/Security/LegacyJWTAuthenticator.php"/>
+                <referencedClass name="Symfony\Component\HttpKernel\Event\GetResponseEvent"/>
+                <referencedClass name="Symfony\Component\Security\Guard\AbstractGuardAuthenticator"/>
+                <referencedClass name="Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator"/>
+                <referencedClass name="Symfony\Component\Security\Core\Exception\UserNotFoundException"/>
+            </errorLevel>
+        </UndefinedClass>
+        <MissingDependency>
+            <errorLevel type="suppress">
+                <file name="src/Resources/config/services.php"/>
+            </errorLevel>
+        </MissingDependency>
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Symfony\Component\HttpKernel\Event\GetResponseEvent"/>
+            </errorLevel>
+        </UndefinedDocblockClass>
+        <ReservedWord>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+                <directory name="Tests"/>
+            </errorLevel>
+        </ReservedWord>
+    </issueHandlers>
+</psalm>

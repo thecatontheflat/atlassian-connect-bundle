@@ -18,3 +18,7 @@ atlassian_connect:
                     url: "/protected/jira/issue_created"
                     filter: "project = TEST"
                     excludeBody: false
+    license_allow_list:
+        -
+            client_key: client_key
+            valid_till: 2200-10-10

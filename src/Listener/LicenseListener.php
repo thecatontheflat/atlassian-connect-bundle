@@ -17,10 +17,20 @@ class LicenseListener
 
     protected TokenStorageInterface $tokenStorage;
 
-    public function __construct(RouterInterface $router, TokenStorageInterface $tokenStorage)
-    {
+    private string $environment;
+
+    private array $licenseAllowList;
+
+    public function __construct(
+        RouterInterface $router,
+        TokenStorageInterface $tokenStorage,
+        string $environment,
+        array $licenseAllowList
+    ) {
         $this->router = $router;
         $this->tokenStorage = $tokenStorage;
+        $this->environment = $environment;
+        $this->licenseAllowList = $licenseAllowList;
     }
 
     /**
@@ -43,34 +53,29 @@ class LicenseListener
 
         $request = $event->getRequest();
         $route = $request->attributes->get('_route');
-        $kernel = $event->getKernel();
 
-        if (null !== $route && !$request->attributes->get('requires_license')) {
+        if (null !== $route && false === $request->attributes->get('requires_license')) {
             return;
         }
 
-        if ('active' === $request->get('lic') || 'prod' !== $kernel->getEnvironment()) {
+        if ('active' === $request->query->get('lic') || 'prod' !== $this->environment) {
             return;
         }
 
         // Checking for whitelisted users
         try {
-            /** @noinspection NullPointerExceptionInspection */
+            /** @var TenantInterface $user */
             $user = $this->tokenStorage->getToken()->getUser();
 
-            if ($user instanceof TenantInterface) {
-                if ($user->isWhiteListed()) {
+            if ($user instanceof TenantInterface && $user->isWhiteListed()) {
+                return;
+            }
+
+            $today = date('Y-m-d');
+
+            foreach ($this->licenseAllowList as $allowed) {
+                if ($today <= $allowed['valid_till'] && $allowed['client_key'] === $user->getClientKey()) {
                     return;
-                }
-
-                $today = date('Y-m-d');
-                $whitelist = $kernel->getContainer()->getParameter('license_whitelist');
-
-                /* @noinspection ForeachSourceInspection */
-                foreach ($whitelist as $allowed) {
-                    if ($today <= $allowed['valid_till'] && $allowed['client_key'] === $user->getClientKey()) {
-                        return;
-                    }
                 }
             }
         } catch (\Throwable $e) {

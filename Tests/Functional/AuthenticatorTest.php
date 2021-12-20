@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Functional;
 
-use AtlassianConnectBundle\Service\QSHGenerator;
-use Firebase\JWT\JWT;
-
 /**
  * Tests JWTAuthenticator and LegacyJWTAuthenticator.
  */
@@ -53,16 +50,5 @@ final class AuthenticatorTest extends AbstractWebTestCase
         $client->request('GET', '/protected/route?jwt=invalid');
         $this->assertResponseStatusCodeSame(403);
         $this->assertEquals('Authentication Failed: Failed to parse token', $client->getResponse()->getContent());
-    }
-
-    public function getTenantJWTCode(): string
-    {
-        return JWT::encode([
-            'iss' => 'client_key',
-            'iat' => time(),
-            'exp' => strtotime('+1 day'),
-            'qsh' => QSHGenerator::generate('/protected_route', 'GET'),
-            'sub' => 'admin',
-        ], 'shared_secret');
     }
 }

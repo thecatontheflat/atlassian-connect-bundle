@@ -10,11 +10,18 @@ use Doctrine\Persistence\ObjectManager;
 
 final class TenantFixture extends Fixture
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
+    {
+        $manager->persist($this->getTenant('client_key'));
+        $manager->persist($this->getTenant('not_whitelisted'));
+        $manager->flush();
+    }
+
+    private function getTenant(string $clientKey): Tenant
     {
         $tenant = new Tenant();
         $tenant->setAddonKey('addon_key');
-        $tenant->setClientKey('client_key');
+        $tenant->setClientKey($clientKey);
         $tenant->setPublicKey('public_key');
         $tenant->setSharedSecret('shared_secret');
         $tenant->setServerVersion('1');
@@ -24,7 +31,6 @@ final class TenantFixture extends Fixture
         $tenant->setDescription('description');
         $tenant->setEventType('type');
 
-        $manager->persist($tenant);
-        $manager->flush();
+        return $tenant;
     }
 }
