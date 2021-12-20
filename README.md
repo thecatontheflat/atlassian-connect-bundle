@@ -112,7 +112,7 @@ If you are still on Symfony version 4.4.*, be sure to use guards instead.
 Add the following configuration to `config/routes.yaml`:
 ```yaml
     ac:
-        resource: "@AtlassianConnectBundle/Resources/config/routing.yml"
+        resource: "@AtlassianConnectBundle/Resources/config/routing.php"
 ```
 
     
