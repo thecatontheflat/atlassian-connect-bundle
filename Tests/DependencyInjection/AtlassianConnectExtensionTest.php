@@ -2,10 +2,8 @@
 
 namespace AtlassianConnectBundle\Tests\DependencyInjection;
 
-use AtlassianConnectBundle\Controller\DescriptorController;
-use AtlassianConnectBundle\Controller\HandshakeController;
-use AtlassianConnectBundle\Controller\UnlicensedController;
 use AtlassianConnectBundle\DependencyInjection\AtlassianConnectExtension;
+use AtlassianConnectBundle\Service\AtlassianRestClient;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -13,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use Twig\Environment;
 
 /**
  * AtlassianConnectExtensionTest
@@ -50,7 +48,7 @@ class AtlassianConnectExtensionTest extends TestCase
         $this->container->set(TokenStorageInterface::class, new \stdClass());
         $this->container->set(EntityManagerInterface::class, new \stdClass());
         $this->container->set(LoggerInterface::class, new \stdClass());
-        $this->container->set('twig', new \stdClass());
+        $this->container->set(Environment::class, new \stdClass());
         $this->container->setParameter('kernel.environment', 'test');
 
         $this->container->prependExtensionConfig($this->extension->getAlias(), [
@@ -62,16 +60,7 @@ class AtlassianConnectExtensionTest extends TestCase
         ]);
         $this->container->loadFromExtension($this->extension->getAlias());
         $this->container->compile();
-
         // Check that services have been loaded
-        static::assertTrue($this->container->has('jwt_user_provider'));
-        static::assertTrue($this->container->has('jwt_authenticator'));
-        static::assertTrue($this->container->has(DescriptorController::class));
-        static::assertTrue($this->container->has(UnlicensedController::class));
-        static::assertTrue($this->container->has(HandshakeController::class));
-
-        if (\class_exists(AbstractGuardAuthenticator::class)) {
-            static::assertTrue($this->container->has('jwt_authenticator_guard'));
-        }
+        $this->assertTrue($this->container->has(AtlassianRestClient::class));
     }
 }

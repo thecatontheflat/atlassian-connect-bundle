@@ -6,7 +6,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -27,11 +26,7 @@ class AtlassianConnectExtension extends Extension
         $container->setParameter('atlassian_connect', $config['descriptor']);
         $container->setParameter('atlassian_connect_dev_tenant', $config['dev_tenant']);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-
-        if (\class_exists(AbstractGuardAuthenticator::class)) {
-            $loader->load('services-guard.yml');
-        }
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));
+        $loader->load('services.php');
     }
 }
