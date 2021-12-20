@@ -1,12 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Trait TenantTrait
- */
 trait TenantTrait
 {
     /**
@@ -130,8 +129,6 @@ trait TenantTrait
 
     /**
      * @ORM\PrePersist()
-     *
-     * @return void
      */
     public function setCreatedAt(): void
     {
@@ -139,9 +136,6 @@ trait TenantTrait
         $this->updatedAt = new \DateTime();
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
@@ -149,26 +143,19 @@ trait TenantTrait
 
     /**
      * @ORM\PreUpdate()
-     *
-     * @return void
      */
     public function setUpdatedAt(): void
     {
         $this->updatedAt = new \DateTime();
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -176,9 +163,7 @@ trait TenantTrait
     }
 
     /**
-     * Set addonKey
-     *
-     * @param string $addonKey
+     * Set addonKey.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -190,9 +175,7 @@ trait TenantTrait
     }
 
     /**
-     * Get addonKey
-     *
-     * @return string|null
+     * Get addonKey.
      */
     public function getAddonKey(): ?string
     {
@@ -200,9 +183,7 @@ trait TenantTrait
     }
 
     /**
-     * Set clientKey
-     *
-     * @param string $clientKey
+     * Set clientKey.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -214,9 +195,7 @@ trait TenantTrait
     }
 
     /**
-     * Get clientKey
-     *
-     * @return string|null
+     * Get clientKey.
      */
     public function getClientKey(): ?string
     {
@@ -224,9 +203,7 @@ trait TenantTrait
     }
 
     /**
-     * Set publicKey
-     *
-     * @param string $publicKey
+     * Set publicKey.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -238,9 +215,7 @@ trait TenantTrait
     }
 
     /**
-     * Get publicKey
-     *
-     * @return string|null
+     * Get publicKey.
      */
     public function getPublicKey(): ?string
     {
@@ -248,9 +223,7 @@ trait TenantTrait
     }
 
     /**
-     * Set sharedSecret
-     *
-     * @param string $sharedSecret
+     * Set sharedSecret.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -262,9 +235,7 @@ trait TenantTrait
     }
 
     /**
-     * Get sharedSecret
-     *
-     * @return string|null
+     * Get sharedSecret.
      */
     public function getSharedSecret(): ?string
     {
@@ -272,9 +243,7 @@ trait TenantTrait
     }
 
     /**
-     * Set serverVersion
-     *
-     * @param string $serverVersion
+     * Set serverVersion.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -286,9 +255,7 @@ trait TenantTrait
     }
 
     /**
-     * Get serverVersion
-     *
-     * @return string|null
+     * Get serverVersion.
      */
     public function getServerVersion(): ?string
     {
@@ -296,9 +263,7 @@ trait TenantTrait
     }
 
     /**
-     * Set pluginsVersion
-     *
-     * @param string $pluginsVersion
+     * Set pluginsVersion.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -310,9 +275,7 @@ trait TenantTrait
     }
 
     /**
-     * Get pluginsVersion
-     *
-     * @return string|null
+     * Get pluginsVersion.
      */
     public function getPluginsVersion(): ?string
     {
@@ -320,9 +283,7 @@ trait TenantTrait
     }
 
     /**
-     * Set baseUrl
-     *
-     * @param string $baseUrl
+     * Set baseUrl.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -334,9 +295,7 @@ trait TenantTrait
     }
 
     /**
-     * Get baseUrl
-     *
-     * @return string|null
+     * Get baseUrl.
      */
     public function getBaseUrl(): ?string
     {
@@ -344,9 +303,7 @@ trait TenantTrait
     }
 
     /**
-     * Set productType
-     *
-     * @param string $productType
+     * Set productType.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -358,9 +315,7 @@ trait TenantTrait
     }
 
     /**
-     * Get productType
-     *
-     * @return string|null
+     * Get productType.
      */
     public function getProductType(): ?string
     {
@@ -368,9 +323,7 @@ trait TenantTrait
     }
 
     /**
-     * Set description
-     *
-     * @param string $description
+     * Set description.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -382,9 +335,7 @@ trait TenantTrait
     }
 
     /**
-     * Get description
-     *
-     * @return string|null
+     * Get description.
      */
     public function getDescription(): ?string
     {
@@ -392,9 +343,7 @@ trait TenantTrait
     }
 
     /**
-     * Set eventType
-     *
-     * @param string $eventType
+     * Set eventType.
      *
      * @return TenantTrait|TenantInterface
      */
@@ -406,9 +355,7 @@ trait TenantTrait
     }
 
     /**
-     * Get eventType
-     *
-     * @return string|null
+     * Get eventType.
      */
     public function getEventType(): ?string
     {
@@ -416,7 +363,7 @@ trait TenantTrait
     }
 
     /**
-     * Implementing UserInterface
+     * Implementing UserInterface.
      *
      * @return array<string>
      */
@@ -425,25 +372,16 @@ trait TenantTrait
         return ['ROLE_USER'];
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return '';
     }
 
-    /**
-     * @return string
-     */
     public function getSalt(): string
     {
         return '';
     }
 
-    /**
-     * @return string|null
-     */
     public function getUsername(): ?string
     {
         return $this->getUserIdentifier();
@@ -458,8 +396,6 @@ trait TenantTrait
     }
 
     /**
-     * @param string $name
-     *
      * @return TenantTrait|TenantInterface
      */
     public function setUsername(string $name): TenantInterface
@@ -469,26 +405,15 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * @return void
-     */
     public function eraseCredentials(): void
     {
     }
 
-    /**
-     * @return bool
-     */
     public function getIsWhiteListed(): bool
     {
         return $this->isWhiteListed;
     }
 
-    /**
-     * @param bool $isWhiteListed
-     *
-     * @return self
-     */
     public function setIsWhiteListed(bool $isWhiteListed): self
     {
         $this->isWhiteListed = $isWhiteListed;
@@ -496,19 +421,11 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getWhiteListedUntil(): ?\DateTime
     {
         return $this->whiteListedUntil;
     }
 
-    /**
-     * @param \DateTime $whiteListedUntil
-     *
-     * @return self
-     */
     public function setWhiteListedUntil(\DateTime $whiteListedUntil): self
     {
         $this->whiteListedUntil = $whiteListedUntil;
@@ -516,19 +433,14 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isWhiteListed(): bool
     {
         $now = new \DateTime();
 
-        return $this->getIsWhiteListed() && ($this->getWhiteListedUntil() === null || ($now < $this->getWhiteListedUntil()));
+        return $this->getIsWhiteListed() && (null === $this->getWhiteListedUntil() || ($now < $this->getWhiteListedUntil()));
     }
 
     /**
-     * @param string|null $oauthClientId
-     *
      * @return TenantTrait|TenantInterface
      */
     public function setOauthClientId(?string $oauthClientId): TenantInterface
@@ -538,9 +450,6 @@ trait TenantTrait
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOauthClientId(): ?string
     {
         return $this->oauthClientId;

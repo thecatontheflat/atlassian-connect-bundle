@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Security;
 
@@ -16,9 +18,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
-/**
- * Class LegacyJWTAuthenticatorTest
- */
 final class LegacyJWTAuthenticatorTest extends TestCase
 {
     /**
@@ -26,36 +25,22 @@ final class LegacyJWTAuthenticatorTest extends TestCase
      */
     private $securityHelper;
 
-    /**
-     * @var LegacyJWTAuthenticator
-     */
-    private $jwtAuthenticator;
+    private LegacyJWTAuthenticator $jwtAuthenticator;
 
-    /**
-     * Setup Before Class
-     *
-     * @return void
-     */
     public static function setUpBeforeClass(): void
     {
-        if (!\class_exists(AbstractGuardAuthenticator::class)) {
+        if (!class_exists(AbstractGuardAuthenticator::class)) {
             self::markTestSkipped('Test only applies to symfony/security-guard 5.4 or earlier');
         }
     }
 
-    /**
-     * Setup method
-     */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->securityHelper = $this->createMock(JWTSecurityHelperInterface::class);
 
         $this->jwtAuthenticator = new LegacyJWTAuthenticator($this->securityHelper);
     }
 
-    /**
-     * Test start method
-     */
     public function testItSendsA401WhenNoAuthenticationHeaderIsSet(): void
     {
         $response = $this->jwtAuthenticator->start(new Request());
@@ -64,9 +49,6 @@ final class LegacyJWTAuthenticatorTest extends TestCase
         $this->assertEquals(401, $response->getStatusCode());
     }
 
-    /**
-     * Tests if the request is supported
-     */
     public function testSupportsRequest(): void
     {
         $this->securityHelper
@@ -78,9 +60,6 @@ final class LegacyJWTAuthenticatorTest extends TestCase
         $this->assertTrue($this->jwtAuthenticator->supports($request));
     }
 
-    /**
-     * Test if the getCredentials method returns a valid array
-     */
     public function testGetsCredentials(): void
     {
         $request = new Request(['jwt' => 'token']);
@@ -93,9 +72,6 @@ final class LegacyJWTAuthenticatorTest extends TestCase
         $this->assertSame(['jwt' => 'token'], $this->jwtAuthenticator->getCredentials($request));
     }
 
-    /**
-     * Test if the getCredentials method returns null when no jwt token is passed
-     */
     public function testGetsCredentialsTokenDoesNotExist(): void
     {
         $request = new Request();
@@ -108,9 +84,6 @@ final class LegacyJWTAuthenticatorTest extends TestCase
         $this->assertNull($this->jwtAuthenticator->getCredentials($request));
     }
 
-    /**
-     * Test get user gets invalid user provider
-     */
     public function testGetUserGetsInvalidUserProvider(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -121,9 +94,6 @@ final class LegacyJWTAuthenticatorTest extends TestCase
         $this->jwtAuthenticator->getUser('credentials', $userProvider);
     }
 
-    /**
-     * Test get user without client key throws exception
-     */
     public function testGetUserWithoutClientKeyThrowsException(): void
     {
         $this->expectException(AuthenticationException::class);
@@ -143,9 +113,6 @@ final class LegacyJWTAuthenticatorTest extends TestCase
         $this->jwtAuthenticator->getUser(['jwt' => 'token'], $userProvider);
     }
 
-    /**
-     * Test UserProvider with loadByIdentifier metdho
-     */
     public function testUserProviderHasLoadMethod(): void
     {
         $token = [
@@ -173,9 +140,6 @@ final class LegacyJWTAuthenticatorTest extends TestCase
         $this->assertEquals('username', $tenant->getUsername());
     }
 
-    /**
-     * Test if a user gets fetched
-     */
     public function testGetsUser(): void
     {
         $token = [
@@ -203,17 +167,11 @@ final class LegacyJWTAuthenticatorTest extends TestCase
         $this->assertEquals('username', $tenant->getUsername());
     }
 
-    /**
-     * test checkCredentials method
-     */
     public function testItChecksCredentials(): void
     {
         $this->assertTrue($this->jwtAuthenticator->checkCredentials(null, $this->createMock(UserInterface::class)));
     }
 
-    /**
-     * test onAuthenticationFailure Method
-     */
     public function testItSendsAResponseOnAuthenticationFailure(): void
     {
         $response = $this->jwtAuthenticator->onAuthenticationFailure(new Request(), new AuthenticationException('Error'));
@@ -222,17 +180,11 @@ final class LegacyJWTAuthenticatorTest extends TestCase
         $this->assertEquals(403, $response->getStatusCode());
     }
 
-    /**
-     * test onAuthenticationSuccess method
-     */
     public function testItDoesNotSendAResponseOnAuthenticationSuccess(): void
     {
         $this->assertNull($this->jwtAuthenticator->onAuthenticationSuccess(new Request(), $this->createMock(TokenInterface::class), 'main'));
     }
 
-    /**
-     * test supportsRememberMe method
-     */
     public function testItDoesNotSupportRememberMeFunctionality(): void
     {
         $this->assertFalse($this->jwtAuthenticator->supportsRememberMe());

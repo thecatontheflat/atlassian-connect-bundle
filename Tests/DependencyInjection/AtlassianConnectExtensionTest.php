@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\DependencyInjection;
 
@@ -13,24 +15,12 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Twig\Environment;
 
-/**
- * AtlassianConnectExtensionTest
- */
 class AtlassianConnectExtensionTest extends TestCase
 {
-    /**
-     * @var AtlassianConnectExtension
-     */
-    private $extension;
+    private AtlassianConnectExtension $extension;
 
-    /**
-     * @var ContainerBuilder Container builder
-     */
-    private $container;
+    private ContainerBuilder $container;
 
-    /**
-     * Set UP
-     */
     protected function setUp(): void
     {
         $this->extension = new AtlassianConnectExtension();
@@ -38,9 +28,6 @@ class AtlassianConnectExtensionTest extends TestCase
         $this->container->registerExtension($this->extension);
     }
 
-    /**
-     * Test load extension
-     */
     public function testLoadExtension(): void
     {
         $this->container->set(RouterInterface::class, new \stdClass());

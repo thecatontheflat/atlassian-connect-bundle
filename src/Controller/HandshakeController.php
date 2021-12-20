@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Controller;
 
@@ -9,31 +11,14 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Class HandshakeController
- */
 class HandshakeController
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
-    /**
-     * @var string
-     */
-    private $tenantClass;
+    private string $tenantClass;
 
-    /**
-     * @param EntityManagerInterface $em
-     * @param LoggerInterface        $logger
-     * @param string                 $tenantClass
-     */
     public function __construct(EntityManagerInterface $em, LoggerInterface $logger, string $tenantClass)
     {
         $this->em = $em;
@@ -41,23 +26,18 @@ class HandshakeController
         $this->tenantClass = $tenantClass;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function registerAction(Request $request): Response
     {
         $content = $request->getContent();
-        $content = \json_decode($content, true);
+        $content = json_decode($content, true);
 
         /** @var TenantInterface $tenant */
         /** @noinspection PhpUndefinedMethodInspection */
         $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($content['clientKey']);
 
-        if ($tenant !== null) {
+        if (null !== $tenant) {
             try {
-                $authorizationHeaderArray = \explode(' ', $request->headers->get('authorization'));
+                $authorizationHeaderArray = explode(' ', $request->headers->get('authorization'));
 
                 if (\count($authorizationHeaderArray) <= 1) {
                     throw new \InvalidArgumentException('Bad authorization header');

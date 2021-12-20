@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Functional;
 
@@ -6,16 +8,10 @@ use AtlassianConnectBundle\Service\QSHGenerator;
 use Firebase\JWT\JWT;
 
 /**
- * Class AuthenticatorTest
- *
  * Tests JWTAuthenticator and LegacyJWTAuthenticator
  */
 final class AuthenticatorTest extends AbstractWebTestCase
 {
-    /**
-     * test a protected route without any authentication headers
-     * also test the entry point response
-     */
     public function testProtectedRouteWithoutAuthentication(): void
     {
         $client = self::createClient();
@@ -26,31 +22,22 @@ final class AuthenticatorTest extends AbstractWebTestCase
         $this->assertSame('Authentication header required', $client->getResponse()->getContent());
     }
 
-    /**
-     * test authentication with bearer endpoint
-     */
     public function testProtectedRouteWithBearerToken(): void
     {
-        $client = self::createClient([], ['HTTP_AUTHORIZATION' => 'Bearer '.$this->getTenantJWTCode()]);
+        $client = self::createClient([], ['HTTP_AUTHORIZATION' => 'Bearer ' . $this->getTenantJWTCode()]);
 
         $client->request('GET', '/protected/route');
         $this->assertResponseIsSuccessful();
     }
 
-    /**
-     * test authentication with jwt endpoint
-     */
     public function testProtectedRouteWithQueryToken(): void
     {
         $client = self::createClient();
 
-        $client->request('GET', '/protected/route?jwt='.$this->getTenantJWTCode());
+        $client->request('GET', '/protected/route?jwt=' . $this->getTenantJWTCode());
         $this->assertResponseIsSuccessful();
     }
 
-    /**
-     * test authentication in dev mode
-     */
     public function testProtectedRouteInDevEnvironment(): void
     {
         $client = self::createClient(['environment' => 'dev']);
@@ -59,9 +46,6 @@ final class AuthenticatorTest extends AbstractWebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    /**
-     * test authentication with invalid jwt token
-     */
     public function testProtectedRouteWithInvalidJWTToken(): void
     {
         $client = self::createClient();
@@ -71,15 +55,12 @@ final class AuthenticatorTest extends AbstractWebTestCase
         $this->assertEquals('Authentication Failed: Failed to parse token', $client->getResponse()->getContent());
     }
 
-    /**
-     * @return string
-     */
     public function getTenantJWTCode(): string
     {
         return JWT::encode([
             'iss' => 'client_key',
-            'iat' => \time(),
-            'exp' => \strtotime('+1 day'),
+            'iat' => time(),
+            'exp' => strtotime('+1 day'),
             'qsh' => QSHGenerator::generate('/protected_route', 'GET'),
             'sub' => 'admin',
         ], 'shared_secret');

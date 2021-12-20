@@ -21,9 +21,7 @@
     "firebase/php-jwt": "^5.0"
   },
   "require-dev": {
-    "escapestudios/symfony2-coding-standard": "^3.0",
     "phpunit/phpunit": "^9.5.10",
-    "slevomat/coding-standard": "^6.4",
     "symfony/framework-bundle": "^4.4|^5.4|^6.0",
     "doctrine/doctrine-bundle": "^1.12|^2.5",
     "symfony/browser-kit": "^4.4|^5.4|^6.0",

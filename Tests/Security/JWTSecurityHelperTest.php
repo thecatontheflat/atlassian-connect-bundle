@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Security;
 
@@ -11,9 +13,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Class JWTSecurityHelperTest
- */
 final class JWTSecurityHelperTest extends TestCase
 {
     /**
@@ -21,14 +20,8 @@ final class JWTSecurityHelperTest extends TestCase
      */
     private $em;
 
-    /**
-     * @var JWTSecurityHelper
-     */
-    private $helper;
+    private JWTSecurityHelper $helper;
 
-    /**
-     * Setup method
-     */
     protected function setUp(): void
     {
         $this->em = $this->createMock(EntityManagerInterface::class);
@@ -37,11 +30,6 @@ final class JWTSecurityHelperTest extends TestCase
 
     /**
      * @dataProvider supportsRequestProvider
-     *
-     * @param Request  $request
-     * @param bool     $supportsRequest
-     * @param int|null $devTenant
-     * @param string   $environment
      */
     public function testSupportsRequest(
         Request $request,
@@ -54,9 +42,6 @@ final class JWTSecurityHelperTest extends TestCase
         $this->assertSame($supportsRequest, $helper->supportsRequest($request));
     }
 
-    /**
-     * @return \Generator
-     */
     public function supportsRequestProvider(): \Generator
     {
         $request = new Request(['jwt' => 'token']);
@@ -79,9 +64,6 @@ final class JWTSecurityHelperTest extends TestCase
         yield 'dev_tenant_prod' => [new Request(), false, 1, 'prod'];
     }
 
-    /**
-     * Test if the jwt token can be fetched from the query parameters.
-     */
     public function testGetJWTFromQueryParameter(): void
     {
         $request = new Request(['jwt' => 'token']);
@@ -89,9 +71,6 @@ final class JWTSecurityHelperTest extends TestCase
         $this->assertSame('token', $this->helper->getJWTToken($request));
     }
 
-    /**
-     * Test if the jwt token can be fetched from the request headers.
-     */
     public function testGetJWTFromAuthorizationHeader(): void
     {
         $request = new Request();
@@ -100,9 +79,6 @@ final class JWTSecurityHelperTest extends TestCase
         $this->assertSame('token', $this->helper->getJWTToken($request));
     }
 
-    /**
-     * Test if the jwt token can be fetched from the dev tenant.
-     */
     public function testGetJWTFromDevTenant(): void
     {
         $tenant = new Tenant();
@@ -129,9 +105,6 @@ final class JWTSecurityHelperTest extends TestCase
         );
     }
 
-    /**
-     * Test repository cannot find tenant
-     */
     public function testCannotFindTenant(): void
     {
         $this->expectException(\RuntimeException::class);
@@ -151,9 +124,6 @@ final class JWTSecurityHelperTest extends TestCase
         $this->helper->getJWTToken(new Request());
     }
 
-    /**
-     * Test there is no jwt token at all
-     */
     public function testNoJWTToken(): void
     {
         $helper = new JWTSecurityHelper($this->em, 1, 'prod', TenantInterface::class);

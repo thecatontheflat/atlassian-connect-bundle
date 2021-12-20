@@ -1,18 +1,14 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Controller;
 
 use AtlassianConnectBundle\Controller\DescriptorController;
 use PHPUnit\Framework\TestCase;
 
-/**
- * DescriptorControllerTest
- */
 class DescriptorControllerTest extends TestCase
 {
-    /**
-     * Test
-     */
     public function testIndexAction(): void
     {
         $controller = new DescriptorController($data = [
@@ -21,6 +17,6 @@ class DescriptorControllerTest extends TestCase
 
         $response = $controller->indexAction();
         self::assertEquals(200, $response->getStatusCode());
-        self::assertEquals(\json_encode($data), $response->getContent());
+        self::assertEquals(json_encode($data), $response->getContent());
     }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Security;
 
@@ -18,9 +20,6 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationExc
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-/**
- * Class JWTAuthenticatorTest
- */
 final class JWTAuthenticatorTest extends TestCase
 {
     /**
@@ -33,14 +32,8 @@ final class JWTAuthenticatorTest extends TestCase
      */
     private $securityHelper;
 
-    /**
-     * @var JWTAuthenticator
-     */
-    private $jwtAuthenticator;
+    private JWTAuthenticator $jwtAuthenticator;
 
-    /**
-     * Setup function
-     */
     protected function setUp(): void
     {
         if (Kernel::VERSION_ID < 50100) {
@@ -55,9 +48,6 @@ final class JWTAuthenticatorTest extends TestCase
         );
     }
 
-    /**
-     * Tests if the request is supported
-     */
     public function testSupportsRequest(): void
     {
         $this->securityHelper
@@ -69,9 +59,6 @@ final class JWTAuthenticatorTest extends TestCase
         $this->assertTrue($this->jwtAuthenticator->supports($request));
     }
 
-    /**
-     * Test the authenticate method
-     */
     public function testAuthenticate(): void
     {
         $token = [
@@ -99,7 +86,7 @@ final class JWTAuthenticatorTest extends TestCase
 
         $result = $this->jwtAuthenticator->authenticate($request);
 
-        if (\class_exists(UserBadge::class)) {
+        if (class_exists(UserBadge::class)) {
             $this->assertEquals(
                 new SelfValidatingPassport(new UserBadge('key')),
                 $result
@@ -112,9 +99,6 @@ final class JWTAuthenticatorTest extends TestCase
         }
     }
 
-    /**
-     * Test if an exception is thrown when no jwt token is present
-     */
     public function testAuthenticateHasNoJWTToken(): void
     {
         $this->expectException(CustomUserMessageAuthenticationException::class);
@@ -129,9 +113,6 @@ final class JWTAuthenticatorTest extends TestCase
         $this->jwtAuthenticator->authenticate($request);
     }
 
-    /**
-     * Test if an exception is thrown when no client key is present
-     */
     public function testAuthenticateHasNoClientKey(): void
     {
         $this->expectException(CustomUserMessageAuthenticationException::class);
@@ -157,9 +138,6 @@ final class JWTAuthenticatorTest extends TestCase
         $this->jwtAuthenticator->authenticate($request);
     }
 
-    /**
-     * test onAuthenticationFailure Method
-     */
     public function testItSendsAResponseOnAuthenticationFailure(): void
     {
         $response = $this->jwtAuthenticator->onAuthenticationFailure(new Request(), new AuthenticationException('Error'));
@@ -168,17 +146,11 @@ final class JWTAuthenticatorTest extends TestCase
         $this->assertEquals(403, $response->getStatusCode());
     }
 
-    /**
-     * test onAuthenticationSuccess method
-     */
     public function testItDoesNotSendAResponseOnAuthenticationSuccess(): void
     {
         $this->assertNull($this->jwtAuthenticator->onAuthenticationSuccess(new Request(), $this->createMock(TokenInterface::class), 'main'));
     }
 
-    /**
-     * test start method
-     */
     public function testStartMethod(): void
     {
         $this->assertEquals(

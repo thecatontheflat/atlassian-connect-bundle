@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Listener;
 
@@ -18,9 +20,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class LicenseListenerTest
- */
 final class LicenseListenerTest extends TestCase
 {
     /**
@@ -38,14 +37,8 @@ final class LicenseListenerTest extends TestCase
      */
     private $tokenStorage;
 
-    /**
-     * @var LicenseListener
-     */
-    private $listener;
+    private LicenseListener $listener;
 
-    /**
-     * setUp
-     */
     protected function setUp(): void
     {
         $this->router = $this->createMock(RouterInterface::class);
@@ -58,9 +51,6 @@ final class LicenseListenerTest extends TestCase
         );
     }
 
-    /**
-     * Test
-     */
     public function testItSkipsOnASubRequest(): void
     {
         $attributeParameterBag = $this->createMock(ParameterBagInterface::class);
@@ -80,9 +70,6 @@ final class LicenseListenerTest extends TestCase
         $this->listener->onKernelRequest($event);
     }
 
-    /**
-     * Test
-     */
     public function testItSkipsWhenTheRouteIsNullAndRouteRequiresNoLicense(): void
     {
         $request = new Request(
@@ -107,9 +94,6 @@ final class LicenseListenerTest extends TestCase
         $this->listener->onKernelRequest($event);
     }
 
-    /**
-     * Test
-     */
     public function testLicenseIsNotActiveOrDevelopment(): void
     {
         $request1 = new Request(
@@ -155,9 +139,6 @@ final class LicenseListenerTest extends TestCase
         $this->listener->onKernelRequest($event2);
     }
 
-    /**
-     * Test
-     */
     public function testUserIsNoTenant(): void
     {
         $request = new Request(
@@ -208,9 +189,6 @@ final class LicenseListenerTest extends TestCase
         $this->assertEquals('http://website.com', $response->getTargetUrl());
     }
 
-    /**
-     * Test
-     */
     public function testTenantIsWhiteListed(): void
     {
         $request = new Request(
@@ -254,9 +232,6 @@ final class LicenseListenerTest extends TestCase
         $this->listener->onKernelRequest($event);
     }
 
-    /**
-     * Test
-     */
     public function testIsValidByWhiteList(): void
     {
         $request = new Request(
@@ -313,9 +288,6 @@ final class LicenseListenerTest extends TestCase
         $this->assertNull($event->getResponse());
     }
 
-    /**
-     * Test
-     */
     public function testWhiteListIsExpired(): void
     {
         $request = new Request(
@@ -381,9 +353,6 @@ final class LicenseListenerTest extends TestCase
         $this->assertEquals('http://website.com', $response->getTargetUrl());
     }
 
-    /**
-     * Test
-     */
     public function testThrowsException(): void
     {
         $request = new Request(
@@ -427,18 +396,9 @@ final class LicenseListenerTest extends TestCase
         $this->assertEquals('http://website.com', $response->getTargetUrl());
     }
 
-    /**
-     * Gets an event according to the symfony version
-     *
-     * @param KernelInterface $kernel
-     * @param Request         $request
-     * @param int             $type
-     *
-     * @return GetResponseEvent|RequestEvent
-     */
     private function getEvent(KernelInterface $kernel, Request $request, int $type)
     {
-        if (\class_exists(RequestEvent::class)) {
+        if (class_exists(RequestEvent::class)) {
             return new RequestEvent($kernel, $request, $type);
         }
 
