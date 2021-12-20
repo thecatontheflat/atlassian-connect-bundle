@@ -10,22 +10,15 @@ use Symfony\Component\HttpFoundation\Response;
 class DescriptorController
 {
     /**
-     * @var string
-     */
-    private $env;
-
-    /**
      * @var array<mixed>
      */
     private $config;
 
     /**
-     * @param string       $env
      * @param array<mixed> $config
      */
-    public function __construct(string $env, array $config)
+    public function __construct(array $config)
     {
-        $this->env = $env ?: 'dev';
         $this->config = $config;
     }
 
@@ -34,8 +27,7 @@ class DescriptorController
      */
     public function indexAction(): Response
     {
-        $envConfig = $this->config[$this->env];
-        $descriptor = \json_encode($envConfig);
+        $descriptor = \json_encode($this->config);
 
         $response = new Response();
         $response->setContent($descriptor);

@@ -12,7 +12,7 @@ final class DescriptorControllerTest extends AbstractWebTestCase
      */
     public function testGetDescriptor(): void
     {
-        $client = self::createClient(['environment' => 'prod']);
+        $client = self::createClient();
         $client->request('GET', '/atlassian-connect.json');
 
         $this->assertResponseIsSuccessful();
@@ -20,7 +20,7 @@ final class DescriptorControllerTest extends AbstractWebTestCase
         $descriptor = \json_decode($client->getResponse()->getContent(), true);
         $config = self::getParentContainer()->getParameter('atlassian_connect');
         $this->assertSame(
-            $config['prod'],
+            $config,
             $descriptor
         );
     }

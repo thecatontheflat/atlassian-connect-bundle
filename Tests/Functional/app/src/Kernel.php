@@ -2,12 +2,20 @@
 
 namespace AtlassianConnectBundle\Tests\Functional\App;
 
+use AtlassianConnectBundle\AtlassianConnectBundle;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
+use Symfony\Component\Routing\RouteCollectionBuilder;
 
 /**
  * class Kernel
@@ -15,6 +23,21 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 final class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
+
+    /**
+     * @return array<BundleInterface>
+     */
+    public function registerBundles(): array
+    {
+        return [
+            new FrameworkBundle(),
+            new TwigBundle(),
+            new SecurityBundle(),
+            new DoctrineBundle(),
+            new DoctrineFixturesBundle(),
+            new AtlassianConnectBundle(),
+        ];
+    }
 
     /**
      * @return string
@@ -41,20 +64,23 @@ final class Kernel extends BaseKernel
     }
 
     /**
-     * @param ContainerConfigurator $container
+     * @param ContainerBuilder $container
+     * @param LoaderInterface  $loader
+     *
+     * @return void
      */
-    public function configureContainer(ContainerConfigurator $container): void
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
-        $container->import('../config/{packages}/*.yaml');
-        $container->import('../config/{services}*.yaml');
-    }
+        $configDir = $this->getProjectDir().'/config';
 
-    /**
-     * @param RoutingConfigurator $routes
-     */
-    public function configureRoutes(RoutingConfigurator $routes): void
-    {
-        $routes->import('../config/routes.yaml');
+        if (BaseKernel::VERSION_ID >= 50400) {
+            $loader->load($configDir.'/{base}/*.yaml', 'glob');
+        } else {
+            $loader->load($configDir.'/{base_old}/*.yaml', 'glob');
+        }
+
+        $loader->load($configDir.'/{packages}/*.yaml', 'glob');
+        $loader->load($configDir.'/{services}.yaml', 'glob');
     }
 
     /**
@@ -63,5 +89,15 @@ final class Kernel extends BaseKernel
     protected function build(ContainerBuilder $container): void
     {
         $container->register('logger', NullLogger::class);
+    }
+
+    /**
+     * TODO: Drop RouteCollectionBuilder when support for Symfony 4.4 is dropped.
+     *
+     * @param RoutingConfigurator|RouteCollectionBuilder $routes
+     */
+    protected function configureRoutes($routes)
+    {
+        $routes->import($this->getProjectDir().'/config/routes.yaml');
     }
 }

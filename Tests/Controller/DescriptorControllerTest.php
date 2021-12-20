@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace AtlassianConnectBundle\Tests\DependencyInjection;
+namespace AtlassianConnectBundle\Tests\Controller;
 
 use AtlassianConnectBundle\Controller\DescriptorController;
 use PHPUnit\Framework\TestCase;
@@ -15,14 +15,8 @@ class DescriptorControllerTest extends TestCase
      */
     public function testIndexAction(): void
     {
-        $data = [
+        $controller = new DescriptorController($data = [
             'name' => 'test dev',
-        ];
-
-        $controller = new DescriptorController('dev', [
-            'dev_tenant' => 1,
-            'prod' => [],
-            'dev' => $data,
         ]);
 
         $response = $controller->indexAction();

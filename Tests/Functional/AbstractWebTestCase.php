@@ -4,25 +4,12 @@ namespace AtlassianConnectBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * abstract class AbstractWebTestCase
  */
 abstract class AbstractWebTestCase extends WebTestCase
 {
-    /**
-     * setup method
-     */
-    protected function setUp(): void
-    {
-        if (Kernel::VERSION_ID >= 50100) {
-            return;
-        }
-
-        $this->markTestSkipped('These tests only run on Symfony 5.2 or higher');
-    }
-
     /**
      * @return ContainerInterface
      */

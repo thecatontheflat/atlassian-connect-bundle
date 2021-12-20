@@ -26,7 +26,6 @@ services:
 
     AtlassianConnectBundle\Controller\DescriptorController:
         arguments:
-            $env: '%kernel.environment%'
             $config: '%atlassian_connect%'
 
     AtlassianConnectBundle\Command\RequestAPICommand:
