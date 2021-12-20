@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Controller;
 
@@ -10,14 +12,8 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\Logger;
 
-/**
- * HandshakeControllerTest
- */
 class HandshakeControllerTest extends TestCase
 {
-    /**
-     * Test
-     */
     public function testIndexAction(): void
     {
         $tenantRepository = $this->getMockBuilder(ObjectRepository::class)->addMethods(['findOneByClientKey'])->getMockForAbstractClass();
@@ -31,7 +27,7 @@ class HandshakeControllerTest extends TestCase
             ->willReturn($tenantRepository);
 
         $controller = new HandshakeController($objectManager, new Logger(), Tenant::class);
-        $request = new Request([], [], [], [], [], [], \json_encode([
+        $request = new Request([], [], [], [], [], [], json_encode([
             'key' => 'test',
             'clientKey' => 'test',
             'publicKey' => 'test',

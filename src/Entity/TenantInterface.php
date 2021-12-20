@@ -1,12 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Interface TenantInterface
- */
 interface TenantInterface extends UserInterface
 {
     /**
@@ -14,107 +13,35 @@ interface TenantInterface extends UserInterface
      */
     public function getRoles(): array;
 
-    /**
-     * @return string|null
-     */
     public function getSharedSecret(): ?string;
 
-    /**
-     * @return string|null
-     */
     public function getOauthClientId(): ?string;
 
-    /**
-     * @return string|null
-     */
     public function getBaseUrl(): ?string;
 
-    /**
-     * @return string|null
-     */
     public function getAddonKey(): ?string;
 
-    /**
-     * @param string $name
-     *
-     * @return TenantInterface
-     */
-    public function setUsername(string $name): TenantInterface;
+    public function setUsername(string $name): self;
 
-    /**
-     * @param string $addonKey
-     *
-     * @return TenantInterface
-     */
-    public function setAddonKey(string $addonKey): TenantInterface;
+    public function setAddonKey(string $addonKey): self;
 
-    /**
-     * @param string $clientKey
-     *
-     * @return TenantInterface
-     */
-    public function setClientKey(string $clientKey): TenantInterface;
+    public function setClientKey(string $clientKey): self;
 
-    /**
-     * @param string $publicKey
-     *
-     * @return TenantInterface
-     */
-    public function setPublicKey(string $publicKey): TenantInterface;
+    public function setPublicKey(string $publicKey): self;
 
-    /**
-     * @param string $sharedSecret
-     *
-     * @return TenantInterface
-     */
-    public function setSharedSecret(string $sharedSecret): TenantInterface;
+    public function setSharedSecret(string $sharedSecret): self;
 
-    /**
-     * @param string $serverVersion
-     *
-     * @return TenantInterface
-     */
-    public function setServerVersion(string $serverVersion): TenantInterface;
+    public function setServerVersion(string $serverVersion): self;
 
-    /**
-     * @param string $pluginsVersion
-     *
-     * @return TenantInterface
-     */
-    public function setPluginsVersion(string $pluginsVersion): TenantInterface;
+    public function setPluginsVersion(string $pluginsVersion): self;
 
-    /**
-     * @param string $baseUrl
-     *
-     * @return TenantInterface
-     */
-    public function setBaseUrl(string $baseUrl): TenantInterface;
+    public function setBaseUrl(string $baseUrl): self;
 
-    /**
-     * @param string $productType
-     *
-     * @return TenantInterface
-     */
-    public function setProductType(string $productType): TenantInterface;
+    public function setProductType(string $productType): self;
 
-    /**
-     * @param string $description
-     *
-     * @return TenantInterface
-     */
-    public function setDescription(string $description): TenantInterface;
+    public function setDescription(string $description): self;
 
-    /**
-     * @param string $eventType
-     *
-     * @return TenantInterface
-     */
-    public function setEventType(string $eventType): TenantInterface;
+    public function setEventType(string $eventType): self;
 
-    /**
-     * @param string|null $oauthClientId
-     *
-     * @return TenantInterface
-     */
-    public function setOauthClientId(?string $oauthClientId): TenantInterface;
+    public function setOauthClientId(?string $oauthClientId): self;
 }

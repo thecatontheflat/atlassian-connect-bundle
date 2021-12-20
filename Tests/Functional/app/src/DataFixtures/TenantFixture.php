@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Functional\App\DataFixtures;
 
@@ -6,14 +8,8 @@ use AtlassianConnectBundle\Entity\Tenant;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-/**
- * class TenantFixture
- */
 final class TenantFixture extends Fixture
 {
-    /**
-     * @param ObjectManager $manager
-     */
     public function load(ObjectManager $manager)
     {
         $tenant = new Tenant();

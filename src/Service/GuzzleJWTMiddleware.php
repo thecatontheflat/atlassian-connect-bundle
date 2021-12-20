@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Service;
 
@@ -7,40 +9,20 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\RequestInterface;
 
-/**
- * Class GuzzleJWTMiddleware
- */
 class GuzzleJWTMiddleware
 {
-    /**
-     * JWT Authentication middleware for Guzzle
-     *
-     * @param string $issuer Add-on key in most cases
-     * @param string $secret Shared secret
-     *
-     * @return callable
-     */
     public static function authTokenMiddleware(string $issuer, string $secret): callable
     {
         return Middleware::mapRequest(
             static function (RequestInterface $request) use ($issuer, $secret) {
                 return $request->withHeader(
                     'Authorization',
-                    'JWT '.JWTGenerator::generate($request, $issuer, $secret)
+                    'JWT ' . JWTGenerator::generate($request, $issuer, $secret)
                 );
             }
         );
     }
 
-    /**
-     * @param ClientInterface $client
-     * @param string          $oauthClientId
-     * @param string          $secret
-     * @param string          $baseUrl
-     * @param string          $username
-     *
-     * @return callable
-     */
     public static function authUserTokenMiddleware(
         ClientInterface $client,
         string $oauthClientId,
@@ -54,21 +36,12 @@ class GuzzleJWTMiddleware
                     ->withHeader('Accept', 'application/json')
                     ->withHeader(
                         'Authorization',
-                        'Bearer '.self::getAuthToken($client, $oauthClientId, $secret, $baseUrl, $username)
+                        'Bearer ' . self::getAuthToken($client, $oauthClientId, $secret, $baseUrl, $username)
                     );
             }
         );
     }
 
-    /**
-     * @param ClientInterface $client
-     * @param string          $oauthClientId
-     * @param string          $secret
-     * @param string          $baseUrl
-     * @param string          $username
-     *
-     * @return string
-     */
     private static function getAuthToken(
         ClientInterface $client,
         string $oauthClientId,
@@ -83,6 +56,6 @@ class GuzzleJWTMiddleware
             ],
         ]);
 
-        return \json_decode($result->getBody()->getContents(), true)['access_token'];
+        return json_decode($result->getBody()->getContents(), true)['access_token'];
     }
 }

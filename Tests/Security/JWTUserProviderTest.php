@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Security;
 
@@ -14,29 +16,20 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class JWTUserProviderTest
- */
 final class JWTUserProviderTest extends TestCase
 {
-    /**
-     * @var EntityManagerInterface|MockObject
-     */
-    private $entityManager;
-
-    /**
-     * @var JWTUserProvider
-     */
-    private $userProvider;
-
     /**
      * @var EntityRepository|MockObject
      */
     private $entityRepository;
 
     /**
-     * Setup properties
+     * @var EntityManagerInterface|MockObject
      */
+    private $entityManager;
+
+    private JWTUserProvider $userProvider;
+
     protected function setUp(): void
     {
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
@@ -54,13 +47,6 @@ final class JWTUserProviderTest extends TestCase
 
     /**
      * @dataProvider jwtTokenProvider
-     *
-     * @param string $jwt
-     * @param string $secret
-     * @param string $isstoken
-     * @param string $sub
-     * @param string $name
-     * @param int    $iat
      */
     public function testItDecodesAToken(string $jwt, string $secret, string $isstoken, string $sub, string $name, int $iat): void
     {
@@ -83,9 +69,6 @@ final class JWTUserProviderTest extends TestCase
         $this->assertEquals($iat, $token->iat);
     }
 
-    /**
-     * @return \Generator
-     */
     public function jwtTokenProvider(): \Generator
     {
         yield [
@@ -107,9 +90,6 @@ final class JWTUserProviderTest extends TestCase
         ];
     }
 
-    /**
-     * test decoded token fails
-     */
     public function testItFailsToDecodeToken(): void
     {
         $this->expectException(AuthenticationException::class);
@@ -117,9 +97,6 @@ final class JWTUserProviderTest extends TestCase
         $this->userProvider->getDecodedToken('invalid_token');
     }
 
-    /**
-     * test loadUserByUsername method
-     */
     public function testLoadsUserByUserName(): void
     {
         $tenant = $this->createMock(TenantInterface::class);
@@ -136,9 +113,6 @@ final class JWTUserProviderTest extends TestCase
         $this->assertSame($result, $tenant);
     }
 
-    /**
-     * Test it fails to load a user by user name
-     */
     public function testItFailsToLoadAUserByUserName(): void
     {
         $this->expectException(UsernameNotFoundException::class);
@@ -154,9 +128,6 @@ final class JWTUserProviderTest extends TestCase
         $this->userProvider->loadUserByUsername('key');
     }
 
-    /**
-     * Test refresh user is not supported
-     */
     public function testRefreshUserIsNotSupported(): void
     {
         $this->expectException(UnsupportedUserException::class);
@@ -165,9 +136,6 @@ final class JWTUserProviderTest extends TestCase
     }
 
     /**
-     * @param mixed $class
-     * @param bool  $isSupported
-     *
      * @dataProvider classProvider
      */
     public function testItSupportsAclass($class, bool $isSupported): void
@@ -177,9 +145,6 @@ final class JWTUserProviderTest extends TestCase
         $this->assertEquals($isSupported, $result);
     }
 
-    /**
-     * @return \Generator
-     */
     public function classProvider(): \Generator
     {
         yield [new Tenant(), true];

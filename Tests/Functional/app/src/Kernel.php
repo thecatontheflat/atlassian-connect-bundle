@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Functional\App;
 
@@ -17,9 +19,6 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
-/**
- * class Kernel
- */
 final class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
@@ -39,53 +38,35 @@ final class Kernel extends BaseKernel
         ];
     }
 
-    /**
-     * @return string
-     */
     public function getProjectDir(): string
     {
         return \dirname(__DIR__);
     }
 
-    /**
-     * @return string
-     */
     public function getCacheDir(): string
     {
-        return \sys_get_temp_dir().'/com.github.thecatontheflat.atlassian/tests/var/cache';
+        return sys_get_temp_dir() . '/com.github.thecatontheflat.atlassian/tests/var/cache';
     }
 
-    /**
-     * @return string
-     */
     public function getLogDir(): string
     {
-        return \sys_get_temp_dir().'/com.github.thecatontheflat.atlassian/tests/var'.$this->environment.'/log';
+        return sys_get_temp_dir() . '/com.github.thecatontheflat.atlassian/tests/var' . $this->environment . '/log';
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param LoaderInterface  $loader
-     *
-     * @return void
-     */
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
-        $configDir = $this->getProjectDir().'/config';
+        $configDir = $this->getProjectDir() . '/config';
 
         if (BaseKernel::VERSION_ID >= 50400) {
-            $loader->load($configDir.'/{base}/*.yaml', 'glob');
+            $loader->load($configDir . '/{base}/*.yaml', 'glob');
         } else {
-            $loader->load($configDir.'/{base_old}/*.yaml', 'glob');
+            $loader->load($configDir . '/{base_old}/*.yaml', 'glob');
         }
 
-        $loader->load($configDir.'/{packages}/*.yaml', 'glob');
-        $loader->load($configDir.'/{services}.yaml', 'glob');
+        $loader->load($configDir . '/{packages}/*.yaml', 'glob');
+        $loader->load($configDir . '/{services}.yaml', 'glob');
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     protected function build(ContainerBuilder $container): void
     {
         $container->register('logger', NullLogger::class);
@@ -98,6 +79,6 @@ final class Kernel extends BaseKernel
      */
     protected function configureRoutes($routes)
     {
-        $routes->import($this->getProjectDir().'/config/routes.yaml');
+        $routes->import($this->getProjectDir() . '/config/routes.yaml');
     }
 }

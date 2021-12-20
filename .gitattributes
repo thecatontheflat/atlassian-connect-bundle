@@ -1,0 +1,9 @@
+/.github                    export-ignore
+/Tests                      export-ignore
+/.gitignore                 export-ignore
+/.gitattributes             export-ignore
+/.php-cs-fixer.dist.php     export-ignore
+/.scrutinizer.yml           export-ignore
+/phpunit.xml.dist           export-ignore
+/tools                      export-ignore
+/tools/*                    binary

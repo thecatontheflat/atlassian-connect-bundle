@@ -1,9 +1,12 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Command;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
 use AtlassianConnectBundle\Service\AtlassianRestClient;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,30 +14,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class RequestAPICommand
- */
 class RequestAPICommand extends Command
 {
-    /**
-     * @var bool
-     */
-    protected $shouldNotRun;
+    private EntityManagerInterface $em;
 
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
+    private string $tenantClass;
 
-    /**
-     * @var string
-     */
-    private $tenantClass;
-
-    /**
-     * @param ManagerRegistry $registry
-     * @param string          $tenantClass
-     */
     public function __construct(ManagerRegistry $registry, string $tenantClass)
     {
         $this->em = $registry->getManager();
@@ -43,9 +28,6 @@ class RequestAPICommand extends Command
         parent::__construct();
     }
 
-    /**
-     * @return void
-     */
     protected function configure(): void
     {
         $this
@@ -56,17 +38,11 @@ class RequestAPICommand extends Command
             ->setDescription('Request REST end-points. Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return void
-     */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $restUrl = $input->getArgument('rest-url');
 
-        /** @var TenantInterface $tenant */
+        /* @var TenantInterface $tenant */
         if ($input->getOption('tenant-id')) {
             $tenant = $this->em->getRepository($this->tenantClass)->find($input->getOption('tenant-id'));
         } elseif ($input->getOption('client-key')) {
@@ -80,7 +56,7 @@ class RequestAPICommand extends Command
         $json = $request->get($restUrl);
 
         $output->writeln('');
-        echo \json_encode($json, \JSON_PRETTY_PRINT);
+        echo json_encode($json, \JSON_PRETTY_PRINT);
         $output->writeln('');
     }
 }

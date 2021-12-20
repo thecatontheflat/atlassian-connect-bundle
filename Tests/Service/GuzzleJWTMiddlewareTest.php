@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Tests\Service;
 
@@ -12,14 +14,14 @@ use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class GuzzleJWTMiddlewareTest
+ * Class GuzzleJWTMiddlewareTest.
  *
  * @covers \AtlassianConnectBundle\Service\GuzzleJWTMiddleware
  */
 final class GuzzleJWTMiddlewareTest extends TestCase
 {
     /**
-     * Test if authorization header is set when using auth tokens
+     * Test if authorization header is set when using auth tokens.
      */
     public function testAuthTokenMiddleware(): void
     {
@@ -40,12 +42,12 @@ final class GuzzleJWTMiddlewareTest extends TestCase
     }
 
     /**
-     * Test if authorization and accept headers are set with user auth middleware
+     * Test if authorization and accept headers are set with user auth middleware.
      */
     public function testAuthUserTokenMiddleware(): void
     {
         $mock = new MockHandler([
-            new Response(200, [], \json_encode(['access_token' => 'token'])),
+            new Response(200, [], json_encode(['access_token' => 'token'])),
         ]);
         $client = new Client(['handler' => HandlerStack::create($mock)]);
 

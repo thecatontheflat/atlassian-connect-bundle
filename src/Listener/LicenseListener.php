@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Listener;
 
@@ -9,25 +11,12 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-/**
- * Class LicenseListener
- */
 class LicenseListener
 {
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @var TokenStorageInterface
-     */
-    protected $tokenStorage;
+    protected TokenStorageInterface $tokenStorage;
 
-    /**
-     * @param RouterInterface       $router
-     * @param TokenStorageInterface $tokenStorage
-     */
     public function __construct(RouterInterface $router, TokenStorageInterface $tokenStorage)
     {
         $this->router = $router;
@@ -36,8 +25,6 @@ class LicenseListener
 
     /**
      * @param GetResponseEvent|RequestEvent $event
-     *
-     * @return void
      */
     public function onKernelRequest($event): void
     {
@@ -45,7 +32,7 @@ class LicenseListener
             throw new \InvalidArgumentException();
         }
 
-        $mainRequest = \method_exists($event, 'isMainRequest')
+        $mainRequest = method_exists($event, 'isMainRequest')
             ? 'isMainRequest'
             : 'isMasterRequest'
         ;
@@ -58,11 +45,11 @@ class LicenseListener
         $route = $request->attributes->get('_route');
         $kernel = $event->getKernel();
 
-        if ($route !== null && !$request->attributes->get('requires_license')) {
+        if (null !== $route && !$request->attributes->get('requires_license')) {
             return;
         }
 
-        if ($request->get('lic') === 'active' || $kernel->getEnvironment() !== 'prod') {
+        if ('active' === $request->get('lic') || 'prod' !== $kernel->getEnvironment()) {
             return;
         }
 
@@ -76,10 +63,10 @@ class LicenseListener
                     return;
                 }
 
-                $today = \date('Y-m-d');
+                $today = date('Y-m-d');
                 $whitelist = $kernel->getContainer()->getParameter('license_whitelist');
 
-                /** @noinspection ForeachSourceInspection */
+                /* @noinspection ForeachSourceInspection */
                 foreach ($whitelist as $allowed) {
                     if ($today <= $allowed['valid_till'] && $allowed['client_key'] === $user->getClientKey()) {
                         return;
