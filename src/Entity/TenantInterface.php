@@ -21,7 +21,11 @@ interface TenantInterface extends UserInterface
 
     public function getAddonKey(): ?string;
 
+    public function getClientKey(): ?string;
+
     public function setUsername(string $name): self;
+
+    public function isWhiteListed(): bool;
 
     public function setAddonKey(string $addonKey): self;
 

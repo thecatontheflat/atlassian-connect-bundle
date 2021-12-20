@@ -20,9 +20,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class GuzzleJWTMiddlewareTest extends TestCase
 {
-    /**
-     * Test if authorization header is set when using auth tokens.
-     */
     public function testAuthTokenMiddleware(): void
     {
         $middleware = GuzzleJWTMiddleware::authTokenMiddleware('atlassian-connect', 'secret');
@@ -41,9 +38,6 @@ final class GuzzleJWTMiddlewareTest extends TestCase
         $invokable($request, []);
     }
 
-    /**
-     * Test if authorization and accept headers are set with user auth middleware.
-     */
     public function testAuthUserTokenMiddleware(): void
     {
         $mock = new MockHandler([

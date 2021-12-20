@@ -17,4 +17,12 @@ final class ProtectedController extends AbstractController
     {
         return new Response('OK');
     }
+
+    /**
+     * @Route("/protected/license-route", defaults={"requires_license": "true"})
+     */
+    public function licenseProtectedRoute(): Response
+    {
+        return new Response('OK');
+    }
 }

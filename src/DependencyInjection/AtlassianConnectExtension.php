@@ -18,6 +18,7 @@ class AtlassianConnectExtension extends Extension
 
         $container->setParameter('atlassian_connect', $config['descriptor']);
         $container->setParameter('atlassian_connect_dev_tenant', $config['dev_tenant']);
+        $container->setParameter('atlassian_connect_license_allow_list', $config['license_allow_list']);
 
         $loader = new Loader\PhpFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));
         $loader->load('services.php');

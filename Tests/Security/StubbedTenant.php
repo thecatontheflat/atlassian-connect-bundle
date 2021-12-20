@@ -104,4 +104,12 @@ class StubbedTenant implements TenantInterface
     public function eraseCredentials(): void
     {
     }
+
+    public function getClientKey(): ?string
+    {
+    }
+
+    public function isWhiteListed(): bool
+    {
+    }
 }
