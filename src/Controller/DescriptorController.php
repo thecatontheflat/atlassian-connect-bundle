@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DescriptorController
 {
@@ -15,14 +15,8 @@ class DescriptorController
         $this->config = $config;
     }
 
-    public function indexAction(): Response
+    public function indexAction(): JsonResponse
     {
-        $descriptor = json_encode($this->config);
-
-        $response = new Response();
-        $response->setContent($descriptor);
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return new JsonResponse($this->config);
     }
 }
