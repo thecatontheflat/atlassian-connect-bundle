@@ -16,29 +16,28 @@ Installation
 
 ### Step 1. Add bundle to composer dependencies
 
-**Without Symfony Flex:**
 ```bash
 composer require thecatontheflat/atlassian-connect-bundle
 ```
 
-### Step 2. Add bundle to kernel
+### Step 2. Enable the bundle
 
-Add the bundle to `app/AppKernel.php`
+Add the bundle to `config/bundles.php`
 
 ```php
-$bundles = array(
-	// ... other bundles
-	new AtlassianConnectBundle\AtlassianConnectBundle(),
-);
+<?php
+
+return [
+    // ... other bundles
+    AtlassianConnectBundle\AtlassianConnectBundle::class => ['all' => true],
+]
 ```
 
 ### Step 3. Bundle configuration
 
-Bundle configuration includes has two main nodes - `prod` and `dev`. 
-When requesting descriptor - this configuration is converted to JSON. 
-Whatever you specify under `dev` node will override same option from `prod`.
+The bundle descriptor is used to install your app on Atlassian. When requesting descriptor - this configuration is converted to JSON. 
 
-Sample configuration in `config.yml`:
+Sample configuration in `packages/atlassian-connect.yaml`:
 
 ```yaml
     atlassian_connect:
