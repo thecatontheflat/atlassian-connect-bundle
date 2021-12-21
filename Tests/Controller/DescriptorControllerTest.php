@@ -16,7 +16,9 @@ class DescriptorControllerTest extends TestCase
         ]);
 
         $response = $controller->indexAction();
-        self::assertEquals(200, $response->getStatusCode());
-        self::assertEquals(json_encode($data), $response->getContent());
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(json_encode($data), $response->getContent());
+        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
     }
 }
