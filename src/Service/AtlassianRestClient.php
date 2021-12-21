@@ -21,6 +21,7 @@ class AtlassianRestClient
 
     public function __construct(?TenantInterface $tenant, ?TokenStorageInterface $tokenStorage = null)
     {
+        $this->user = null;
         $this->setTenant($tenant, $tokenStorage);
         $this->client = $this->createClient();
     }
