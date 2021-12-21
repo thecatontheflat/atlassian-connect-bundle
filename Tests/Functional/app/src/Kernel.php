@@ -45,26 +45,26 @@ final class Kernel extends BaseKernel
 
     public function getCacheDir(): string
     {
-        return sys_get_temp_dir() . '/com.github.thecatontheflat.atlassian/tests/var/cache';
+        return sys_get_temp_dir().'/com.github.thecatontheflat.atlassian/tests/var/cache';
     }
 
     public function getLogDir(): string
     {
-        return sys_get_temp_dir() . '/com.github.thecatontheflat.atlassian/tests/var' . $this->environment . '/log';
+        return sys_get_temp_dir().'/com.github.thecatontheflat.atlassian/tests/var'.$this->environment.'/log';
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
-        $configDir = $this->getProjectDir() . '/config';
+        $configDir = $this->getProjectDir().'/config';
 
         if (BaseKernel::VERSION_ID >= 50400) {
-            $loader->load($configDir . '/{base}/*.yaml', 'glob');
+            $loader->load($configDir.'/{base}/*.yaml', 'glob');
         } else {
-            $loader->load($configDir . '/{base_old}/*.yaml', 'glob');
+            $loader->load($configDir.'/{base_old}/*.yaml', 'glob');
         }
 
-        $loader->load($configDir . '/{packages}/*.yaml', 'glob');
-        $loader->load($configDir . '/{services}.yaml', 'glob');
+        $loader->load($configDir.'/{packages}/*.yaml', 'glob');
+        $loader->load($configDir.'/{services}.yaml', 'glob');
     }
 
     protected function build(ContainerBuilder $container): void
@@ -79,6 +79,6 @@ final class Kernel extends BaseKernel
      */
     protected function configureRoutes($routes)
     {
-        $routes->import($this->getProjectDir() . '/config/routes.yaml');
+        $routes->import($this->getProjectDir().'/config/routes.yaml');
     }
 }

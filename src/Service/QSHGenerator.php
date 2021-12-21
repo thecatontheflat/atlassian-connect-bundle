@@ -42,7 +42,7 @@ class QSHGenerator
 
             foreach ($queryArray as $key => $pieceOfQuery) {
                 $pieceOfQuery = implode(',', $pieceOfQuery);
-                $canonicalQuery .= $key . '=' . $pieceOfQuery . '&';
+                $canonicalQuery .= $key.'='.$pieceOfQuery.'&';
             }
 
             $canonicalQuery = rtrim($canonicalQuery, '&');

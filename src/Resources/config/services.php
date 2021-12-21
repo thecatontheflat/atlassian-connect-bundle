@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
@@ -37,7 +39,7 @@ return static function (ContainerConfigurator $container) {
             ->args([
                 new ReferenceConfigurator(EntityManagerInterface::class),
                 new ReferenceConfigurator(LoggerInterface::class),
-                '%atlassian_connect_tenant_entity_class%'
+                '%atlassian_connect_tenant_entity_class%',
             ])
             ->tag('controller.service_arguments')
         ->set(DescriptorController::class)

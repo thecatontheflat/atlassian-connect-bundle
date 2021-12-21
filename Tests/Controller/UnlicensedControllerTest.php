@@ -14,7 +14,7 @@ class UnlicensedControllerTest extends TestCase
     public function testUnlicensedAction(): void
     {
         $loader = new FilesystemLoader();
-        $loader->addPath(__DIR__ . '/../../src/Resources/views', 'AtlassianConnect');
+        $loader->addPath(__DIR__.'/../../src/Resources/views', 'AtlassianConnect');
 
         $twig = new Environment($loader, [
             'debug' => true,

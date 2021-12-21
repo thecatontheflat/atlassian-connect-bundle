@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AtlassianConnectBundle\Security;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;

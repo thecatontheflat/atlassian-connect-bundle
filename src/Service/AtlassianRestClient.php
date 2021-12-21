@@ -91,7 +91,7 @@ class AtlassianRestClient
     {
         // Jira return absolute self links, so its more easy to work with get with absolute urls in such cases
         if ((0 !== mb_strpos($restUrl, 'http://')) && (0 !== mb_strpos($restUrl, 'https://'))) {
-            return $this->tenant->getBaseUrl() . $restUrl;
+            return $this->tenant->getBaseUrl().$restUrl;
         }
 
         return $restUrl;

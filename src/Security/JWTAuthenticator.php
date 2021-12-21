@@ -64,7 +64,7 @@ class JWTAuthenticator extends AbstractAuthenticator implements AuthenticationEn
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new Response('Authentication Failed: ' . $exception->getMessage(), 403);
+        return new Response('Authentication Failed: '.$exception->getMessage(), 403);
     }
 
     public function start(Request $request, AuthenticationException $authException = null): Response

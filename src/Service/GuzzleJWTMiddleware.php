@@ -17,7 +17,7 @@ class GuzzleJWTMiddleware
             static function (RequestInterface $request) use ($issuer, $secret) {
                 return $request->withHeader(
                     'Authorization',
-                    'JWT ' . JWTGenerator::generate($request, $issuer, $secret)
+                    'JWT '.JWTGenerator::generate($request, $issuer, $secret)
                 );
             }
         );
@@ -36,7 +36,7 @@ class GuzzleJWTMiddleware
                     ->withHeader('Accept', 'application/json')
                     ->withHeader(
                         'Authorization',
-                        'Bearer ' . self::getAuthToken($client, $oauthClientId, $secret, $baseUrl, $username)
+                        'Bearer '.self::getAuthToken($client, $oauthClientId, $secret, $baseUrl, $username)
                     );
             }
         );

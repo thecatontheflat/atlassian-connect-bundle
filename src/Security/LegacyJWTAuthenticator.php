@@ -88,7 +88,7 @@ class LegacyJWTAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new Response('Authentication Failed: ' . $exception->getMessage(), 403);
+        return new Response('Authentication Failed: '.$exception->getMessage(), 403);
     }
 
     /**

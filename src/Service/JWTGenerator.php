@@ -24,8 +24,8 @@ class JWTGenerator
     public static function generateAssertion(string $secret, string $oauthClientId, string $baseUrl, string $user): string
     {
         $data = [
-            'iss' => 'urn:atlassian:connect:clientid:' . $oauthClientId,
-            'sub' => 'urn:atlassian:connect:useraccountid:' . $user,
+            'iss' => 'urn:atlassian:connect:clientid:'.$oauthClientId,
+            'sub' => 'urn:atlassian:connect:useraccountid:'.$user,
             'iat' => time(),
             'exp' => strtotime('+1 minutes'),
             'tnt' => $baseUrl,

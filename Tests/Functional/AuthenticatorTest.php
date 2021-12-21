@@ -8,7 +8,7 @@ use AtlassianConnectBundle\Service\QSHGenerator;
 use Firebase\JWT\JWT;
 
 /**
- * Tests JWTAuthenticator and LegacyJWTAuthenticator
+ * Tests JWTAuthenticator and LegacyJWTAuthenticator.
  */
 final class AuthenticatorTest extends AbstractWebTestCase
 {
@@ -24,7 +24,7 @@ final class AuthenticatorTest extends AbstractWebTestCase
 
     public function testProtectedRouteWithBearerToken(): void
     {
-        $client = self::createClient([], ['HTTP_AUTHORIZATION' => 'Bearer ' . $this->getTenantJWTCode()]);
+        $client = self::createClient([], ['HTTP_AUTHORIZATION' => 'Bearer '.$this->getTenantJWTCode()]);
 
         $client->request('GET', '/protected/route');
         $this->assertResponseIsSuccessful();
@@ -34,7 +34,7 @@ final class AuthenticatorTest extends AbstractWebTestCase
     {
         $client = self::createClient();
 
-        $client->request('GET', '/protected/route?jwt=' . $this->getTenantJWTCode());
+        $client->request('GET', '/protected/route?jwt='.$this->getTenantJWTCode());
         $this->assertResponseIsSuccessful();
     }
 
