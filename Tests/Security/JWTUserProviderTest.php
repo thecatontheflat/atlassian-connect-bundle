@@ -6,9 +6,8 @@ namespace AtlassianConnectBundle\Tests\Security;
 
 use AtlassianConnectBundle\Entity\Tenant;
 use AtlassianConnectBundle\Entity\TenantInterface;
+use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use AtlassianConnectBundle\Security\JWTUserProvider;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -18,31 +17,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class JWTUserProviderTest extends TestCase
 {
-    /**
-     * @var EntityRepository|MockObject
-     */
-    private $entityRepository;
-
-    /**
-     * @var EntityManagerInterface|MockObject
-     */
-    private $entityManager;
+    /** @var TenantRepositoryInterface|MockObject */
+    private $repository;
 
     private JWTUserProvider $userProvider;
 
     protected function setUp(): void
     {
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
-
-        $this->entityRepository = $this->createMock(EntityRepository::class);
-        $this->entityManager
-            ->method('getRepository')
-            ->willReturn($this->entityRepository);
-
-        $this->userProvider = new JWTUserProvider(
-            $this->entityManager,
-            Tenant::class
-        );
+        $this->repository = $this->createMock(TenantRepositoryInterface::class);
+        $this->userProvider = new JWTUserProvider($this->repository);
     }
 
     /**
@@ -56,9 +39,9 @@ final class JWTUserProviderTest extends TestCase
             ->method('getSharedSecret')
             ->willReturn($secret);
 
-        $this->entityRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with(['clientKey' => $isstoken])
+        $this->repository->expects($this->once())
+            ->method('findByClientKey')
+            ->with($isstoken)
             ->willReturn($tenant);
 
         $token = $this->userProvider->getDecodedToken($jwt);
@@ -101,12 +84,10 @@ final class JWTUserProviderTest extends TestCase
     {
         $tenant = $this->createMock(TenantInterface::class);
 
-        $this->entityRepository
+        $this->repository
             ->expects($this->once())
-            ->method('findOneBy')
-            ->with([
-                'clientKey' => 'key',
-            ])
+            ->method('findByClientKey')
+            ->with('key')
             ->willReturn($tenant);
 
         $result = $this->userProvider->loadUserByUsername('key');
@@ -117,12 +98,10 @@ final class JWTUserProviderTest extends TestCase
     {
         $this->expectException(UsernameNotFoundException::class);
 
-        $this->entityRepository
+        $this->repository
             ->expects($this->once())
-            ->method('findOneBy')
-            ->with([
-                'clientKey' => 'key',
-            ])
+            ->method('findByClientKey')
+            ->with('key')
             ->willReturn(null);
 
         $this->userProvider->loadUserByUsername('key');

@@ -10,13 +10,14 @@ use AtlassianConnectBundle\Controller\HandshakeController;
 use AtlassianConnectBundle\Controller\UnlicensedController;
 use AtlassianConnectBundle\Entity\Tenant;
 use AtlassianConnectBundle\Listener\LicenseListener;
+use AtlassianConnectBundle\Repository\TenantRepository;
+use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use AtlassianConnectBundle\Security\JWTAuthenticator;
 use AtlassianConnectBundle\Security\JWTSecurityHelper;
 use AtlassianConnectBundle\Security\JWTSecurityHelperInterface;
 use AtlassianConnectBundle\Security\JWTUserProvider;
 use AtlassianConnectBundle\Security\LegacyJWTAuthenticator;
 use AtlassianConnectBundle\Service\AtlassianRestClient;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -37,9 +38,8 @@ return static function (ContainerConfigurator $container) {
             ->tag('controller.service_arguments')
         ->set(HandshakeController::class)
             ->args([
-                new ReferenceConfigurator(EntityManagerInterface::class),
+                new ReferenceConfigurator(TenantRepositoryInterface::class),
                 new ReferenceConfigurator(LoggerInterface::class),
-                '%atlassian_connect_tenant_entity_class%',
             ])
             ->tag('controller.service_arguments')
         ->set(DescriptorController::class)
@@ -47,7 +47,7 @@ return static function (ContainerConfigurator $container) {
             ->tag('controller.service_arguments')
         ->set(RequestAPICommand::class)
             ->args([
-                new ReferenceConfigurator(ManagerRegistry::class),
+                new ReferenceConfigurator(TenantRepositoryInterface::class),
                 '%atlassian_connect_tenant_entity_class%',
             ])
             ->tag('console.command')
@@ -59,10 +59,9 @@ return static function (ContainerConfigurator $container) {
             ])
         ->set(JWTSecurityHelper::class)
             ->args([
-                new ReferenceConfigurator(EntityManagerInterface::class),
+                new ReferenceConfigurator(TenantRepositoryInterface::class),
                 '%atlassian_connect_dev_tenant%',
                 '%kernel.environment%',
-                '%atlassian_connect_tenant_entity_class%',
             ])
         ->alias(JWTSecurityHelperInterface::class, JWTSecurityHelper::class)
         ->set('kernel.listener.license_listener', '%atlassian_connect_license_listener_class%')
@@ -75,8 +74,7 @@ return static function (ContainerConfigurator $container) {
             ->tag('kernel.event_listener', ['event' => 'kernel.request', 'method' => 'onKernelRequest'])
         ->set('jwt_user_provider', '%atlassian_connect_jwt_user_provider_class%')
             ->args([
-                new ReferenceConfigurator(EntityManagerInterface::class),
-                '%atlassian_connect_tenant_entity_class%',
+                new ReferenceConfigurator(TenantRepositoryInterface::class),
             ])
         ->set('jwt_authenticator', '%atlassian_connect_jwt_authenticator_class%')
             ->args([
@@ -84,6 +82,11 @@ return static function (ContainerConfigurator $container) {
                 new ReferenceConfigurator(JWTSecurityHelperInterface::class),
             ])
         ->alias(JWTAuthenticator::class, (new ReferenceConfigurator('jwt_authenticator'))->__toString())
+        ->set(TenantRepositoryInterface::class, TenantRepository::class)
+            ->args([
+                new ReferenceConfigurator(ManagerRegistry::class),
+                '%atlassian_connect_tenant_entity_class%',
+            ])
     ;
 
     if (class_exists(AbstractGuardAuthenticator::class)) {

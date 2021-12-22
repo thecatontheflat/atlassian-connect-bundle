@@ -4,31 +4,24 @@ declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Security;
 
+use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use AtlassianConnectBundle\Service\QSHGenerator;
-use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 
 final class JWTSecurityHelper implements JWTSecurityHelperInterface
 {
-    private EntityManagerInterface $entityManager;
+    private TenantRepositoryInterface $repository;
 
     private ?int $devTenant;
 
     private string $environment;
 
-    private string $tenantEntityClass;
-
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        ?int $devTenant,
-        string $environment,
-        string $tenantEntityClass
-    ) {
-        $this->entityManager = $entityManager;
+    public function __construct(TenantRepositoryInterface $repository, ?int $devTenant, string $environment)
+    {
+        $this->repository = $repository;
         $this->devTenant = $devTenant;
         $this->environment = $environment;
-        $this->tenantEntityClass = $tenantEntityClass;
     }
 
     public function supportsRequest(Request $request): bool
@@ -72,9 +65,7 @@ final class JWTSecurityHelper implements JWTSecurityHelperInterface
             return null;
         }
 
-        $tenant = $this->entityManager
-            ->getRepository($this->tenantEntityClass)
-            ->find($this->devTenant);
+        $tenant = $this->repository->findById($this->devTenant);
 
         if (!$tenant) {
             throw new \RuntimeException(sprintf('Cant find tenant with id %s - please set atlassian_connect.dev_tenant to false to disable dedicated dev tenant OR add valid id', $this->devTenant));
