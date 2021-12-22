@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AtlassianConnectBundle\Security;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -15,14 +15,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class JWTUserProvider implements JWTUserProviderInterface
 {
-    protected EntityManagerInterface $em;
+    private TenantRepositoryInterface $repository;
 
-    protected string $tenantClass;
-
-    public function __construct(EntityManagerInterface $entityManager, string $tenantClass)
+    public function __construct(TenantRepositoryInterface $repository)
     {
-        $this->em = $entityManager;
-        $this->tenantClass = $tenantClass;
+        $this->repository = $repository;
     }
 
     /**
@@ -90,8 +87,6 @@ class JWTUserProvider implements JWTUserProviderInterface
 
     private function findTenant(string $clientKey): ?TenantInterface
     {
-        return $this->em
-            ->getRepository($this->tenantClass)
-            ->findOneBy(['clientKey' => $clientKey]);
+        return $this->repository->findByClientKey($clientKey);
     }
 }

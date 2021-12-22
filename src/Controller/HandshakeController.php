@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Controller;
 
-use AtlassianConnectBundle\Entity\TenantInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use Firebase\JWT\JWT;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,17 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HandshakeController
 {
-    private EntityManagerInterface $em;
+    private TenantRepositoryInterface $repository;
 
     private LoggerInterface $logger;
 
-    private string $tenantClass;
-
-    public function __construct(EntityManagerInterface $em, LoggerInterface $logger, string $tenantClass)
+    public function __construct(TenantRepositoryInterface $repository, LoggerInterface $logger)
     {
-        $this->em = $em;
+        $this->repository = $repository;
         $this->logger = $logger;
-        $this->tenantClass = $tenantClass;
     }
 
     public function registerAction(Request $request): Response
@@ -31,8 +27,7 @@ class HandshakeController
         $content = $request->getContent();
         $content = json_decode($content, true);
 
-        /** @var TenantInterface $tenant */
-        $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($content['clientKey']);
+        $tenant = $this->repository->findByClientKey($content['clientKey']);
 
         if (null !== $tenant) {
             try {
@@ -50,8 +45,7 @@ class HandshakeController
                 return new Response('Unauthorized', 401);
             }
         } else {
-            $tenantClass = $this->tenantClass;
-            $tenant = new $tenantClass();
+            $tenant = $this->repository->initializeTenant();
         }
 
         $tenant
@@ -71,8 +65,7 @@ class HandshakeController
             $tenant->setOauthClientId($content['oauthClientId']);
         }
 
-        $this->em->persist($tenant);
-        $this->em->flush();
+        $this->repository->save($tenant);
 
         return new Response('OK', 200);
     }

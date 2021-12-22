@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Command;
 
-use AtlassianConnectBundle\Entity\TenantInterface;
+use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use AtlassianConnectBundle\Service\AtlassianRestClient;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,16 +14,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RequestAPICommand extends Command
 {
-    private EntityManagerInterface $em;
+    private TenantRepositoryInterface $repository;
 
-    private string $tenantClass;
-
-    public function __construct(ManagerRegistry $registry, string $tenantClass)
+    public function __construct(TenantRepositoryInterface $repository)
     {
-        $this->em = $registry->getManager();
-        $this->tenantClass = $tenantClass;
-
         parent::__construct();
+        $this->repository = $repository;
     }
 
     protected function configure(): void
@@ -42,11 +36,10 @@ class RequestAPICommand extends Command
     {
         $restUrl = $input->getArgument('rest-url');
 
-        /* @var TenantInterface $tenant */
         if ($input->getOption('tenant-id')) {
-            $tenant = $this->em->getRepository($this->tenantClass)->find($input->getOption('tenant-id'));
+            $tenant = $this->repository->findById($input->getOption('tenant-id'));
         } elseif ($input->getOption('client-key')) {
-            $tenant = $this->em->getRepository($this->tenantClass)->findOneByClientKey($input->getOption('client-key'));
+            $tenant = $this->repository->findByClientKey($input->getOption('client-key'));
         } else {
             throw new \RuntimeException('Please provide client-key or tenant-id');
         }
