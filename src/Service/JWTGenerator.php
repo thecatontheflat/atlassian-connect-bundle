@@ -47,7 +47,7 @@ class JWTGenerator
             'iat' => \time(),
             'exp' => \strtotime('+1 minutes'),
             'tnt' => $baseUrl,
-            'aud' => 'https://auth.atlassian.io',
+            'aud' => 'https://oauth-2-authorization-server.services.atlassian.com',
         ];
 
         return JWT::encode($data, $secret);
