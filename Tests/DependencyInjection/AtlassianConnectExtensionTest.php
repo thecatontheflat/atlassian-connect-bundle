@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AtlassianConnectBundle\Tests\DependencyInjection;
 
 use AtlassianConnectBundle\DependencyInjection\AtlassianConnectExtension;
-use AtlassianConnectBundle\Service\AtlassianRestClient;
+use AtlassianConnectBundle\Service\AtlassianRestClientInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -48,6 +48,6 @@ class AtlassianConnectExtensionTest extends TestCase
         $this->container->loadFromExtension($this->extension->getAlias());
         $this->container->compile();
         // Check that services have been loaded
-        $this->assertTrue($this->container->has(AtlassianRestClient::class));
+        $this->assertTrue($this->container->has(AtlassianRestClientInterface::class));
     }
 }

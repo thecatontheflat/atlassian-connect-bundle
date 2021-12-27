@@ -52,7 +52,8 @@ class JWTAuthenticator extends AbstractAuthenticator implements AuthenticationEn
         $user = $this->userProvider->loadUserByIdentifier($clientKey);
 
         if (property_exists($token, 'sub')) {
-            // for some reasons, when webhooks are called - field sub is undefined
+            // If a user context is present, also set the subject of this user
+            // See https://developer.atlassian.com/cloud/jira/platform/understanding-jwt-for-connect-apps/#claims
             $user->setUsername($token->sub);
         }
 

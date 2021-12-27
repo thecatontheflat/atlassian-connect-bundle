@@ -31,15 +31,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - description: 'PHP 7.4 - SF 4.4'
-            php: '7.4'
-            symfony_version: '4.4.*'
-          - description: 'PHP 8.0 - SF 4.4'
-            php: '8.0'
-            symfony_version: '4.4.*'
-          - description: 'PHP 7.4 - SF 5.4'
-            php: '7.4'
-            symfony_version: '5.4.*'
           - description: 'PHP 8.0 - SF 5.4.*'
             php: '8.0'
             symfony_version: '5.4.*'

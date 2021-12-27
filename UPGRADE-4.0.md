@@ -4,8 +4,15 @@ UPGRADE FROM 3.X to 4.0
 Supported Versions
 ------------------
 
-* Minimum Symfony versions have been bumped to `^4.4|^5.4|^6.0`.
-* Minimum PHP version has been bumped to `^7.4|^8.0`
+* Minimum Symfony versions have been bumped to `^5.4|^6.0`.
+* Minimum PHP version has been bumped to `^8.0`
+
+AtlassianRestClient
+-------------------
+
+* Service can be fetched with `AtlassianRestClientInterface` or `atlassian_rest_client`.
+* Use dependency injection to fetch the client as the constructor signature has been changed.
+* symfony/http-client is used instead of guzzle. If you catch any guzzle exceptions, replace them.
 
 TenantInterface
 ---------------
@@ -19,4 +26,4 @@ Configuration
 
 Services
 --------
-* Only the `AtlassianRestClient` is public. All other services have been made private. Be sure to use Dependency injection instead of fetching the service through the container.
+* Only the `AtlassianRestClientInterface` is public. All other services have been made private. Be sure to use Dependency injection instead of fetching the service through the container.

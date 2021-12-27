@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace AtlassianConnectBundle\Service;
 
 use Firebase\JWT\JWT;
-use Psr\Http\Message\RequestInterface;
 
 class JWTGenerator
 {
-    public static function generate(RequestInterface $request, string $issuer, string $secret): string
+    public static function generate(string $url, string $method, string $issuer, string $secret): string
     {
         $data = [
             'iss' => $issuer,
             'iat' => time(),
             'exp' => strtotime('+1 day'),
-            'qsh' => QSHGenerator::generate((string) $request->getUri(), $request->getMethod()),
+            'qsh' => QSHGenerator::generate($url, $method),
         ];
 
         return JWT::encode($data, $secret);

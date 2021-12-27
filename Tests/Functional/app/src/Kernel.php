@@ -16,8 +16,6 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
-use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
-use Symfony\Component\Routing\RouteCollectionBuilder;
 
 final class Kernel extends BaseKernel
 {
@@ -57,11 +55,7 @@ final class Kernel extends BaseKernel
     {
         $configDir = $this->getProjectDir().'/config';
 
-        if (BaseKernel::VERSION_ID >= 50400) {
-            $loader->load($configDir.'/{base}/*.yaml', 'glob');
-        } else {
-            $loader->load($configDir.'/{base_old}/*.yaml', 'glob');
-        }
+        $loader->load($configDir.'/{base}/*.yaml', 'glob');
 
         $loader->load($configDir.'/{packages}/*.yaml', 'glob');
         $loader->load($configDir.'/{services}.yaml', 'glob');
@@ -70,15 +64,5 @@ final class Kernel extends BaseKernel
     protected function build(ContainerBuilder $container): void
     {
         $container->register('logger', NullLogger::class);
-    }
-
-    /**
-     * TODO: Drop RouteCollectionBuilder when support for Symfony 4.4 is dropped.
-     *
-     * @param RoutingConfigurator|RouteCollectionBuilder $routes
-     */
-    protected function configureRoutes($routes)
-    {
-        $routes->import($this->getProjectDir().'/config/routes.yaml');
     }
 }

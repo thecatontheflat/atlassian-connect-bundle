@@ -5,38 +5,75 @@ declare(strict_types=1);
 namespace AtlassianConnectBundle\Service;
 
 use AtlassianConnectBundle\Entity\TenantInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\CurlHandler;
-use GuzzleHttp\HandlerStack;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class AtlassianRestClient
+final class AtlassianRestClient implements AtlassianRestClientInterface
 {
-    private TenantInterface $tenant;
+    private HttpClientInterface $client;
 
-    private Client $client;
+    private TokenStorageInterface $tokenStorage;
+
+    private ?TenantInterface $tenant;
 
     private ?string $user;
 
-    public function __construct(?TenantInterface $tenant, ?TokenStorageInterface $tokenStorage = null)
+    public function __construct(HttpClientInterface $client, TokenStorageInterface $tokenStorage)
     {
+        $this->client = $client;
+        $this->tokenStorage = $tokenStorage;
+
+        $this->tenant = null;
         $this->user = null;
-        $this->setTenant($tenant, $tokenStorage);
-        $this->client = $this->createClient();
     }
 
-    public function getClient(): Client
+    public function setTenant(TenantInterface $tenant): self
     {
-        return $this->client;
+        $this->tenant = $tenant;
+
+        return $this;
     }
 
-    public function sendFile(UploadedFile $file, string $restUrl): string
+    public function actAsUser(string $userId): self
+    {
+        $this->user = $userId;
+
+        return $this;
+    }
+
+    public function get(string $restUrl): string
+    {
+        return $this->doRequest('GET', $restUrl, []);
+    }
+
+    public function post(string $restUrl, array $json): string
+    {
+        return $this->doRequest('POST', $restUrl, [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => $json,
+        ]);
+    }
+
+    public function put(string $restUrl, array $json): string
+    {
+        return $this->doRequest('PUT', $restUrl, [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => $json,
+        ]);
+    }
+
+    public function delete(string $restUrl): string
+    {
+        return $this->doRequest('DELETE', $restUrl, []);
+    }
+
+    public function sendFile(File $file, string $restUrl): string
     {
         $options = [];
 
         $options['headers']['X-Atlassian-Token'] = 'nocheck';
-        $savedFile = $file->move('/tmp/', $file->getClientOriginalName());
+        $savedFile = $file->move('/tmp/', $file->getFilename());
 
         $options['body'] = [
             'file' => fopen($savedFile->getRealPath(), 'r'),
@@ -44,48 +81,34 @@ class AtlassianRestClient
 
         unlink($savedFile->getRealPath());
 
-        return $this->client->post($this->buildURL($restUrl), $options)->getBody()->getContents();
+        return $this->doRequest('POST', $restUrl, $options);
     }
 
-    /**
-     * @param array<mixed> $json
-     */
-    public function put(string $restUrl, array $json): string
+    public function doRequest(string $method, string $restUrl, array $options): string
     {
-        $options = [];
+        $options['tenant'] = $this->getTenant();
+        $options['user_id'] = $this->user;
 
-        $options['headers']['Content-Type'] = 'application/json';
-        $options['json'] = $json;
-
-        return $this->client->put($this->buildURL($restUrl), $options)->getBody()->getContents();
+        return $this->client->request($method, $this->buildURL($restUrl), $options)->getContent();
     }
 
-    public function post(string $restUrl, array $json): string
+    private function getTenant(): TenantInterface
     {
-        $options = [];
+        if ($this->tenant) {
+            return $this->tenant;
+        }
 
-        $options['headers']['Content-Type'] = 'application/json';
-        $options['json'] = $json;
+        $token = $this->tokenStorage->getToken();
 
-        return $this->client->post($this->buildURL($restUrl), $options)->getBody()->getContents();
-    }
+        if (!$token || !$user = $token->getUser()) {
+            throw new \RuntimeException('Could not get tenant from token');
+        }
 
-    public function get(string $restUrl): string
-    {
-        return $this->client->get($this->buildURL($restUrl))->getBody()->getContents();
-    }
+        if (!$user instanceof TenantInterface) {
+            throw new \RuntimeException('Current user is not a Tenant');
+        }
 
-    public function delete(string $restUrl): string
-    {
-        return $this->client->delete($this->buildURL($restUrl))->getBody()->getContents();
-    }
-
-    public function setUser(?string $user): self
-    {
-        $this->user = $user;
-        $this->client = $this->createClient();
-
-        return $this;
+        return $this->tenant = $user;
     }
 
     private function buildURL(string $restUrl): string
@@ -96,47 +119,5 @@ class AtlassianRestClient
         }
 
         return $restUrl;
-    }
-
-    private function createClient(): Client
-    {
-        $stack = new HandlerStack();
-        $stack->setHandler(new CurlHandler());
-
-        if (null === $this->user) {
-            $stack->push(GuzzleJWTMiddleware::authTokenMiddleware(
-                $this->tenant->getAddonKey(),
-                $this->tenant->getSharedSecret()
-            ));
-        } else {
-            $stack->push(GuzzleJWTMiddleware::authUserTokenMiddleware(
-                new Client(),
-                $this->tenant->getOauthClientId(),
-                $this->tenant->getSharedSecret(),
-                $this->tenant->getBaseUrl(),
-                $this->user
-            ));
-        }
-
-        return new Client(['handler' => $stack]);
-    }
-
-    private function setTenant(?TenantInterface $tenant, ?TokenStorageInterface $tokenStorage): void
-    {
-        if (null !== $tenant) {
-            $this->tenant = $tenant;
-        } elseif (null !== $tokenStorage) {
-            $token = $tokenStorage->getToken();
-
-            if (null !== $token) {
-                $user = $token->getUser();
-
-                if ($user instanceof TenantInterface) {
-                    $this->tenant = $user;
-                }
-            }
-        } else {
-            throw new \RuntimeException('Can\'t get tenant');
-        }
     }
 }

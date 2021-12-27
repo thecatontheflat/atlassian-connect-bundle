@@ -16,13 +16,13 @@ use AtlassianConnectBundle\Security\JWTAuthenticator;
 use AtlassianConnectBundle\Security\JWTSecurityHelper;
 use AtlassianConnectBundle\Security\JWTSecurityHelperInterface;
 use AtlassianConnectBundle\Security\JWTUserProvider;
-use AtlassianConnectBundle\Security\LegacyJWTAuthenticator;
 use AtlassianConnectBundle\Service\AtlassianRestClient;
+use AtlassianConnectBundle\Service\AtlassianRestClientFactory;
+use AtlassianConnectBundle\Service\AtlassianRestClientInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Twig\Environment;
 
 return static function (ContainerConfigurator $container) {
@@ -48,15 +48,15 @@ return static function (ContainerConfigurator $container) {
         ->set(RequestAPICommand::class)
             ->args([
                 new ReferenceConfigurator(TenantRepositoryInterface::class),
-                '%atlassian_connect_tenant_entity_class%',
+                new ReferenceConfigurator('atlassian_connect_rest_client'),
             ])
             ->tag('console.command')
-        ->set(AtlassianRestClient::class)
+        ->set('atlassian_connect_rest_client', AtlassianRestClient::class)
             ->public()
-            ->args([
-                null,
-                new ReferenceConfigurator(TokenStorageInterface::class),
-            ])
+            ->factory([AtlassianRestClientFactory::class, 'createAtlassianRestClient'])
+            ->args([new ReferenceConfigurator(TokenStorageInterface::class)])
+        ->alias(AtlassianRestClientInterface::class, 'atlassian_connect_rest_client')
+            ->public()
         ->set(JWTSecurityHelper::class)
             ->args([
                 new ReferenceConfigurator(TenantRepositoryInterface::class),
@@ -88,13 +88,4 @@ return static function (ContainerConfigurator $container) {
                 '%atlassian_connect_tenant_entity_class%',
             ])
     ;
-
-    if (class_exists(AbstractGuardAuthenticator::class)) {
-        $container->parameters()
-            ->set('atlassian_connect_jwt_authenticator_guard_class', LegacyJWTAuthenticator::class);
-
-        $container->services()
-            ->set('jwt_authenticator_guard', '%atlassian_connect_jwt_authenticator_guard_class%')
-            ->args([new ReferenceConfigurator(JWTSecurityHelperInterface::class)]);
-    }
 };
