@@ -49,7 +49,7 @@ class GuzzleJWTMiddleware
         string $baseUrl,
         string $username
     ): string {
-        $result = $client->request('POST', 'https://auth.atlassian.io/oath2/token', [
+        $result = $client->request('POST', 'https://oauth-2-authorization-server.services.atlassian.com/oauth2/token', [
             RequestOptions::FORM_PARAMS => [
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
                 'assertion' => JWTGenerator::generateAssertion($secret, $oauthClientId, $baseUrl, $username),
