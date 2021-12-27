@@ -88,24 +88,6 @@ To configure security part - use the following configuration in your `security.y
                 # If you also need an entry_point
                 entry_point: AtlassianConnectBundle\Security\JWTAuthenticator
 ```
-
-If you are still on Symfony version 4.4.*, be sure to use guards instead.
-
-```yaml
-    security:
-        providers:
-            jwt_user_provider:
-                id: jwt_user_provider
-        firewalls:
-            jwt_secured_area:
-                pattern: "^/protected"
-                stateless: true
-                guard:
-                    authenticators:
-                        - jwt_authenticator_guard
-                provider: jwt_user_provider
-```
-    
 ### Step 5. Include Routes
  
 Add the following configuration to `config/routes.yaml`:
@@ -158,7 +140,15 @@ class ProtectedController extends Controller
      */
     public function index()
     {
-        $client = $this->container->get(AtlassianRestClient::class);
+        $client = $this->container->get(AtlassianRestClientInterface::class);
+        // Or
+        // $client = $this->container->get('atlassian_connect_rest_client');
+        
+        // If you are not in a security context fetch the tenant first
+        // $client->setTenant($tenant);
+        
+        // If you want to impersonate the user
+        // $client->actAsUser($this->getUser()->getUserName())
         
         // Send request from anonymous plugin user
         $issue = $client->get('/rest/api/2/issue/KEY-XXX');

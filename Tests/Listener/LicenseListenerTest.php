@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -324,11 +323,7 @@ final class LicenseListenerTest extends TestCase
 
     private function getEvent(KernelInterface $kernel, Request $request, int $type)
     {
-        if (class_exists(RequestEvent::class)) {
-            return new RequestEvent($kernel, $request, $type);
-        }
-
-        return new GetResponseEvent($kernel, $request, $type);
+        return new RequestEvent($kernel, $request, $type);
     }
 
     private function getLicenseListener(string $environment = 'prod', array $license_allow_list = [])

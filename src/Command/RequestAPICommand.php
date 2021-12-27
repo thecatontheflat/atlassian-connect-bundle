@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AtlassianConnectBundle\Command;
 
 use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
-use AtlassianConnectBundle\Service\AtlassianRestClient;
+use AtlassianConnectBundle\Service\AtlassianRestClientInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,11 +15,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RequestAPICommand extends Command
 {
     private TenantRepositoryInterface $repository;
+    private AtlassianRestClientInterface $restClient;
 
-    public function __construct(TenantRepositoryInterface $repository)
+    public function __construct(TenantRepositoryInterface $repository, AtlassianRestClientInterface $restClient)
     {
         parent::__construct();
         $this->repository = $repository;
+        $this->restClient = $restClient;
     }
 
     protected function configure(): void
@@ -32,7 +34,7 @@ class RequestAPICommand extends Command
             ->setDescription('Request REST end-points. Documentation available on https://docs.atlassian.com/jira/REST/cloud/');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $restUrl = $input->getArgument('rest-url');
 
@@ -44,11 +46,14 @@ class RequestAPICommand extends Command
             throw new \RuntimeException('Please provide client-key or tenant-id');
         }
 
-        $request = new AtlassianRestClient($tenant);
-        $json = $request->get($restUrl);
+        $this->restClient->setTenant($tenant);
+
+        $json = $this->restClient->get($restUrl);
 
         $output->writeln('');
-        echo json_encode($json, \JSON_PRETTY_PRINT);
+        $output->writeln($json);
         $output->writeln('');
+
+        return 0;
     }
 }

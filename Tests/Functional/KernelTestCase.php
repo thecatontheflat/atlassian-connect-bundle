@@ -10,11 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class KernelTestCase extends BaseKernelTestCase
 {
-    public function __construct(?string $name = null, array $data = [], $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-    }
-
     protected static function getKernelClass(): string
     {
         return Kernel::class;
