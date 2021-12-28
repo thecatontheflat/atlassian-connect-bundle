@@ -11,17 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class JWTSecurityHelper implements JWTSecurityHelperInterface
 {
-    private TenantRepositoryInterface $repository;
-
-    private ?int $devTenant;
-
-    private string $environment;
-
-    public function __construct(TenantRepositoryInterface $repository, ?int $devTenant, string $environment)
-    {
-        $this->repository = $repository;
-        $this->devTenant = $devTenant;
-        $this->environment = $environment;
+    public function __construct(
+        private TenantRepositoryInterface $repository,
+        private ?int $devTenant,
+        private string $environment
+    ) {
     }
 
     public function supportsRequest(Request $request): bool

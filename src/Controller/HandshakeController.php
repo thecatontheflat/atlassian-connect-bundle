@@ -12,14 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HandshakeController
 {
-    private TenantRepositoryInterface $repository;
-
-    private LoggerInterface $logger;
-
-    public function __construct(TenantRepositoryInterface $repository, LoggerInterface $logger)
+    public function __construct(private TenantRepositoryInterface $repository, private LoggerInterface $logger)
     {
-        $this->repository = $repository;
-        $this->logger = $logger;
     }
 
     public function registerAction(Request $request): Response

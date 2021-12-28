@@ -20,20 +20,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class LicenseListenerTest extends TestCase
 {
-    /**
-     * @var MockObject|KernelInterface
-     */
-    private $kernel;
-
-    /**
-     * @var MockObject|RouterInterface
-     */
-    private $router;
-
-    /**
-     * @var MockObject|TokenStorageInterface
-     */
-    private $tokenStorage;
+    private KernelInterface|MockObject $kernel;
+    private RouterInterface|MockObject $router;
+    private TokenStorageInterface|MockObject $tokenStorage;
 
     protected function setUp(): void
     {
@@ -75,7 +64,7 @@ final class LicenseListenerTest extends TestCase
         $event = $this->getEvent(
             $this->kernel,
             $request,
-            KernelInterface::MASTER_REQUEST
+            KernelInterface::MAIN_REQUEST
         );
 
         $this->getLicenseListener('dev')->onKernelRequest($event);
@@ -110,13 +99,13 @@ final class LicenseListenerTest extends TestCase
         $event1 = $this->getEvent(
             $this->kernel,
             $request1,
-            KernelInterface::MASTER_REQUEST
+            KernelInterface::MAIN_REQUEST
         );
 
         $event2 = $this->getEvent(
             $this->kernel,
             $request2,
-            KernelInterface::MASTER_REQUEST
+            KernelInterface::MAIN_REQUEST
         );
 
         $this->getLicenseListener('dev')->onKernelRequest($event1);
@@ -154,7 +143,7 @@ final class LicenseListenerTest extends TestCase
         $event = $this->getEvent(
             $this->kernel,
             $request,
-            KernelInterface::MASTER_REQUEST
+            KernelInterface::MAIN_REQUEST
         );
 
         $this->getLicenseListener()->onKernelRequest($event);
@@ -192,7 +181,7 @@ final class LicenseListenerTest extends TestCase
         $event = $this->getEvent(
             $this->kernel,
             $request,
-            KernelInterface::MASTER_REQUEST
+            KernelInterface::MAIN_REQUEST
         );
 
         $this->getLicenseListener()->onKernelRequest($event);
@@ -229,7 +218,7 @@ final class LicenseListenerTest extends TestCase
         $event = $this->getEvent(
             $this->kernel,
             $request,
-            KernelInterface::MASTER_REQUEST
+            KernelInterface::MAIN_REQUEST
         );
 
         $this->getLicenseListener('prod', [['valid_till' => $date->format('Y-m-d'), 'client_key' => 'key']])->onKernelRequest($event);
@@ -273,7 +262,7 @@ final class LicenseListenerTest extends TestCase
         $event = $this->getEvent(
             $this->kernel,
             $request,
-            KernelInterface::MASTER_REQUEST
+            KernelInterface::MAIN_REQUEST
         );
 
         $this->getLicenseListener()->onKernelRequest($event);
@@ -311,7 +300,7 @@ final class LicenseListenerTest extends TestCase
         $event = $this->getEvent(
             $this->kernel,
             $request,
-            KernelInterface::MASTER_REQUEST
+            KernelInterface::MAIN_REQUEST
         );
 
         $this->getLicenseListener()->onKernelRequest($event);

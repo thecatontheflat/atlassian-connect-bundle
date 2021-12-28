@@ -13,7 +13,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
@@ -22,24 +21,12 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 final class JWTAuthenticatorTest extends TestCase
 {
-    /**
-     * @var JWTUserProviderInterface|MockObject
-     */
-    private $userProvider;
-
-    /**
-     * @var JWTSecurityHelperInterface|MockObject
-     */
-    private $securityHelper;
-
+    private JWTUserProviderInterface|MockObject $userProvider;
+    private JWTSecurityHelperInterface|MockObject $securityHelper;
     private JWTAuthenticator $jwtAuthenticator;
 
     protected function setUp(): void
     {
-        if (Kernel::VERSION_ID < 50100) {
-            $this->markTestSkipped('This test only works with the new authenticator mechanism');
-        }
-
         $this->userProvider = $this->createMock(JWTUserProvider::class);
         $this->securityHelper = $this->createMock(JWTSecurityHelperInterface::class);
         $this->jwtAuthenticator = new JWTAuthenticator(

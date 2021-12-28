@@ -34,58 +34,58 @@ return static function (ContainerConfigurator $container) {
 
     $container->services()
         ->set(UnlicensedController::class)
-            ->args([new ReferenceConfigurator(Environment::class)])
+            ->args([service(Environment::class)])
             ->tag('controller.service_arguments')
         ->set(HandshakeController::class)
             ->args([
-                new ReferenceConfigurator(TenantRepositoryInterface::class),
-                new ReferenceConfigurator(LoggerInterface::class),
+                service(TenantRepositoryInterface::class),
+                service(LoggerInterface::class),
             ])
             ->tag('controller.service_arguments')
         ->set(DescriptorController::class)
-            ->args(['%atlassian_connect%'])
+            ->args([param('atlassian_connect')])
             ->tag('controller.service_arguments')
         ->set(RequestAPICommand::class)
             ->args([
-                new ReferenceConfigurator(TenantRepositoryInterface::class),
-                new ReferenceConfigurator('atlassian_connect_rest_client'),
+                service(TenantRepositoryInterface::class),
+                service('atlassian_connect_rest_client'),
             ])
             ->tag('console.command')
         ->set('atlassian_connect_rest_client', AtlassianRestClient::class)
             ->public()
             ->factory([AtlassianRestClientFactory::class, 'createAtlassianRestClient'])
-            ->args([new ReferenceConfigurator(TokenStorageInterface::class)])
+            ->args([service(TokenStorageInterface::class)])
         ->alias(AtlassianRestClientInterface::class, 'atlassian_connect_rest_client')
             ->public()
         ->set(JWTSecurityHelper::class)
             ->args([
-                new ReferenceConfigurator(TenantRepositoryInterface::class),
-                '%atlassian_connect_dev_tenant%',
-                '%kernel.environment%',
+                service(TenantRepositoryInterface::class),
+                param('atlassian_connect_dev_tenant'),
+                param('kernel.environment'),
             ])
         ->alias(JWTSecurityHelperInterface::class, JWTSecurityHelper::class)
         ->set('kernel.listener.license_listener', '%atlassian_connect_license_listener_class%')
             ->args([
-                new ReferenceConfigurator(RouterInterface::class),
-                new ReferenceConfigurator(TokenStorageInterface::class),
-                '%kernel.environment%',
-                '%atlassian_connect_license_allow_list%',
+                service(RouterInterface::class),
+                service(TokenStorageInterface::class),
+                param('kernel.environment'),
+                param('atlassian_connect_license_allow_list'),
             ])
             ->tag('kernel.event_listener', ['event' => 'kernel.request', 'method' => 'onKernelRequest'])
         ->set('jwt_user_provider', '%atlassian_connect_jwt_user_provider_class%')
             ->args([
-                new ReferenceConfigurator(TenantRepositoryInterface::class),
+                service(TenantRepositoryInterface::class),
             ])
         ->set('jwt_authenticator', '%atlassian_connect_jwt_authenticator_class%')
             ->args([
-                new ReferenceConfigurator('jwt_user_provider'),
-                new ReferenceConfigurator(JWTSecurityHelperInterface::class),
+                service('jwt_user_provider'),
+                service(JWTSecurityHelperInterface::class),
             ])
-        ->alias(JWTAuthenticator::class, (new ReferenceConfigurator('jwt_authenticator'))->__toString())
+        ->alias(JWTAuthenticator::class, (service('jwt_authenticator'))->__toString())
         ->set(TenantRepositoryInterface::class, TenantRepository::class)
             ->args([
-                new ReferenceConfigurator(ManagerRegistry::class),
-                '%atlassian_connect_tenant_entity_class%',
+                service(ManagerRegistry::class),
+                param('atlassian_connect_tenant_entity_class'),
             ])
     ;
 };

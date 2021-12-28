@@ -9,23 +9,16 @@ use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class JWTUserProvider implements JWTUserProviderInterface
 {
-    private TenantRepositoryInterface $repository;
-
-    public function __construct(TenantRepositoryInterface $repository)
+    public function __construct(private TenantRepositoryInterface $repository)
     {
-        $this->repository = $repository;
     }
 
-    /**
-     * @return object|mixed
-     */
-    public function getDecodedToken(string $jwt)
+    public function getDecodedToken(string $jwt): object
     {
         try {
             $bodyb64 = explode('.', $jwt)[1];
@@ -39,15 +32,9 @@ class JWTUserProvider implements JWTUserProviderInterface
         }
     }
 
-    public function loadUserByUsername($username): UserInterface
+    public function loadUserByUsername(string $username): UserInterface
     {
-        $tenant = $this->findTenant($username);
-
-        if (!$tenant) {
-            throw $this->getNotFoundException();
-        }
-
-        return $tenant;
+        return $this->loadUserByIdentifier($username);
     }
 
     public function refreshUser(UserInterface $user): void
@@ -68,21 +55,10 @@ class JWTUserProvider implements JWTUserProviderInterface
         $tenant = $this->findTenant($identifier);
 
         if (!$tenant) {
-            throw $this->getNotFoundException();
+            throw new UserNotFoundException('Can\t find tenant with such username');
         }
 
         return $tenant;
-    }
-
-    private function getNotFoundException(): AuthenticationException
-    {
-        $message = 'Can\'t find tenant with such username';
-
-        if (class_exists(UserNotFoundException::class)) {
-            return new UserNotFoundException($message);
-        }
-
-        return new UsernameNotFoundException($message);
     }
 
     private function findTenant(string $clientKey): ?TenantInterface

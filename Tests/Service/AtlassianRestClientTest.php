@@ -19,12 +19,8 @@ final class AtlassianRestClientTest extends TestCase
 {
     private const APP_URL = 'https://app.atlassian.com';
 
-    /** @var HttpClientInterface|MockObject */
-    private $client;
-
-    /** @var MockObject|TokenStorageInterface */
-    private $tokenStorage;
-
+    private HttpClientInterface|MockObject $client;
+    private TokenStorageInterface|MockObject $tokenStorage;
     private AtlassianRestClient $restClient;
 
     protected function setUp(): void

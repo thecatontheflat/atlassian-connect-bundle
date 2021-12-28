@@ -9,11 +9,8 @@ use Twig\Environment;
 
 class UnlicensedController
 {
-    private Environment $twig;
-
-    public function __construct(Environment $twig)
+    public function __construct(private Environment $twig)
     {
-        $this->twig = $twig;
     }
 
     public function unlicensedAction(): Response

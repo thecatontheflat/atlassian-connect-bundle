@@ -14,7 +14,7 @@ final class AtlassianRestClientFactoryTest extends TestCase
 {
     public function testCreatesClientInstance(): void
     {
-        $client = AtlassianRestClientFactory::createAtlassianRestClient($storage = $this->createMock(TokenStorageInterface::class), null);
+        $client = AtlassianRestClientFactory::createAtlassianRestClient($this->createMock(TokenStorageInterface::class), null);
 
         $this->assertInstanceOf(AtlassianRestClientInterface::class, $client);
         $this->assertInstanceOf(AtlassianRestClient::class, $client);

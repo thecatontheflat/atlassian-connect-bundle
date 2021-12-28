@@ -18,14 +18,10 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 
 class JWTAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
-    private JWTUserProviderInterface $userProvider;
-
-    private JWTSecurityHelperInterface $securityHelper;
-
-    public function __construct(JWTUserProviderInterface $userProvider, JWTSecurityHelperInterface $securityHelper)
-    {
-        $this->userProvider = $userProvider;
-        $this->securityHelper = $securityHelper;
+    public function __construct(
+        private JWTUserProviderInterface $userProvider,
+        private JWTSecurityHelperInterface $securityHelper
+    ) {
     }
 
     public function supports(Request $request): ?bool
