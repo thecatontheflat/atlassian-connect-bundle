@@ -12,41 +12,17 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class LicenseListener
 {
-    protected RouterInterface $router;
-
-    protected TokenStorageInterface $tokenStorage;
-
-    private string $environment;
-
-    private array $licenseAllowList;
-
     public function __construct(
-        RouterInterface $router,
-        TokenStorageInterface $tokenStorage,
-        string $environment,
-        array $licenseAllowList
+        private RouterInterface $router,
+        private TokenStorageInterface $tokenStorage,
+        private string $environment,
+        private array $licenseAllowList
     ) {
-        $this->router = $router;
-        $this->tokenStorage = $tokenStorage;
-        $this->environment = $environment;
-        $this->licenseAllowList = $licenseAllowList;
     }
 
-    /**
-     * @param RequestEvent $event
-     */
-    public function onKernelRequest($event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
-        if (!$event instanceof RequestEvent) {
-            throw new \InvalidArgumentException();
-        }
-
-        $mainRequest = method_exists($event, 'isMainRequest')
-            ? 'isMainRequest'
-            : 'isMasterRequest'
-        ;
-
-        if (!$event->$mainRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
@@ -61,7 +37,7 @@ class LicenseListener
             return;
         }
 
-        // Checking for whitelisted users
+        // Checking for allowed users
         try {
             /** @var TenantInterface $user */
             $user = $this->tokenStorage->getToken()->getUser();

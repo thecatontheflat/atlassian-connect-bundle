@@ -8,8 +8,5 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 interface JWTUserProviderInterface extends UserProviderInterface
 {
-    /**
-     * @return object|mixed
-     */
-    public function getDecodedToken(string $jwt);
+    public function getDecodedToken(string $jwt): object;
 }

@@ -13,10 +13,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class AuthenticatedAtlassianClientTest extends TestCase
 {
-    /**
-     * @var MockObject|HttpClientInterface
-     */
-    private $inner;
+    private HttpClientInterface|MockObject $inner;
     private AuthenticatedAtlassianClient $client;
 
     protected function setUp(): void

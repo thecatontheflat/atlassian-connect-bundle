@@ -18,7 +18,6 @@ use Twig\Environment;
 class AtlassianConnectExtensionTest extends TestCase
 {
     private AtlassianConnectExtension $extension;
-
     private ContainerBuilder $container;
 
     protected function setUp(): void

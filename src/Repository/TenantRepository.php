@@ -10,11 +10,8 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class TenantRepository extends ServiceEntityRepository implements TenantRepositoryInterface
 {
-    private string $tenantClass;
-
-    public function __construct(ManagerRegistry $registry, string $tenantClass)
+    public function __construct(ManagerRegistry $registry, private string $tenantClass)
     {
-        $this->tenantClass = $tenantClass;
         parent::__construct($registry, $tenantClass);
     }
 

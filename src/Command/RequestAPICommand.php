@@ -14,14 +14,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RequestAPICommand extends Command
 {
-    private TenantRepositoryInterface $repository;
-    private AtlassianRestClientInterface $restClient;
-
-    public function __construct(TenantRepositoryInterface $repository, AtlassianRestClientInterface $restClient)
-    {
+    public function __construct(
+        private TenantRepositoryInterface $repository,
+        private AtlassianRestClientInterface $restClient
+    ) {
         parent::__construct();
-        $this->repository = $repository;
-        $this->restClient = $restClient;
     }
 
     protected function configure(): void

@@ -13,9 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class JWTSecurityHelperTest extends TestCase
 {
-    /** @var TenantRepositoryInterface|MockObject */
-    private $repository;
-
+    private TenantRepositoryInterface|MockObject $repository;
     private JWTSecurityHelper $helper;
 
     protected function setUp(): void

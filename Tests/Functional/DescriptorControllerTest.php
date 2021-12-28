@@ -14,7 +14,7 @@ final class DescriptorControllerTest extends AbstractWebTestCase
         $this->assertResponseIsSuccessful();
 
         $descriptor = json_decode($client->getResponse()->getContent(), true);
-        $config = self::getParentContainer()->getParameter('atlassian_connect');
+        $config = self::getContainer()->getParameter('atlassian_connect');
         $this->assertSame(
             $config,
             $descriptor

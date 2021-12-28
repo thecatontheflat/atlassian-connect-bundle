@@ -17,9 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class JWTUserProviderTest extends TestCase
 {
-    /** @var TenantRepositoryInterface|MockObject */
-    private $repository;
-
+    private TenantRepositoryInterface|MockObject $repository;
     private JWTUserProvider $userProvider;
 
     protected function setUp(): void

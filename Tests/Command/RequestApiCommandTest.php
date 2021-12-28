@@ -8,18 +8,15 @@ use AtlassianConnectBundle\Command\RequestAPICommand;
 use AtlassianConnectBundle\Entity\TenantInterface;
 use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use AtlassianConnectBundle\Service\AtlassianRestClientInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 final class RequestApiCommandTest extends TestCase
 {
-    /** @var TenantRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $tenantRepository;
-
-    /** @var AtlassianRestClientInterface|\PHPUnit\Framework\MockObject\MockObject */
-    private $restClient;
-
+    private TenantRepositoryInterface|MockObject $tenantRepository;
+    private AtlassianRestClientInterface|MockObject$restClient;
     private CommandTester $commandTester;
 
     protected function setUp(): void
