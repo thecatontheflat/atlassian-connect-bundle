@@ -62,7 +62,7 @@ final class LicenseListenerTest extends TestCase
         $this->getLicenseListener()->onKernelRequest($event);
     }
 
-    public function testItSkipsWhenTheRouteIsNullAndRouteRequiresNoLicense(): void
+    public function testItSkipsWhenTheRouteIsNotNullAndRouteRequiresNoLicense(): void
     {
         $request = new Request(
             ['lic' => 'test'],
@@ -80,6 +80,27 @@ final class LicenseListenerTest extends TestCase
         );
 
         $this->getLicenseListener('dev')->onKernelRequest($event);
+
+        $this->assertNull($event->getResponse());
+    }
+
+    public function testItSkipsWhenTheRouteIsNotNullAndRouteHasNoRequiresLicenseAttribute(): void
+    {
+        $request = new Request(
+            ['lic' => 'test'],
+            [],
+            [
+                '_route' => 'route',
+            ]
+        );
+
+        $event = $this->getEvent(
+            $this->kernel,
+            $request,
+            KernelInterface::MASTER_REQUEST
+        );
+
+        $this->getLicenseListener()->onKernelRequest($event);
 
         $this->assertNull($event->getResponse());
     }
