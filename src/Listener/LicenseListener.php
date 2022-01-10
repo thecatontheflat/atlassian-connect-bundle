@@ -54,7 +54,7 @@ class LicenseListener
         $request = $event->getRequest();
         $route = $request->attributes->get('_route');
 
-        if (null !== $route && false === $request->attributes->get('requires_license')) {
+        if (null !== $route && false === $request->attributes->get('requires_license', false)) {
             return;
         }
 
