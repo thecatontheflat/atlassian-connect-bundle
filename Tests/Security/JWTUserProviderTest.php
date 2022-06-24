@@ -12,7 +12,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 final class JWTUserProviderTest extends TestCase
@@ -94,7 +94,7 @@ final class JWTUserProviderTest extends TestCase
 
     public function testItFailsToLoadAUserByUserName(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
 
         $this->repository
             ->expects($this->once())
