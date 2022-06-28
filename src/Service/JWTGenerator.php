@@ -17,7 +17,7 @@ class JWTGenerator
             'qsh' => QSHGenerator::generate($url, $method),
         ];
 
-        return JWT::encode($data, $secret);
+        return JWT::encode($data, $secret, 'HS256');
     }
 
     public static function generateAssertion(string $secret, string $oauthClientId, string $baseUrl, string $user): string
@@ -31,6 +31,6 @@ class JWTGenerator
             'aud' => 'https://oauth-2-authorization-server.services.atlassian.com',
         ];
 
-        return JWT::encode($data, $secret);
+        return JWT::encode($data, $secret, 'HS256');
     }
 }
