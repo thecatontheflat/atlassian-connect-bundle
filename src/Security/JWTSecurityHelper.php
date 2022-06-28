@@ -71,6 +71,6 @@ final class JWTSecurityHelper implements JWTSecurityHelperInterface
             'exp' => strtotime('+1 day'),
             'qsh' => QSHGenerator::generate($request->getRequestUri(), 'GET'),
             'sub' => 'admin',
-        ], $tenant->getSharedSecret());
+        ], $tenant->getSharedSecret(), 'HS256');
     }
 }

@@ -7,6 +7,7 @@ namespace AtlassianConnectBundle\Security;
 use AtlassianConnectBundle\Entity\TenantInterface;
 use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -24,7 +25,7 @@ class JWTUserProvider implements JWTUserProviderInterface
             $bodyb64 = explode('.', $jwt)[1];
             $decodedToken = json_decode(JWT::urlsafeB64Decode($bodyb64));
 
-            JWT::decode($jwt, $this->findTenant($decodedToken->iss)->getSharedSecret(), ['HS256']);
+            JWT::decode($jwt, new Key($this->findTenant($decodedToken->iss)->getSharedSecret(), 'HS256'));
 
             return $decodedToken;
         } catch (\Throwable $e) {

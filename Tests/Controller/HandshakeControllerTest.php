@@ -109,7 +109,7 @@ class HandshakeControllerTest extends TestCase
             ->with($expectedTenant);
 
         $controller = new HandshakeController($repository, new Logger());
-        $request = new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.JWT::encode([], 'test')], json_encode([
+        $request = new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.JWT::encode([], 'test', 'HS256')], json_encode([
             'key' => 'test2',
             'clientKey' => 'test',
             'publicKey' => 'test2',
@@ -158,7 +158,7 @@ class HandshakeControllerTest extends TestCase
             ->method('save');
 
         $controller = new HandshakeController($repository, new NullLogger());
-        $request = new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.JWT::encode([], 'test')], json_encode([
+        $request = new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.JWT::encode([], 'test', 'HS256')], json_encode([
             'key' => 'test2',
             'clientKey' => 'test',
             'publicKey' => 'test2',

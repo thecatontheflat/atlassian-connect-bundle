@@ -23,6 +23,6 @@ abstract class AbstractWebTestCase extends WebTestCase
             'exp' => strtotime('+1 day'),
             'qsh' => QSHGenerator::generate('/protected_route', 'GET'),
             'sub' => 'admin',
-        ], 'shared_secret');
+        ], 'shared_secret', 'HS256');
     }
 }

@@ -6,6 +6,7 @@ namespace AtlassianConnectBundle\Controller;
 
 use AtlassianConnectBundle\Repository\TenantRepositoryInterface;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,7 @@ class HandshakeController
                 }
 
                 $jwt = $authorizationHeaderArray[1];
-                JWT::decode($jwt, $tenant->getSharedSecret(), ['HS256']);
+                JWT::decode($jwt, new Key($tenant->getSharedSecret(), 'HS256'));
             } catch (\Throwable $e) {
                 $this->logger->error($e->getMessage(), ['exception' => $e]);
 
