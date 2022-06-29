@@ -17,6 +17,8 @@ interface AtlassianRestClientInterface
 
     public function post(string $restUrl, array $json): string;
 
+    public function put(string $restUrl, array $json): string;
+
     public function delete(string $restUrl): string;
 
     public function sendFile(UploadedFile $file, string $restUrl): string;
