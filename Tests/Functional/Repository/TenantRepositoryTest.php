@@ -33,8 +33,10 @@ final class TenantRepositoryTest extends KernelTestCase
     public function testSaveTenant(): void
     {
         self::bootKernel();
+        /** @var TenantRepositoryInterface $repository */
         $repository = self::getContainer()->get(TenantRepositoryInterface::class);
 
+        /** @var Tenant $tenant */
         $tenant = $repository->initializeTenant();
         $tenant->setClientKey('new_client_key');
         $tenant->setAddonKey('key');
@@ -48,8 +50,9 @@ final class TenantRepositoryTest extends KernelTestCase
         $tenant->setEventType('event');
         $repository->save($tenant);
 
-        self::getContainer()->get(EntityManagerInterface::class)->clear(Tenant::class);
+        self::getContainer()->get(EntityManagerInterface::class)->clear();
 
-        $this->assertNotNull($repository->findByClientKey('new_client_key'));
+        $this->assertNotNull($tenant = $repository->findByClientKey('new_client_key'));
+        $this->assertNotNull($tenant->getCreatedAt());
     }
 }

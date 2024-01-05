@@ -1,6 +1,12 @@
-controllers:
-    resource: ../src/Controller/
-    type: annotation
+protected:
+    path: /protected/route
+    controller: AtlassianConnectBundle\Tests\Functional\App\Controller\ProtectedController::protectedRoute
+
+license_protected:
+    path: /protected/license-route
+    defaults:
+        requires_license: true
+    controller: AtlassianConnectBundle\Tests\Functional\App\Controller\ProtectedController::licenseProtectedRoute
 
 ac:
     resource: "@AtlassianConnectBundle/Resources/config/routing.php"

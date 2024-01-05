@@ -1,5 +1,4 @@
 security:
-    enable_authenticator_manager: true
     providers:
         jwt_user_provider:
             id: jwt_user_provider

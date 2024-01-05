@@ -13,6 +13,9 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @template-implements JWTUserProviderInterface<TenantInterface>
+ */
 class JWTUserProvider implements JWTUserProviderInterface
 {
     public function __construct(private TenantRepositoryInterface $repository)
@@ -38,7 +41,7 @@ class JWTUserProvider implements JWTUserProviderInterface
         return $this->loadUserByIdentifier($username);
     }
 
-    public function refreshUser(UserInterface $user): void
+    public function refreshUser(UserInterface $user): UserInterface
     {
         throw new UnsupportedUserException('Refresh prohibited');
     }

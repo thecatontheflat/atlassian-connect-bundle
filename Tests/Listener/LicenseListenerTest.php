@@ -8,7 +8,6 @@ use AtlassianConnectBundle\Entity\Tenant;
 use AtlassianConnectBundle\Listener\LicenseListener;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -33,13 +32,7 @@ final class LicenseListenerTest extends TestCase
 
     public function testItSkipsOnASubRequest(): void
     {
-        $attributeParameterBag = $this->createMock(ParameterBagInterface::class);
-        $attributeParameterBag
-            ->expects($this->never())
-            ->method('get');
-
-        $request = new Request();
-        $request->attributes = $attributeParameterBag;
+        $request = new Request([], [], []);
 
         $event = $this->getEvent(
             $this->kernel,
@@ -48,6 +41,7 @@ final class LicenseListenerTest extends TestCase
         );
 
         $this->getLicenseListener()->onKernelRequest($event);
+        $this->assertNull($event->getResponse());
     }
 
     public function testItSkipsWhenTheRouteIsNotNullAndRouteRequiresNoLicense(): void
@@ -85,7 +79,7 @@ final class LicenseListenerTest extends TestCase
         $event = $this->getEvent(
             $this->kernel,
             $request,
-            KernelInterface::MASTER_REQUEST
+            KernelInterface::MAIN_REQUEST
         );
 
         $this->getLicenseListener()->onKernelRequest($event);

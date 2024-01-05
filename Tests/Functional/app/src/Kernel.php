@@ -63,6 +63,10 @@ final class Kernel extends BaseKernel
 
     protected function build(ContainerBuilder $container): void
     {
+        if (self::MAJOR_VERSION < 6) {
+            $container->prependExtensionConfig('security', ['enable_authenticator_manager' => true]);
+        }
+
         $container->register('logger', NullLogger::class);
     }
 }
