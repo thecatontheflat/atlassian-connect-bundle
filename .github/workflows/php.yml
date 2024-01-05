@@ -25,24 +25,28 @@ jobs:
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
+    - name: Run php-cs-fixer
+      run: PHP_CS_FIXER_IGNORE_ENV=1 tools/php-cs-fixer fix --dry-run --diff --ansi
+    - name: Run psalm
+      run: tools/psalm
   test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - description: 'PHP 8.0 - SF 5.4.*'
-            php: '8.0'
-            symfony_version: '5.4.*'
           - description: 'PHP 8.1 - SF 5.4.*'
             php: '8.1'
             symfony_version: '5.4.*'
-          - description: 'PHP 8.0 - SF 6.0.*'
-            php: '8.0'
-            symfony_version: '6.0.*'
-          - description: 'PHP 8.1 - SF 6.0.*'
-            php: '8.1'
-            symfony_version: '6.0.*'
+          - description: 'PHP 8.3 - SF 6.3.*'
+            php: '8.3'
+            symfony_version: '6.3.*'
+          - description: 'PHP 8.3 - SF 6.4.*'
+            php: '8.3'
+            symfony_version: '6.4.*'
+          - description: 'PHP 8.3 - SF 7.0'
+            php: '8.3'
+            symfony_version: '7.0.*'
     name: Tests ${{ matrix.description }}
     steps:
       - name: Checkout
@@ -63,12 +67,8 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: "pcov"
       - run: |
-          sed -ri 's/"symfony\/(.+)": "(.+)"/"symfony\/\1": "'${{ matrix.symfony_version }}'"/' composer.json;
+          sed -Ei '/"symfony\/var-exporter":/! s/"symfony\/(.+)": "(.+)"/"symfony\/\1": "'${{ matrix.symfony_version }}'"/' composer.json;
       - run: composer update --no-interaction --no-progress --ansi ${{ matrix.composer_flags }}
-      - name: Run php-cs-fixer
-        run: tools/php-cs-fixer fix --dry-run --diff --ansi
-      - name: Run psalm
-        run: tools/psalm
       - name: Run Tests
         run: vendor/bin/phpunit --coverage-clover=coverage.xml
       - name: Upload coverage to Codecov

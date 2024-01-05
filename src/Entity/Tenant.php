@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity()
  */
+#[ORM\Entity, ORM\Table(name: 'tenant'), ORM\HasLifecycleCallbacks]
 class Tenant implements TenantInterface
 {
     use TenantTrait;

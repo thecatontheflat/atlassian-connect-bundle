@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AtlassianConnectBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 trait TenantTrait
@@ -15,6 +16,7 @@ trait TenantTrait
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: Types::INTEGER), ORM\Id, ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
@@ -22,6 +24,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="addon_key", type="string", length=255)
      */
+    #[ORM\Column(name: 'addon_key', type: Types::STRING, length: 255)]
     private $addonKey;
 
     /**
@@ -29,6 +32,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="client_key", type="string", length=255, unique=true)
      */
+    #[ORM\Column(name: 'client_key', type: Types::STRING, length: 255, unique: true)]
     private $clientKey;
 
     /**
@@ -36,6 +40,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="oauth_client_id", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'oauth_client_id', type: Types::STRING, length: 255, nullable: true)]
     private $oauthClientId;
 
     /**
@@ -48,6 +53,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="public_key", type="string", length=255)
      */
+    #[ORM\Column(name: 'public_key', type: Types::STRING, length: 255)]
     private $publicKey;
 
     /**
@@ -55,6 +61,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="shared_secret", type="string", length=255)
      */
+    #[ORM\Column(name: 'shared_secret', type: Types::STRING, length: 255)]
     private $sharedSecret;
 
     /**
@@ -62,6 +69,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="server_version", type="string", length=255)
      */
+    #[ORM\Column(name: 'server_version', type: Types::STRING, length: 255)]
     private $serverVersion;
 
     /**
@@ -69,6 +77,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="plugins_version", type="string", length=255)
      */
+    #[ORM\Column(name: 'plugins_version', type: Types::STRING, length: 255)]
     private $pluginsVersion;
 
     /**
@@ -76,6 +85,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="base_url", type="string", length=255)
      */
+    #[ORM\Column(name: 'base_url', type: Types::STRING, length: 255)]
     private $baseUrl;
 
     /**
@@ -83,6 +93,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="product_type", type="string", length=255)
      */
+    #[ORM\Column(name: 'product_type', type: Types::STRING, length: 255)]
     private $productType;
 
     /**
@@ -90,6 +101,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="description", type="string", length=255)
      */
+    #[ORM\Column(name: 'description', type: Types::STRING, length: 255)]
     private $description;
 
     /**
@@ -97,6 +109,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="event_type", type="string", length=255)
      */
+    #[ORM\Column(name: 'event_type', type: Types::STRING, length: 255)]
     private $eventType;
 
     /**
@@ -104,6 +117,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE, nullable: false)]
     private $createdAt;
 
     /**
@@ -111,6 +125,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE, nullable: false)]
     private $updatedAt;
 
     /**
@@ -118,6 +133,7 @@ trait TenantTrait
      *
      * @ORM\Column(name="is_white_listed", type="boolean", options={"default":0})
      */
+    #[ORM\Column(name: 'is_white_listed', type: Types::BOOLEAN, options: ['default' => 0])]
     private $isWhiteListed = false;
 
     /**
@@ -125,11 +141,13 @@ trait TenantTrait
      *
      * @ORM\Column(name="white_listed_until", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'white_listed_until', type: Types::DATETIME_MUTABLE, nullable: true)]
     private $whiteListedUntil;
 
     /**
      * @ORM\PrePersist()
      */
+    #[ORM\PrePersist]
     public function setCreatedAt(): void
     {
         $this->createdAt = new \DateTime();
@@ -144,6 +162,7 @@ trait TenantTrait
     /**
      * @ORM\PreUpdate()
      */
+    #[ORM\PreUpdate]
     public function setUpdatedAt(): void
     {
         $this->updatedAt = new \DateTime();

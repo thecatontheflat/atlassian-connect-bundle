@@ -151,7 +151,7 @@ final class AtlassianRestClientTest extends TestCase
     public function testNoTenantInToken(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectDeprecationMessage('Could not get tenant from token');
+        $this->expectExceptionMessage('Could not get tenant from token');
 
         $this->tokenStorage
             ->expects($this->once())
@@ -164,7 +164,7 @@ final class AtlassianRestClientTest extends TestCase
     public function testNotInTenantContext(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectDeprecationMessage('Current user is not a Tenant');
+        $this->expectExceptionMessage('Current user is not a Tenant');
 
         $this->tokenStorage
             ->expects($this->once())
