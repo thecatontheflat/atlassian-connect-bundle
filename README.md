@@ -63,7 +63,7 @@ Sample configuration in `packages/atlassian-connect.yaml`:
                         weight: 100
                         name:
                             value: 'Tab Name'
-
+    license_allow_list: []
 ```
 
 If you need to overwrite any config in dev/test environment, overwrite that config in the `packages/{env}/atlassian-connect.yaml` file.
